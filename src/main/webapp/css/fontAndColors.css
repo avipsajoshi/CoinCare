@@ -1,0 +1,36 @@
+@font-face {
+  font-family: 'Roboto'; 
+  src: url('../components/Font/Roboto-Regular.ttf');
+}
+
+:root{
+  --primary-color:#13262f;
+  --primary-color-alt:#F7FFF7;
+  --primary-text: #eee;
+  --primary-text-alt:#102;
+  --action-primary:#4ECDC4;
+  --action-alt:#b5ffe9;
+  --action-btn:#49bcb4;
+  --action-btn-alt:#a0e2ce;
+  font-weight: 500;
+  --boxShadow: 0;
+  font-family: 'Roboto' !important;
+}
+
+.light_mode{
+  --primary:var(--action-primary);
+  --back:var(--primary-color-alt);
+  --action:var(--action-primary);
+  --text: var(--primary-text-alt);
+  --text-alt:var(--primary-text);
+  --btn:var(--action-btn);
+}
+
+.dark_mode{
+  --primary:var(--action-alt);
+  --back:var(--primary-color);
+  --action:var(--action-alt);
+  --text: var(--primary-text);
+  --text-alt: var(--primary-text-alt);
+  --btn:var(--action-btn-alt);
+}
