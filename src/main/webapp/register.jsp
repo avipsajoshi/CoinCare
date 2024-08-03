@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/fontAndColors.css" />
     <link rel="stylesheet" href="css/formStyle.css" />
     <title>Register</title>
-    <link rel="icon" type="image/svg+xml" href="./images/coincarelogo.svg">
+    <link rel="icon" type="image/png" href="./images/coincarelogo.png">
   </head>
   <body class="light_mode">
     <form method="post" id="register-form" action="./RegisterServlet">

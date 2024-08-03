@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet {
           UserDao userDao = new UserDao(FactoryProvider.getFactory());
           User logged_user = userDao.getUserByEmailandPass(userEmail, userPassword);
           if (logged_user == null) {
-            httpSession.setAttribute("message", "Unsuccessful. Please Try Again!");
+            httpSession.setAttribute("message", "Invalid email or password!");
             // ("key", "value");
             response.sendRedirect("login.jsp");
           } else {

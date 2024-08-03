@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Roboto'; 
-  src: url('../components/Font/Roboto-Regular.ttf');
+  src: url('../components/Font/Roboto-Light.ttf');
 }
 
 :root{
@@ -23,13 +23,6 @@
   --text-alt:var(--primary-text);
 }
 
-.dark_mode{
-  --primary:var(--action-alt);
-  --back:var(--primary-color);
-  --action:var(--action-alt);
-  --text: var(--primary-text);
-  --text-alt: var(--primary-text-alt);
-}
 *{
   margin: 0;
   padding: 0;

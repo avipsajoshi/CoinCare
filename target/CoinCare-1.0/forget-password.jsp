@@ -12,6 +12,7 @@
     <title>Forget Password?</title>
     <link rel="stylesheet" href="css/fontAndColors.css" />
     <link rel="stylesheet" href="css/formStyle.css" />
+    <link rel="icon" type="image/png" href="./images/coincarelogo.png">
   </head>
   <body class="body">
     <script src="js/light-dark.js"></script>
@@ -27,7 +28,7 @@
       <div class="text-container">
         <div class="password-more">
           <small id="email-error" class="error"></small><small>  .</small></div>
-          <input type="email" id="email" name="user_email" placeholder="Enter your email address" required/>
+        <input type="email" id="email" name="user_email" placeholder="Enter your email address" required/>
       </div>
       <div class="submitBtn">
         <button type="submit" id="submitButton">Send OTP</button>

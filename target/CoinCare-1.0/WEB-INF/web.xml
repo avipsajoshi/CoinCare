@@ -28,6 +28,18 @@
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>com.coincare.servlets.LogoutServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UpdateProfileServlet</servlet-name>
+        <servlet-class>com.coincare.servlets.UpdateProfileServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SingleChangeServlet</servlet-name>
+        <servlet-class>com.coincare.servlets.SingleChangeServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ExpenseServlet</servlet-name>
+        <servlet-class>com.coincare.servlets.ExpenseServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SendMailServlet</servlet-name>
         <url-pattern>/SendMailServlet</url-pattern>
@@ -55,6 +67,18 @@
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/LogoutServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateProfileServlet</servlet-name>
+        <url-pattern>/UpdateProfileServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SingleChangeServlet</servlet-name>
+        <url-pattern>/SingleChangeServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExpenseServlet</servlet-name>
+        <url-pattern>/ExpenseServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

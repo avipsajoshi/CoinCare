@@ -11,6 +11,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>CoinCare</title>
+    <link rel="icon" type="image/png" href="./images/coincarelogo.png">
   </head>
   <body class="body">
     <script src="js/light-dark.js"></script>

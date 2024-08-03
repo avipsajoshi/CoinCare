@@ -12,6 +12,7 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="css/fontAndColors.css"/>
     <link rel="stylesheet" href="css/elementStyles.css"/>
+    <link rel="icon" type="image/png" href="./images/coincarelogo.png">
   </head>
   <body class="body">
     <script src="js/light-dark.js"></script>
@@ -58,7 +59,7 @@
               <td>@twitter</td>
               <td><button type="button" class="btn action-btn">Change</button></td>
             </tr>
-            
+
             <tr>
               <th scope="row">Topic 3</th>
               <td>Larry</td>
@@ -152,11 +153,11 @@
               <td>@twitter</td>
               <td><button type="button" class="btn action-btn">Change</button></td>
             </tr>
-            
-            
-            
-            
-            
+
+
+
+
+
           </tbody>
         </table>
       </div>

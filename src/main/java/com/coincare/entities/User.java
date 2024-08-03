@@ -1,63 +1,77 @@
 package com.coincare.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-@Table(name="User")
+@Table(name = "User")
 public class User {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int userId;
-  
+
   @Column(length = 100, name = "userName")
   private String userName;
-  
-  @Column(length = 100, name = "userEmail", unique=true)
+
+  @Column(length = 100, name = "userEmail", unique = true)
   private String userEmail;
-  
+
   @Column(length = 1000, name = "userPassword")
   private String userPassword;
-  
+
   @Column(length = 1500, name = "userPic")
   private String userPic;
-  
+
   @Column(length = 1500, name = "userCountry")
   private String userCountry;
-  
+
   @Column(length = 1500, name = "userType")
   private String userType;
-  
-  @Column(name="userDobYear")
+  @Column(name = "userDobYear")
   private int userDobYear;
-  @Column(name="userDobMonth")
+  @Column(name = "userDobMonth")
+  @ColumnDefault("'1'")
   private int userDobMonth;
-  @Column(name="userDobDay")
+  @Column(name = "userDobDay")
+  @ColumnDefault("'1'")
   private int userDobDay;
-  
-  @Column(name="enableReportNotification")
+
+//  @NotNull
+  @Column(name = "enableReportNotification")
+  @ColumnDefault("'on'")
   private String enableReportNotification;
-  
-  @Column(name="enableTipsNotification")
+
+//  @NotNull
+  @Column(name = "enableTipsNotification")
+  @ColumnDefault("'on'")
   private String enableTipsNotification;
-  
-  @Column(name="enableStreakNotification")
-  private String enableStreakNotification;
-  
+
+//  @NotNull
+  @Column(name = "userVerify")
+  @ColumnDefault("'Verify'")
+  private String userVerify;
+//  @Column(name="enableStreakNotification")
+//  @ColumnDefault("Verify")
+//  private String enableStreakNotification;
+
 //  @OneToMany(mappedBy="userCategories")
 //  private List<Category> customCategories = new ArrayList<>();
-  
 //  @ManyToMany
 //  @JoinTable(name = "userBudgetPlans",
 //    joinColumns = @JoinColumn(name = "userId"),
 //    inverseJoinColumns = @JoinColumn(name ="budgetPlanId"))
 //  private BudgetPlan budgetPlan;
+  public User() {
 
-  public User(){
-    
   }
-  public User(String userName, String userEmail, String userPassword, String userPic, String userCountry, String userType, int userDobYear, int userDobMonth, int userDobDay, String enableReportNotification, String enableTipsNotification, String enableStreakNotification) {
+
+  public User(int userId, String userName, String userEmail, String userPassword, String userPic, String userCountry, String userType, int userDobYear, int userDobMonth, int userDobDay, String enableReportNotification, String enableTipsNotification, String userVerify) {
+    this.userId = userId;
     this.userName = userName;
     this.userEmail = userEmail;
     this.userPassword = userPassword;
@@ -69,7 +83,22 @@ public class User {
     this.userDobDay = userDobDay;
     this.enableReportNotification = enableReportNotification;
     this.enableTipsNotification = enableTipsNotification;
-    this.enableStreakNotification = enableStreakNotification;
+    this.userVerify = userVerify;
+  }
+
+  public User(String userName, String userEmail, String userPassword, String userPic, String userCountry, String userType, int userDobYear, int userDobMonth, int userDobDay, String enableReportNotification, String enableTipsNotification, String userVerify) {
+    this.userName = userName;
+    this.userEmail = userEmail;
+    this.userPassword = userPassword;
+    this.userPic = userPic;
+    this.userCountry = userCountry;
+    this.userType = userType;
+    this.userDobYear = userDobYear;
+    this.userDobMonth = userDobMonth;
+    this.userDobDay = userDobDay;
+    this.enableReportNotification = enableReportNotification;
+    this.enableTipsNotification = enableTipsNotification;
+    this.userVerify = userVerify;
   }
 
   public User(String userName, String userEmail, String userPassword, String userPic, String userType) {
@@ -176,14 +205,22 @@ public class User {
     this.enableTipsNotification = enableTipsNotification;
   }
 
-  public String getEnableStreakNotification() {
-    return enableStreakNotification;
+  public String getUserVerify() {
+    return userVerify;
   }
 
-  public void setEnableStreakNotification(String enableStreakNotification) {
-    this.enableStreakNotification = enableStreakNotification;
+  public void setUserVerify(String userVerify) {
+    this.userVerify = userVerify;
   }
-  
-  
-  
+
+  @PrePersist
+  protected void onCreate() {
+    if (this.enableReportNotification == null) {
+      this.enableReportNotification = "on";
+    }
+    if (this.enableTipsNotification == null) {
+      this.enableTipsNotification = "on";
+    }
+  }
+
 }

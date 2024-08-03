@@ -1,14 +1,17 @@
+com\coincare\helper\MinorHelper.class
 com\coincare\entities\Income.class
 com\coincare\servlets\ForgetPasswordServlet.class
 com\coincare\helper\FactoryProvider.class
 com\coincare\servlets\LogoutServlet.class
 com\coincare\resources\JakartaEE10Resource.class
 com\coincare\dao\ExpenseDao.class
+com\coincare\servlets\UpdateProfileServlet.class
 com\coincare\entities\Category.class
 com\coincare\servlets\ResetPasswordServlet.class
 com\coincare\entities\Expense.class
 com\coincare\servlets\NewPasswordServlet.class
 com\coincare\dao\SuperCategoryDao.class
+com\coincare\servlets\SingleChangeServlet.class
 com\coincare\entities\BudgetPlan.class
 com\coincare\entities\User.class
 com\coincare\dao\CategoryDao.class

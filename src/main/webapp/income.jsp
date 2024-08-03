@@ -10,11 +10,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Income</title>
+
+    <link rel="icon" type="image/png" href="./images/coincarelogo.png">
   </head>
   <body class="body">
     <script src="js/light-dark.js"></script>
     <%@include file="components/nav.jsp"%>
-    
+
     <div class="main-content">
       <div class="container">
         <h1>Coin Care</h1>
@@ -22,9 +24,9 @@
       <div class="container">
         <h2>Your Income Sources</h2>
       </div>
-      
+
       <div class="custom-content">
-        
+
       </div>
     </div>
   </body>

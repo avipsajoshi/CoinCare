@@ -5,13 +5,33 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="com.lightitup.entities.User" %>
+<%@page import="com.lightitup.dao.UserDao" %>
+<%
+  User user =(User)session.getAttribute("logged_user");
+  if(user == null){
+    session.setAttribute("message", "You are not logged in! Please login first. ");
+    response.sendRedirect("login.jsp");
+    return;
+  }
+  else{
+     if(user.getUserType().equals("customer")){
+      session.setAttribute("message", "You donot have access to this page.");
+      response.sendRedirect("login.jsp");
+      return;
+    }
+  }
+%>
 <!DOCTYPE html>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="css/fontAndColors.css"/>
-    
+
+    <link rel="icon" type="image/png" href="./images/coincarelogo.png">
+
   </head>
   <body class="light_mode">
     <script src="js/light-dark.js"></script>
