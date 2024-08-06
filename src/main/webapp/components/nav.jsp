@@ -16,7 +16,7 @@
     }
     else{
        if(user.getUserType().equals("admin")){
-        session.setAttribute("message", "You donot have access to this page.");
+        session.setAttribute("message", "You do not have access to this page.");
         response.sendRedirect("login.jsp");
         return;
       }

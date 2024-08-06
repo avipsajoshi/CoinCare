@@ -13,5 +13,5 @@ public class Income {
   @Column(name = "incomeAmount")
   private double incomeAmount;
   //one to many
-  private int userId;
+  private int user;
 }

@@ -6,22 +6,21 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<%@page import="com.lightitup.entities.User" %>
-<%@page import="com.lightitup.dao.UserDao" %>
+<%@page import="com.coincare.entities.User" %>
 <%
-  User user =(User)session.getAttribute("logged_user");
-  if(user == null){
-    session.setAttribute("message", "You are not logged in! Please login first. ");
-    response.sendRedirect("login.jsp");
-    return;
-  }
-  else{
-     if(user.getUserType().equals("customer")){
-      session.setAttribute("message", "You donot have access to this page.");
+   User user =(User) session.getAttribute("logged_user");
+    if(user == null){
+      session.setAttribute("message", "You are not logged in! Please login first. ");
       response.sendRedirect("login.jsp");
       return;
     }
-  }
+    else{
+       if(user.getUserType().equals("user")){
+        session.setAttribute("message", "You do not have access to this page.");
+        response.sendRedirect("login.jsp");
+        return;
+      }
+    }
 %>
 <!DOCTYPE html>
 <html>

@@ -1,3 +1,4 @@
+com\coincare\servlets\ExpenseServlet.class
 com\coincare\helper\MinorHelper.class
 com\coincare\entities\Income.class
 com\coincare\servlets\ForgetPasswordServlet.class

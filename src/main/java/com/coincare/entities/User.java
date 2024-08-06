@@ -55,17 +55,6 @@ public class User {
   @Column(name = "userVerify")
   @ColumnDefault("'Verify'")
   private String userVerify;
-//  @Column(name="enableStreakNotification")
-//  @ColumnDefault("Verify")
-//  private String enableStreakNotification;
-
-//  @OneToMany(mappedBy="userCategories")
-//  private List<Category> customCategories = new ArrayList<>();
-//  @ManyToMany
-//  @JoinTable(name = "userBudgetPlans",
-//    joinColumns = @JoinColumn(name = "userId"),
-//    inverseJoinColumns = @JoinColumn(name ="budgetPlanId"))
-//  private BudgetPlan budgetPlan;
   public User() {
 
   }

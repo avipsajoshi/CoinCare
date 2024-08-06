@@ -1,27 +1,67 @@
 package com.coincare.servlets;
 
+import com.coincare.dao.ExpenseDao;
+import com.coincare.dao.UserDao;
+import com.coincare.dao.CategoryDao;
+import com.coincare.entities.Category;
+import com.coincare.entities.Expense;
+import com.coincare.entities.User;
+import com.coincare.helper.FactoryProvider;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ExpenseServlet extends HttpServlet {
+
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
-      /* TODO output your page here. You may use following sample code. */
-      out.println("<!DOCTYPE html>");
-      out.println("<html>");
-      out.println("<head>");
-      out.println("<title>Servlet ExpenseServlet</title>");      
-      out.println("</head>");
-      out.println("<body>");
-      out.println("<h1>Servlet ExpenseServlet at " + request.getContextPath() + "</h1>");
-      out.println("</body>");
-      out.println("</html>");
+      String operation = request.getParameter("operationType");
+      String user = request.getParameter("userId");
+      HttpSession session = request.getSession();
+      ExpenseDao expDao = new ExpenseDao(FactoryProvider.getFactory());
+
+      UserDao userDao = new UserDao(FactoryProvider.getFactory());
+      CategoryDao catDao = new CategoryDao(FactoryProvider.getFactory());
+      Expense exp = null;
+      boolean status = false;
+      if (operation.trim().equals("add")) {
+        //add expense
+        User userAdd = userDao.getUserById(Integer.parseInt(user));
+        String expTitle = request.getParameter("exp-name");
+        String expRemark = request.getParameter("exp-description");
+        double expAmount = Double.parseDouble(request.getParameter("exp-price"));
+        String expCategory = request.getParameter("catId");
+        Category cat = catDao.getCategoryById(Integer.parseInt(expCategory));
+        Timestamp currentTime;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        var now = LocalDateTime.now();
+        currentTime = Timestamp.valueOf(now);
+        exp = new Expense(expTitle, expRemark, expAmount, currentTime, cat, userAdd);
+        status = expDao.addExpense(exp);
+        if(status){
+          session.setAttribute("message", "Expense added");
+        }
+        else{
+          session.setAttribute("message", "Error adding expense");
+        }
+        response.sendRedirect("./dashboard.jsp");
+        return;
+
+      } else if (operation.trim().equals("update")) {
+        //update expense
+
+      } else if (operation.trim().equals("delete")) {
+        //delete expense with id
+      }
     }
   }
 
