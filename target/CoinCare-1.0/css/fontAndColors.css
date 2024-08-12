@@ -4,7 +4,7 @@
 }
 @font-face{
   font-family: 'Head'; 
-  src: url('../components/Font/Mangolaine.otf');
+  src: url('../components/Font/Mangolaine.ttf');
 }
 
 :root{
@@ -16,9 +16,10 @@
   --action-alt:#b5ffe9;
   --action-btn:#49bcb4;
   --action-btn-alt:#a0e2ce;
+  --font-family: 'Body';
   font-weight: 500;
   --boxShadow: 0;
-  font-family: 'Roboto' !important;
+  font-family: 'Body' !important;
 }
 
 .light_mode{

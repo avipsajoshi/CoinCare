@@ -5,6 +5,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import com.coincare.entities.Category;
+import com.coincare.entities.User;
+import com.coincare.helper.FactoryProvider;
+import org.hibernate.query.Query;
 
 public class CategoryDao {
 
@@ -39,7 +42,6 @@ public class CategoryDao {
   }
 
   //get category with admin type and user id
-  
   public Category getCategoryById(int categoryId) {
     Category cat = null;
     try {
@@ -52,4 +54,87 @@ public class CategoryDao {
     }
     return cat;
   }
+
+  //get category by user and admin for new expense
+  public List<Category> getAllCategoryForNewExpense(int userId, int adminId) {
+    Session s = this.factory.openSession();
+    Query q = s.createQuery("From Category WHERE user.userId=:uid or user.userId=:aid", Category.class);
+    q.setParameter("uid", userId);
+    q.setParameter("aid", adminId);
+    List<Category> listOfCategories = q.list();
+    return listOfCategories;
+  }
+  
+  //get category by user and admin for new expense
+  public List<Category> getAllCategoryByUserId(int userId) {
+    Session s = this.factory.openSession();
+    Query q = s.createQuery("From Category WHERE user.userId=:uid", Category.class);
+    q.setParameter("uid", userId);
+    List<Category> listOfCategories = q.list();
+    return listOfCategories;
+  }
+
+  //update category by user
+  public boolean updateExpense(String categoryTitle, String categoryDescription, String categoryType, int categoryId, int userId) {
+    boolean status = false;
+    UserDao uDao = new UserDao(FactoryProvider.getFactory());
+    User categorUserUpdate = uDao.getUserById(userId);
+    String hql = "";
+    int rowCount = 0;
+    Session session = this.factory.openSession();
+    Transaction tx = session.beginTransaction();
+    try {
+      hql = "update Category SET categoryTitle=:title, categoryDescription=:des, categoryType=:type WHERE categoryId=:id and user_userId=:uid";
+      rowCount = session.createMutationQuery(hql)
+              .setParameter("title", categoryTitle)
+              .setParameter("des", categoryDescription)
+              .setParameter("type", categoryType)
+              .setParameter("id", categoryId)
+              .setParameter("uid", userId)
+              .executeUpdate();
+      System.out.println("Rows affected: " + rowCount);
+      if (rowCount >= 1) {
+        status = true;
+      }
+      tx.commit();
+    } catch (Exception e) {
+      e.printStackTrace();
+      tx.rollback();
+      status = false;
+    } finally {
+      session.close();
+    }
+    return status;
+  }
+
+  //delete category
+  public boolean deleteCategoryById(int categoryId) {
+    boolean status = false;
+
+    String hql = "";
+    int rowCount = 0;
+    Session session = this.factory.openSession();
+    Transaction tx = session.beginTransaction();
+    try {
+      hql = "DELETE from Category WHERE categoryId=:id";
+      rowCount = session.createMutationQuery(hql)
+              .setParameter("id", categoryId)
+              .executeUpdate();
+      System.out.println("Rows affected: " + rowCount);
+      if (rowCount >= 1) {
+        status = true;
+      }
+      tx.commit();
+    } catch (Exception e) {
+      e.printStackTrace();
+      tx.rollback();
+      status = false;
+    } finally {
+      session.close();
+    }
+    return status;
+  }
+
+  //delete multiple category
+  //
 }

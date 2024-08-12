@@ -29,20 +29,7 @@
     <script>
       pop_p = "popup-exp";
       pop_u = "update-popup-exp";
-      let dynamicExpenseId;
-
-
-      //for adding new record
-      function openPopup(popup) {
-        document.getElementById(popup).style.display = "block";
-      }
-
-      function closePopup(popup) {
-        document.getElementById(popup).style.display = "none";
-      }
-
-
-
+      let dynamicBtnId;
     </script>
   </head>
   <body class="body">
@@ -70,7 +57,7 @@
       %>
       <script>
       openPopup(popup_u);
-      dynamicExpenseId = '<%=queryExpenseId%>';
+      dynamicBtnId = '<%=queryExpenseId%>';
       </script>
       <%}%>
       <div class="custom-content">
@@ -90,7 +77,7 @@
             User thisUser = uDao.getUseByEmail(user.getUserEmail());
             int uId=thisUser.getUserId();
             double totalExpensesToday=0;
-            List<Expense> allExpenses = eDao.getExpenseByUserId(uId);
+            List<Expense> allExpenses = eDao.getExpenseByUserIdToday(uId,currentDate);
             for(Expense e : allExpenses){
             
               totalExpensesToday +=e.getExpenseAmount();
@@ -102,13 +89,12 @@
               <td><%=(e.getCategory() != null ? e.getCategory().getCategoryTitle() : "No Category") %></td>
               <td><button type="button" name="editBtn" value="<%=e.getExpenseId()%>" class="btn action-btn" onclick="openPopup(pop_u, this.value)">Edit</button></td>
               <!--update expense-->
-          <div id="update-popup-exp<%=e.getExpenseId()%>" class="popup-container">
-            <div class="close-button" onclick="closePopup(pop_u)">X</div>
+          <div id="update-popup-exp<%=e.getExpenseId()%>" class="popup-container update-exp-form scroll-container">
+            <div class="close-button" onclick="closePopup(pop_u, '<%=e.getExpenseId()%>')">X</div>
             <form id="update-exp-form" action="./ExpenseServlet" method="post" style="padding-left:inherit;">
               <input type="hidden" value="<%=uId%>" name="userId">
               <input type="hidden" value="<%=e.getExpenseId()%>" name="expId" id="up-exp-id">
-              <!-- date added in back end -->
-              <p id="java-variable" style="display: none;"></p>
+
               <h3> Change a few errs</h3>
               <br>
               <label for="exp-name">Expense on: </label>
@@ -144,7 +130,7 @@
             </form>
             <form id="del-exp-form" action="./ExpenseServlet" method="get" style="padding-left:inherit;">
               <input type="hidden" value="<%=e.getExpenseId()%>" name="expId" id="del-exp-id">
-              <button type="button" name="operationType" value="delete" class="submitBtn-exp">Delete Record</button>
+              <button type="submit" name="operationType" value="delete" class="submitBtn-exp">Delete Record</button>
             </form>
           </div>
 
@@ -160,9 +146,12 @@
 
 
     <!--add expense-->
-    <button class="add-button" id="dashboard-add-button" onclick="openPopup(pop_p)">+</button>
-    <div id="popup-exp" class="popup-container">
-      <div class="close-button" onclick="closePopup(pop_p)">X</div>
+    <button class="add-button" id="dashboard-add-button" onclick="openAddPopup(pop_p)">+</button>
+
+
+
+    <div id="popup-exp" class="popup-container scroll-container">
+      <div class="close-button" onclick="closeAddPopup(pop_p)">X</div>
       <form id="exp-form" action="./ExpenseServlet" method="post" style="padding-left:inherit;">
         <input type="hidden" value="add" name="operationType">
         <input type="hidden" value="<%=user.getUserId()%>" name="userId">
@@ -197,10 +186,19 @@
     </div>
     <script>
 
+      //for adding new record
+      function openAddPopup(popup) {
+        document.getElementById(popup).style.display = "block";
+      }
+
+      function closeAddPopup(popup) {
+        document.getElementById(popup).style.display = "none";
+      }
+
       function openPopup(popup, id) {
         var pop = popup + id;
         document.getElementById(pop).style.display = "block";
-        dynamicExpenseId = id;
+        dynamicBtnId = id;
       }
 
       function closePopup(popup, id) {
@@ -222,8 +220,8 @@
 
 //      let delexpid = document.getElementById("del-exp-id");
 //      let upexpid = document.getElementById("up-exp-id");
-//      delexpid.value = dynamicExpenseId;
-//      upexpid.value = dynamicExpenseId;
+//      delexpid.value = dynamicBtnId;
+//      upexpid.value = dynamicBtnId;
 
 
 
@@ -246,7 +244,7 @@
             upexpForm.submit();
           }
         });
-        delexpForm.addEventListener("submit", function (event) {
+        delexpForm.addEventListener("button", function (event) {
           event.preventDefault();
           window.confirm("Are you sure?");
           delexpForm.submit();

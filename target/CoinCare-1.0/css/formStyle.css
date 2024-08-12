@@ -62,6 +62,7 @@ body {
 textarea {
   padding: 15px;
   margin-right: 10px;
+  margin-top: 5px;
   width: 95%;
   border: 1px solid var(--action);
   outline: none;
@@ -69,9 +70,6 @@ textarea {
   color: var(--text);
 }
 
-label{
-  /*font-size: 20px;*/
-}
 
 .password-more{
   display: flex;
@@ -111,7 +109,7 @@ textarea {
   border-radius: 20px;
   cursor: pointer;
   font-size: large;
-  font-family: initial;
+  font-family: 'Body';
   color: var(--back);
   transition: 0.3s;
 }

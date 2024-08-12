@@ -28,24 +28,10 @@
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
 
     <script>
-      pop_i = "popup-income";
-      pop_iu = "update-popup-income";
+      pop_i = "popup-inc";
+      pop_iu = "update-popup-inc";
       let dynamicBtnId;
-      function openPopup(popup, id) {
-        document.getElementById(popup).style.display = "block";
-        dynamicBtnId = id;
-      }
 
-      function closePopup(popup, id) {
-        document.getElementById(popup).style.display = "none";
-      }
-      function openPopup(popup) {
-        document.getElementById(popup).style.display = "block";
-      }
-
-      function closePopup(popup) {
-        document.getElementById(popup).style.display = "none";
-      }
     </script>
 
   </head>
@@ -88,17 +74,16 @@
                 totalIncomesToday +=e.getIncomeAmount();
               %>
               <tr>
-                <td scope="row"><%=e.getIncomeTitle()%></td>
-                <td><%=e.getIncomeRemarks()%></td>
+                <td scope="row"><%=e.getIncomeSource()%></td>
+                <td><%=e.getIncomeDescription()%></td>
                 <td><%=e.getIncomeAmount()%></td>
-                <td><%=(e.getCategory() != null ? e.getCategory().getCategoryTitle() : "No Category") %></td>
                 <td><button type="button" name="editBtn" value="<%=e.getIncomeId()%>" class="btn action-btn" onclick="openPopup(pop_i, this.value)">Edit</button></td>
               </tr>
               <%}%>
             </tbody>
           </table>
 
-          <div id="update-popup-inc" class="popup-container">
+          <div id="update-popup-inc" class="popup-container scroll-container">
             <div class="close-button" onclick="closePopup(pop_iu)">X</div>
             <form id="update-inc-form" action="./IncomeServlet" method="post" style="padding-left:inherit;">
               <input type="hidden" value="add" name="operationType">
@@ -106,18 +91,29 @@
               <input type="hidden" value="" name="incId" id="up-inc-id">
               <h3> Change a few errs</h3>
               <br>
-              <label for="inc-name">Income on: </label>
-              <br>
-              <small id="up-inc-name-error" class="error"></small>
-              <br>
-              <input type="text" id="up-inc-name" name="inc-name" placeholder="Title"/>
-              <br>
-              <label for="inc-price">Amount: </label>
-              <br><small id="up-inc-price-error" class="error"></small>
-              <br>
-              <input type="number" id="up-inc-price" name="inc-price" placeholder="Amount in numbers" />
-
-              <br>
+              <div class="text-container">
+                <label for="inc-name">Income on: </label>
+                <br>
+                <small id="up-inc-name-error" class="error"></small>
+                <br>
+                <input type="text" id="up-inc-name" name="inc-name" placeholder="Title"/>
+                <br>
+              </div>
+              <div class="text-container">
+                <label for="inc-name">Description: </label>
+                <br>
+                <small id="up-inc-des-error" class="error"></small>
+                <br>
+                <input type="text" id="up-inc-des" name="inc-name" placeholder="Description"/>
+                <br>
+              </div>
+              <div class="text-container">
+                <label for="inc-price">Amount: </label>
+                <br><small id="up-inc-price-error" class="error"></small>
+                <br>
+                <input type="number" id="up-inc-price" name="inc-price" placeholder="Amount in numbers" />
+                <br>
+              </div>
               <label for="up-select-category">Type: </label>
               <br>
               <!--incense category drop down-->
@@ -140,7 +136,7 @@
 
       <!--add income-->
       <button class="add-button" id="dashboard-add-button" onclick="openPopup(pop_i)">+</button>
-      <div id="popup-inc" class="popup-container">
+      <div id="popup-inc" class="popup-container scroll-container">
         <div class="close-button" onclick="closePopup(pop_i)">X</div>
         <form id="inc-form" action="./IncomeServlet" method="post" style="padding-left:inherit;">
           <input type="hidden" value="add" name="operationType">
@@ -148,17 +144,29 @@
           <!-- date added in backend -->
           <h3> Add New Income</h3>
           <br>
-          <label for="inc-name">Income source:</label>
-          <small id="inc-name-error" class="error"></small>
-          <br>
-          <input type="text" id="inc-name" name="inc-name" placeholder="Title"/>
-          <br>
-          <label for="inc-price">Amount: </label>
-          <small id="inc-price-error" class="error"></small>
-          <br>
-          <input type="number" id="inc-price" name="inc-price" placeholder="Amount in numbers" />
+          <div class="text-container">
+            <label for="inc-name">Income source:</label>
+            <small id="inc-name-error" class="error"></small>
+            <br>
+            <input type="text" id="inc-name" name="inc-name" placeholder="Title"/>
+            <br>
+          </div>
+          <div class="text-container">
+            <label for="inc-name">Description: </label>
+            <br>
+            <small id="inc-des-error" class="error"></small>
+            <br>
+            <input type="text" id="inc-des" name="inc-name" placeholder="Description"/>
+            <br>
+          </div>
+          <div class="text-container">
+            <label for="inc-price">Amount: </label>
+            <small id="inc-price-error" class="error"></small>
+            <br>
+            <input type="number" id="inc-price" name="inc-price" placeholder="Amount in numbers" />
 
-          <br>
+            <br>
+          </div>
           <label for="select-category">Type </label>
           <br>
           <!--incense category drop down-->
@@ -170,14 +178,34 @@
         </form>
       </div>
       <script>
+
+        function openPopup(popup, id) {
+          document.getElementById(popup).style.display = "block";
+          dynamicBtnId = id;
+        }
+
+        function closePopup(popup, id) {
+          document.getElementById(popup).style.display = "none";
+        }
+        function openPopup(popup) {
+          document.getElementById(popup).style.display = "block";
+        }
+
+        function closePopup(popup) {
+          document.getElementById(popup).style.display = "none";
+        }
+
+
         //inc from validation input
         const totalIncomeloaded = document.getElementById("totalIncome");
         const totalInc = document.getElementById("totalInc");
         const incForm = document.getElementById("inc-form");
         const incNameInput = document.getElementById("inc-name");
         const incPriceInput = document.getElementById("inc-price");
+        const incDesInput = document.getElementById("inc-des");
         const incNameError = document.getElementById("inc-name-error");
         const incPriceError = document.getElementById("inc-price-error");
+        const incDesError = document.getElementById("inc-des-error");
 
         let delincid = document.getElementById("del-inc-id");
         let upincid = document.getElementById("up-inc-id");
@@ -187,8 +215,10 @@
         const delincForm = document.getElementById("del-inc-form");
         const upincNameInput = document.getElementById("up-inc-name");
         const upincPriceInput = document.getElementById("up-inc-price");
+        const upincDesInput = document.getElementById("up-inc-des");
         const upincNameError = document.getElementById("up-inc-name-error");
         const upincPriceError = document.getElementById("up-inc-price-error");
+        const upincDesError = document.getElementById("up-inc-des-error");
 
 
         //category form validation
@@ -198,7 +228,7 @@
           upincForm.addEventListener("submit", function (event) {
             event.preventDefault();
             if (
-                    validateText(incNameInput, incNameError) && validateText(incPriceInput, incPriceError)
+                    validateText(upincNameInput, upincNameError) && validateText(upincPriceInput, upincPriceError) && validateText(upincDesInput, upincDesError)
                     ) {
               upincForm.submit();
             }
@@ -215,7 +245,7 @@
           incForm.addEventListener("submit", function (event) {
             event.preventDefault();
             if (
-                    validateText(incNameInput, incNameError) && validateText(incPriceInput, incPriceError)
+                    validateText(incNameInput, incNameError) && validateText(incPriceInput, incPriceError) && validateText(incDesInput, incDesError)
                     ) {
               incForm.submit();
             }

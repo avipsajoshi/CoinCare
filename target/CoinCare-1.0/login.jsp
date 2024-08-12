@@ -24,7 +24,7 @@
       <div class="text-container">
         <label for="user_email">Email:</label>
         <div class="password-more">
-          <small id="email-error" class="error"></small><small>  .</small></div>
+          <small id="email-error" class="error"></small><small style="color:var(--back);">.</small></div>
         <input type="email" id="email" name="user_email" />
       </div>
       <div class="text-container">

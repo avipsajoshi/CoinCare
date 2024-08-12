@@ -103,7 +103,9 @@
 
 
 /*dashboard add expense popup*/
-#exp-form input, .exp-textarea, .select-category{
+#exp-form input, .exp-textarea, .select-category, 
+.update-exp-form input, .exp-textarea, .select-category,
+.text-container{
   padding: 10px;
   margin:10px 0;
   width: 80%;
@@ -156,6 +158,8 @@ textarea{
   text-align: start;
   display: none;
 }
+
+
 .close-button {
   position: absolute;
   top: 10px;
@@ -249,7 +253,7 @@ label{
 
 }
 
-.text-container input,
+.text-container input, select, 
 textarea {
   padding: 5px;
   padding-left: 15px;
@@ -304,9 +308,40 @@ select *{
 
 .user-profile-img{
   width: 150px;
+  height: 150px;
   border-radius: 100%;
   border: none;
 }
+
+
+/*custom scroll bar*/
+.scroll-container {
+  overflow-y: scroll;
+  padding: 10px;
+  background-color: var(--back);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom scrollbar */
+.scroll-container::-webkit-scrollbar {
+  width: 8px;
+  background-color: transparent;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+
 /*#updateprofilepic-form input #file-upload-button{
   padding: 5px;
   padding-left: 15px;

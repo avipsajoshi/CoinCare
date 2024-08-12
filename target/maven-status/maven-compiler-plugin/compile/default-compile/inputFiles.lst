@@ -1,6 +1,6 @@
-D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\SuperCategoryDao.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\helper\FactoryProvider.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\ExpenseServlet.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\IncomeServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\User.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\UserDao.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\IncomeDao.java
@@ -14,10 +14,9 @@ D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\LoginServlet.j
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\RegisterServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\UpdateProfileServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\ForgetPasswordServlet.java
-D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\UpdateProfilePhotoServlet.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\AdminServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\LogoutServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Expense.java
-D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\SuperCategory.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Category.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\helper\MinorHelper.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Income.java
@@ -25,3 +24,4 @@ D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\NewPasswordSer
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\ExpenseDao.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\resources\JakartaEE10Resource.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\SingleChangeServlet.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Admin.java

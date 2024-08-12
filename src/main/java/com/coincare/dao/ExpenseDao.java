@@ -4,7 +4,10 @@ import com.coincare.entities.Category;
 import com.coincare.entities.Expense;
 import com.coincare.entities.User;
 import com.coincare.helper.FactoryProvider;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -62,11 +65,30 @@ public class ExpenseDao {
     }
     return exp;
   }
+  
+  
+  public  List<Expense> getExpenseByUserIdToday(int uid, LocalDate now) {
+    List<Expense> exp = null;
+    LocalDateTime startOfDay = LocalDateTime.of(now, LocalTime.MIDNIGHT);
+    LocalDateTime endOfDay = now.atTime(LocalTime.MAX);
+    Session session = this.factory.openSession();
+    try {
+      Query pq = session.createQuery("from Expense as e WHERE user.userId=:uid and expenseDate<=:endofday and expenseDate>=:startofday", Expense.class);
+      pq.setParameter("uid", uid);
+      pq.setParameter("startofday", startOfDay);
+      pq.setParameter("endofday", endOfDay);
+      exp = pq.list();
+      session.close();
+    } catch (Exception w) {
+      w.printStackTrace();
+    }
+    return exp;
+  }
 
-  public boolean updateExpense(String expenseTitle, String expenseRemarks, double amount, int category,int expenseId) {
+  public boolean updateExpense(String expenseTitle, String expenseRemarks, double amount, int categoryId,int expenseId) {
     boolean status = false;
     CategoryDao catDao = new CategoryDao(FactoryProvider.getFactory());
-    Category categoryUpdate = catDao.getCategoryById(category);
+    Category categoryUpdate = catDao.getCategoryById(categoryId);
     String hql = "";
     int rowCount = 0;
     Session session = this.factory.openSession();
@@ -76,7 +98,7 @@ public class ExpenseDao {
       rowCount = session.createMutationQuery(hql)
               .setParameter("title", expenseTitle)
               .setParameter("des", expenseRemarks)
-              .setParameter("cat", categoryUpdate)
+              .setParameter("cat", categoryId)
               .setParameter("amt", amount)
               .setParameter("id", expenseId)
               .executeUpdate();

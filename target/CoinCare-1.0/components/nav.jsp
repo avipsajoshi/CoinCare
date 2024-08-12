@@ -37,7 +37,7 @@
   </div>
   <div class="user"><a href="./settings.jsp" >
       <img src="images/<%=user.getUserPic()%>" alt="user" class="user-img"></a>
-    <a href="./settings.jsp" style="text-decoration: none; " ><div>
+    <a href="./settings.jsp" style="text-decoration: none; " ><div class="user-info">
         <p class="bold"><%= user.getUserName() %></p>
         <p><%= user.getUserType() %></p>
       </div></a>

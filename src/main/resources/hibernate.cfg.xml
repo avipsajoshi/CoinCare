@@ -29,7 +29,6 @@
     <mapping class="com.coincare.entities.Category" />
     <mapping class="com.coincare.entities.Expense" />
     <mapping class="com.coincare.entities.Income" />
-    <mapping class="com.coincare.entities.SuperCategory" />
     
   </session-factory>
 </hibernate-configuration>

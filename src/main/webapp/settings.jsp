@@ -6,8 +6,14 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="com.coincare.helper.MinorHelper" %>
+<%@page import="java.util.List" %>
 <%@page import="com.coincare.entities.User" %>
+<%@page import="com.coincare.entities.Category" %>
+<%@page import="com.coincare.entities.BudgetPlan" %>
 <%@page import="com.coincare.dao.UserDao" %>
+<%@page import="com.coincare.dao.CategoryDao" %>
+<%@page import="com.coincare.dao.BudgetPlanDao" %>
+
 <%@page import="java.time.Year"%>
 
 <!DOCTYPE html>
@@ -19,6 +25,11 @@
     <link rel="stylesheet" href="css/elementStyles.css"/>
 
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
+    <script>
+      pop_c = "popup-cat";
+      pop_cu = "update-popup-cat";
+      let dynamicBtnId;
+    </script>
   </head>
   <body class="body">
     <script src="js/light-dark.js"></script>
@@ -104,8 +115,16 @@
                 <div class="text-container">
                   <label>Country:</label>
                   <small id="country-error" class="error"></small>
-                  <input type="text" name="user-country" value="<%=user1.getUserCountry()%>" placeholder="Country" required/>
+                  <select name="user-country" id="country-dropdown">
+                    <% if (user1.getUserCountry() != null){
+                    %>
+                    <option value="<%=user1.getUserCountry()%>" selected><%=user1.getUserCountry()%></option>
+                    <% } else{%>
+                    <option value="">Select your Country</option>
+                    <% }%>
+                  </select>
                 </div>
+
 
                 <div class="submitBtn">
                   <button type="submit" class="setting-change-button">Save Changes</button>
@@ -138,7 +157,7 @@
           </div>
 
 
-
+          <!--budgetplan changes-->
 
           <div class="collapsible">
             <button class="collapsible-button">Edit Budget Plan</button>
@@ -147,12 +166,127 @@
               <p>Budget Plan Description</p>
             </div>
           </div>
+
+
+          <!--category changes-->
+
           <div class="collapsible">
             <button class="collapsible-button">Customize Categories</button>
             <div class="collapse-content">
               <p>Your Categories</p>
+
+              <div class="custom-content">
+                <%
+                  CategoryDao cDao = new CategoryDao(FactoryProvider.getFactory());
+                  UserDao uDao = new UserDao(FactoryProvider.getFactory());
+                  int uId=user1.getUserId();
+                  double totalExpensesToday=0;
+                  List<Category> allUserCategories = cDao.getAllCategoryByUserId(uId);
+                  if(allUserCategories == null || allUserCategories.isEmpty()){
+                %>
+                <img src="nothingtoshow.png" alt="Empty. Use the add button to fill this area!">
+                <%} else{%>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Description</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% 
+                    for(Category c : allUserCategories){
+                    %>
+                    <tr>
+                      <td scope="row"><%=c.getCategoryTitle()%></td>
+                      <td><%=c.getCategoryDescription()%></td>
+                      <td><%=c.getCategoryType()!=null? c.getCategoryType(): "null"%></td>
+                      <td><button type="button" name="editBtn" value="<%=c.getCategoryId()%>" class="btn action-btn" onclick="openPopup(pop_cu, this.value)">Edit</button></td>
+                      <!--update category popup form-->
+                  <div id="update-popup-cat<%=c.getCategoryId()%>" class="popup-container update-cat-form scroll-container">
+                    <div class="close-button" onclick="closePopup(pop_cu, '<%=c.getCategoryId()%>')">X</div>
+                    <form id="up-cat-form<%=c.getCategoryId()%>" action="./CategoryServlet" method="post" style="padding-left:inherit;">
+                      <input type="hidden" value="<%=uId%>" name="userId">
+                      <input type="hidden" value="<%=c.getCategoryId()%>" name="catId" id="up-cat-id">
+                      <h3> Change a few errs</h3>
+                      <br>
+                      <label for="cat-name">Category Title : </label>
+                      <br>
+                      <small id="up-cat-name-error" class="error"></small>
+                      <br>
+                      <input type="text" id="up-cat-name" name="cat-name" placeholder="Title" value="<%=c.getCategoryTitle()%>"/>
+                      <br>
+                      <label for="cat-description">Category Description :</label>
+                      <br>
+                      <small id="up-cat-description-error" class="error"></small>
+                      <br>
+                      <textarea id="up-cat-description" placeholder="Enter description about the category" class="cat-textarea" name="cat-description"><%=c.getCategoryDescription()%></textarea>
+                      <br>
+                      <label for="up-select-category-type">Category Type: </label>
+                      <br>
+
+                      <select name="catType" id="category-type-dropdown" class="select-category-type">
+                        <% if (c.getCategoryType() != null){
+                        %>
+                        <option value="<%=c.getCategoryType()%>" selected><%=c.getCategoryType()%></option>
+                        <% } else{%>
+                        <option value="Fixed Expense"> Fixed Expense</option>
+                        <% }%>
+                      </select>
+                      <button type="submit" name="operationType" value="update" class="submitBtn-cat">Update Changes</button>
+                    </form>
+                    <form id="del-cat-form" action="./CategoryServlet" method="get" style="padding-left:inherit;">
+                      <input type="hidden" value="<%=c.getCategoryId()%>" name="catId" id="del-cat-id">
+                      <button type="submit" name="operationType" value="delete" class="submitBtn-cat">Delete Record</button>
+                    </form>
+                  </div>
+
+                  </tr>
+
+                  <%}%>
+                  </tbody>
+                </table>
+                <%}%>
+                <hr>
+                <p>Add a New Category</p>
+
+                <form id="cat-form" action="./CategoryServlet" method="post" style="padding-left:inherit;">
+                  <div class="text-container">
+                    <label for="cat-name">Category Title : </label>
+                    <br>
+                    <small id="cat-name-error" class="error"></small>
+                    <br>
+                    <input type="text" id="cat-name" name="cat-name" placeholder="Enter Title"/>
+                    <br>
+                  </div>
+                  <div class="text-container">
+                    <label for="cat-description">Category Description :</label>
+                    <br>
+                    <small id="cat-description-error" class="error"></small>
+                    <br>
+                    <textarea id="cat-description" placeholder="Enter description about the category" class="cat-textarea" name="cat-description"></textarea>
+                    <br>
+                  </div>
+                  <label for="select-category-type">Category Type: </label>
+                  <br>
+                  <select name="catType" id="category-type-dropdown" class="select-category-type">
+                    <option value="Fixed Expense"> Fixed Expense</option>
+                  </select>
+                  <button type="submit" class="submitBtn-exp">Add</button>
+                </form>
+
+              </div>
+
+
+
             </div>
           </div>
+
+
+
+          <!--email preferences-->
           <div class="collapsible">
             <button class="collapsible-button">Email Preferences</button>
             <div class="collapse-content">
@@ -202,6 +336,8 @@
           </div>
         </div>
         <script>
+
+          //entire content
           document.querySelectorAll('.collapsible-button').forEach(button => {
             button.addEventListener('click', () => {
               const content = button.nextElementSibling;
@@ -214,6 +350,65 @@
               }
             });
           });
+
+          // Fetch country JSON data from the server for country dropdown
+          function fetchJsonData() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "./components/country-by-currency-code.json", true);
+            xhr.onload = function () {
+              if (xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                populateDropdown(data);
+              } else {
+                console.error("Failed to fetch JSON data");
+              }
+            };
+            xhr.send();
+          }
+
+          // Populate dropdown with JSON data
+          function populateDropdown(data) {
+            var dropdown = document.getElementById("country-dropdown");
+
+            data.forEach(function (item) {
+              var option = document.createElement("option");
+              option.value = item.country;
+              option.text = item.country;
+              dropdown.add(option);
+            });
+          }
+          // Fetch and populate dropdown on page load
+          fetchJsonData();
+
+
+
+
+          //popup for update forms
+          function openPopup(popup, id) {
+            var pop = popup + id;
+            document.getElementById(pop).style.display = "block";
+            dynamicBtnId = id;
+          }
+
+          function closePopup(popup, id) {
+            var pop = popup + id;
+            document.getElementById(pop).style.display = "none";
+          }
+
+          //form validation
+          const catAddForm = document.getElementById("cat-form");
+          const catNameInput = document.getElementById("cat-name");
+          const catDescriptionInput = document.getElementById("cat-description");
+          const catNameError = document.getElementById("cat-name-error");
+          const catDescriptionError = document.getElementById("cat-description-error");
+          
+  
+          const upcatAddForm = document.getElementById("up-cat-form"+dynamicBtnId);
+          const upcatNameInput = document.getElementById("up-cat-name");
+          const upcatDescriptionInput = document.getElementById("up-cat-description");
+          const upcatNameError = document.getElementById("up-cat-name-error");
+          const upcatDescriptionError = document.getElementById("up-cat-description-error");
+
 
         </script>
       </div>

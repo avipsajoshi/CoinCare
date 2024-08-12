@@ -60,20 +60,19 @@ public class IncomeDao {
     return inc;
   }
 
-  public boolean updateIncome(String incomeTitle, String incomeRemarks, double amount, int category,int incomeId) {
+  public boolean updateIncome(String incomeSource, String incomeDescriptions, double amount, String category,int incomeId) {
     boolean status = false;
     CategoryDao catDao = new CategoryDao(FactoryProvider.getFactory());
-    Category categoryUpdate = catDao.getCategoryById(category);
     String hql = "";
     int rowCount = 0;
     Session session = this.factory.openSession();
     Transaction tx = session.beginTransaction();
     try {
-      hql = "update Income SET incomeTitle=:title, incomeRemark=:des, incomeAmount=:amt,category_categoryId=:cat WHERE incomeId=:id";
+      hql = "update Income SET incomeSource=:title, incomeDescription=:des, incomeAmount=:amt,incomeType=:cat WHERE incomeId=:id";
       rowCount = session.createMutationQuery(hql)
-              .setParameter("title", incomeTitle)
-              .setParameter("des", incomeRemarks)
-              .setParameter("cat", categoryUpdate)
+              .setParameter("title", incomeSource)
+              .setParameter("des", incomeDescriptions)
+              .setParameter("cat", category)
               .setParameter("amt", amount)
               .setParameter("id", incomeId)
               .executeUpdate();
