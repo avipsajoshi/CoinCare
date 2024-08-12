@@ -47,10 +47,9 @@ public class ExpenseServlet extends HttpServlet {
         currentTime = Timestamp.valueOf(now);
         exp = new Expense(expTitle, expRemark, expAmount, currentTime, cat, userAdd);
         status = expDao.addExpense(exp);
-        if(status){
+        if (status) {
           session.setAttribute("message", "Expense added");
-        }
-        else{
+        } else {
           session.setAttribute("message", "Error adding expense");
         }
         response.sendRedirect("./dashboard.jsp");
@@ -58,9 +57,34 @@ public class ExpenseServlet extends HttpServlet {
 
       } else if (operation.trim().equals("update")) {
         //update expense
+        int expenseIdToUpdate = Integer.parseInt(request.getParameter("expId"));
+        User userAdd = userDao.getUserById(Integer.parseInt(user));
+        String expTitle = request.getParameter("exp-name");
+        String expRemark = request.getParameter("exp-description");
+        double expAmount = Double.parseDouble(request.getParameter("exp-price"));
+        String expCategory = request.getParameter("catId");
+        int cat = Integer.parseInt(expCategory);
+        status = expDao.updateExpense(expTitle, expRemark, expAmount, cat,expenseIdToUpdate);
+        if (status) {
+          session.setAttribute("message", "Expense record updated");
+        } else {
+          session.setAttribute("message", "Error updating expense");
+        }
+        response.sendRedirect("./dashboard.jsp");
+        return;
 
       } else if (operation.trim().equals("delete")) {
         //delete expense with id
+        int expenseIdToDelete = Integer.parseInt(request.getParameter("expId"));
+        status = expDao.deleteById(expenseIdToDelete);
+        if (status) {
+          session.setAttribute("message", "Expense added");
+        } else {
+          session.setAttribute("message", "Error adding expense");
+        }
+        response.sendRedirect("./dashboard.jsp");
+        return;
+
       }
     }
   }

@@ -28,6 +28,8 @@ public class SingleChangeServlet extends HttpServlet {
       String operation = request.getParameter("singlechangeBtn");
       System.out.println(operation);
       String useremail = request.getParameter("useremail");
+      
+      //sends otp in mail
       if (operation.trim().equals("email-verify")) {
         if (useremail != null || !useremail.equals("")) {
           Random rand = new Random();
@@ -53,7 +55,7 @@ public class SingleChangeServlet extends HttpServlet {
         User vUser = (User) session.getAttribute("logged_user");
         String userVemail = vUser.getUserEmail();
         out.print("verification page");
-        String otp = request.getParameter("otp-value");
+        String otp = request.getParameter("otp-value-verify");
         String sentOtp = (String) session.getAttribute("sentOtp");
         System.out.println("user otp" + otp);
         System.out.println("system otp" + sentOtp);

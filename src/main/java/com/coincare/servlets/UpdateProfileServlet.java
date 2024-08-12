@@ -6,6 +6,7 @@ import com.coincare.helper.MinorHelper;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +15,9 @@ import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Collection;
 
+@MultipartConfig
 public class UpdateProfileServlet extends HttpServlet {
 
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -29,13 +32,12 @@ public class UpdateProfileServlet extends HttpServlet {
       // Debug statement to check the parameters
       System.out.println("Operation Type: " + operationType);
       System.out.println("User Email: " + useremail);
-
       if (operationType == null) {
         session.setAttribute("message", "Operation type is missing. Please try again.");
         response.sendRedirect("./settings.jsp");
-        return;
+        return;  
       }
-      if (operationType.equals("texts")) {
+      if (operationType.equals("1")) {
         String username = request.getParameter("user-name");
         if (username == null && username.isEmpty()) {
           session.setAttribute("message", "Update unsuccessful. Please Try Again");
@@ -58,10 +60,10 @@ public class UpdateProfileServlet extends HttpServlet {
         if (!success) {
           session.setAttribute("message", "Update unsuccessful. Please Try Again");
         } else {
-          session.setAttribute("message", "Successfully updated.");
+          session.setAttribute("message", "Profile updated successfully.");
         }
 
-      } else if (operationType.equals("photo")) {
+      } else if (operationType.equals("2")) {
         Part filePart = request.getPart("user-update-image");
         String fileName = filePart.getSubmittedFileName();
         // Check if a file was actually uploaded

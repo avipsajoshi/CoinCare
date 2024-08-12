@@ -11,6 +11,7 @@ com\coincare\entities\Category.class
 com\coincare\servlets\ResetPasswordServlet.class
 com\coincare\entities\Expense.class
 com\coincare\servlets\NewPasswordServlet.class
+com\coincare\servlets\UpdateProfilePhotoServlet.class
 com\coincare\dao\SuperCategoryDao.class
 com\coincare\servlets\SingleChangeServlet.class
 com\coincare\entities\BudgetPlan.class

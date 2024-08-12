@@ -22,7 +22,7 @@ public class LoginServlet extends HttpServlet {
       try {
           User alreadyLogged = (User) httpSession.getAttribute("logged_user");
 //          response.sendRedirect("index.jsp");
-          if (alreadyLogged.getUserType().equals("admin")) {
+          if (alreadyLogged.getUserType().equals("admin") || alreadyLogged.getUserType().equals("owner")) {
             //admin-dashboard.jsp
             response.sendRedirect("admin-dashboard.jsp");
           } else if (alreadyLogged.getUserType().equals("user")) {
@@ -55,7 +55,7 @@ public class LoginServlet extends HttpServlet {
           } else {
             httpSession.setAttribute("logged_user", logged_user);
   //          response.sendRedirect("index.jsp");
-            if (logged_user.getUserType().equals("admin")) {
+            if (logged_user.getUserType().equals("admin") || logged_user.getUserType().equals("owner")) {
               //admin-dashboard.jsp
               response.sendRedirect("admin-dashboard.jsp");
             } else if (logged_user.getUserType().equals("user")) {

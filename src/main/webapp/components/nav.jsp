@@ -6,21 +6,24 @@
 
 <%@page import="com.coincare.helper.FactoryProvider" %>
 <%@page import="com.coincare.entities.User" %>
+<%@page import="com.coincare.dao.UserDao" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-  User user =(User) session.getAttribute("logged_user");
-    if(user == null){
+  User logged_user =(User) session.getAttribute("logged_user");
+    if(logged_user == null){
       session.setAttribute("message", "You are not logged in! Please login first. ");
       response.sendRedirect("login.jsp");
       return;
     }
     else{
-       if(user.getUserType().equals("admin")){
+       if(logged_user.getUserType().equals("admin")){
         session.setAttribute("message", "You do not have access to this page.");
         response.sendRedirect("login.jsp");
         return;
       }
     }
+    UserDao udao = new UserDao(FactoryProvider.getFactory());
+    User user = udao.getUseByEmail(logged_user.getUserEmail());
 %>
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 <link rel="stylesheet" href="css/sidebarstyle.css">

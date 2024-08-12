@@ -14,28 +14,30 @@ public class Category {
   private String categoryDescription;
   @ManyToOne
   private User user;
-  @ManyToOne
-  private SuperCategory superCategory;
+  @Column(length = 1500, name = "categoryType")
+  private String categoryType;
   
   
 
   public Category() {
   }
 
-  public Category(int categoryId, String categoryTitle, String categoryDescription, User user, SuperCategory superCategory) {
+  public Category(int categoryId, String categoryTitle, String categoryDescription, User user, String categoryType) {
     this.categoryId = categoryId;
     this.categoryTitle = categoryTitle;
     this.categoryDescription = categoryDescription;
     this.user = user;
-    this.superCategory = superCategory;
+    this.categoryType = categoryType;
   }
 
-  public Category(String categoryTitle, String categoryDescription, User user, SuperCategory superCategory) {
+  public Category(String categoryTitle, String categoryDescription, User user, String categoryType) {
     this.categoryTitle = categoryTitle;
     this.categoryDescription = categoryDescription;
     this.user = user;
-    this.superCategory = superCategory;
+    this.categoryType = categoryType;
   }
+
+  
 
   public int getCategoryId() {
     return categoryId;
@@ -69,16 +71,15 @@ public class Category {
     this.user = user;
   }
 
-  public SuperCategory getSuperCategory() {
-    return superCategory;
+  public String getCategoryType() {
+    return categoryType;
   }
 
-  public void setSuperCategory(SuperCategory superCategory) {
-    this.superCategory = superCategory;
+  public void setCategoryType(String categoryType) {
+    this.categoryType = categoryType;
   }
 
-  
-  
+ 
   
   
 }

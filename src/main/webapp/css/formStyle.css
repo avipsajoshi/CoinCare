@@ -70,7 +70,7 @@ textarea {
 }
 
 label{
-  font-size: 20px;
+  /*font-size: 20px;*/
 }
 
 .password-more{
@@ -82,7 +82,7 @@ label{
 .password-more a{
   text-decoration: none;
   color: var(--text);
-  
+
 }
 .formheader{
   margin: 15px 5px;
@@ -111,6 +111,7 @@ textarea {
   border-radius: 20px;
   cursor: pointer;
   font-size: large;
+  font-family: initial;
   color: var(--back);
   transition: 0.3s;
 }

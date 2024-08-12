@@ -6,8 +6,9 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="com.coincare.helper.MinorHelper" %>
+<%@page import="com.coincare.entities.User" %>
 <%@page import="com.coincare.dao.UserDao" %>
-<%@page import="java.time.Year"  %>
+<%@page import="java.time.Year"%>
 
 <!DOCTYPE html>
 <html>
@@ -29,8 +30,7 @@
       </div>
 
       <div class="custom-content">
-        <% UserDao uD = new UserDao(FactoryProvider.getFactory());
-          User user1 =uD.getUserByUser((User) session.getAttribute("logged_user"));%>
+        <% User user1 =user;%>
         <div class="collapse-container">
           <div class="collapsible">
             <button class="collapsible-button">Edit Profile</button>
@@ -52,26 +52,27 @@
                 <%}%>
               </div>
               <hr>
-              
-              
-              
-              <form id="updateprofile-form" action="./UpdateProfileServlet" method="post">
+
+
+
+              <form id="updateprofile-form" action="./UpdateProfileServlet" method="post" >
                 <input type="text" name ="useremail" value="<%= user1.getUserEmail() %>" hidden/>
+                <input type="hidden" name ="profileBtn" value="1"/>
                 <div class="text-container">
                   <label>Full name:</label>
                   <small id="name-error" class="error"></small>
                   <input type="text" name="user-name" value="<%=user1.getUserName()%>" placeholder="Full name" required/>
                 </div>
-                
-                
-                
+
+
+
                 <div class="text-container">
                   <label for="userdob">Date of Birth:</label>
                   <select name="user-dob-year" id="year">
                     <option value="<%=user1.getUserDobYear()%>"><%=user1.getUserDobYear()%></option>
                     <%   
                       int year = Year.now().getValue();
-                      for(int i= year; i>= 1910; i--){
+                      for(int i= year-3; i>= year-110; i--){
                       if(i == user1.getUserDobYear() ) continue;
                     %>
                     <option value="<%=i%>"><%=i%></option>
@@ -97,24 +98,24 @@
                     <%}%>
                   </select>
                 </div>
-                  
-                  
-                  
+
+
+
                 <div class="text-container">
                   <label>Country:</label>
                   <small id="country-error" class="error"></small>
                   <input type="text" name="user-country" value="<%=user1.getUserCountry()%>" placeholder="Country" required/>
                 </div>
-                
+
                 <div class="submitBtn">
-                  <button type="submit" name="profileBtn" value="texts" class="setting-change-button">Save Changes</button>
+                  <button type="submit" class="setting-change-button">Save Changes</button>
                 </div>
               </form> 
               <br>
               <hr>
               <br>
-              
-              
+
+
               <div>
                 Profile picture:
                 <br>
@@ -122,23 +123,23 @@
                 <img src="images/<%=user1.getUserPic()%>" alt="user" class="user-profile-img">
                 <br>
                 <!--<button value="photo" id="change-image-btn" class="setting-change-button"> Change</button>-->
-                <div class="image-upload">
+                <form id="updateprofilepic-form" action="./UpdateProfileServlet" method="post" enctype="multipart/form-data">
+                  <input type="text" name="useremail" value="<%=user1.getUserEmail()%>" hidden />
+                  <input type="hidden" name ="profileBtn" value="2"/>
+                  <input type="file" id="user-update-image" name="user-update-image" required />
                   <br>
-                  <form action="./UpdateProfileServlet" method="post" id="updateprofilepic-form" enctype="multipart/form-data">
-                    <input type="text" name ="useremail" value="<%= user1.getUserEmail() %>" hidden/>
-                    <input type="file" id="user-update-image" name="user-update-image" required />
-                    <br>
-                    <div class="submitBtn">
-                      <button type="submit" name="profileBtn" value="photo" class="setting-change-button"> Upload</button></div>
-                  </form>
-                </div>
+                  <div class="submitBtn">
+                    <button type="submit" class="setting-change-button">Upload</button>
+                  </div>
+                </form>
+
               </div>
             </div>
           </div>
-                    
-                    
-                    
-                    
+
+
+
+
           <div class="collapsible">
             <button class="collapsible-button">Edit Budget Plan</button>
             <div class="collapse-content">
@@ -170,13 +171,13 @@
                 <form class="singlechange-form" action="./SingleChangeServlet" method="post">
                   <input type="text" name ="useremail" value="<%= user1.getUserEmail() %>" hidden/>
                   <div class="single-submitBtn">
-                  <button type="submit" class="setting-change-button" name="singlechangeBtn" value="statement">
-                    Turn <% out.print(change);%></button>
+                    <button type="submit" class="setting-change-button" name="singlechangeBtn" value="statement">
+                      Turn <% out.print(change);%></button>
                   </div>
                 </form>
               </div>
-                  <hr>
-                  
+              <hr>
+
               <div class="singlechange-container">
                 <label> Advice Notification </label>
                 <%
@@ -192,8 +193,8 @@
                 <form class="singlechange-form" action="./SingleChangeServlet" method="post">
                   <input type="text" name ="useremail" value="<%= user1.getUserEmail() %>" hidden/>
                   <div class="single-submitBtn">
-                  <button type="submit" class="setting-change-button" name="singlechangeBtn" value="tips">
-                    Turn <% out.print(change2);%></button>
+                    <button type="submit" class="setting-change-button" name="singlechangeBtn" value="tips">
+                      Turn <% out.print(change2);%></button>
                   </div>
                 </form>
               </div>

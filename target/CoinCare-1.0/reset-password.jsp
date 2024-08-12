@@ -38,9 +38,7 @@
       </div>
     </form>
     <%} else if(operation.equals("newPass")){%>
-
-
-    
+  
     <!--change password from "forget password"-->
     <form id="register-form" method="post" action="./NewPasswordServlet">
       <div class="formheader">
@@ -71,7 +69,7 @@
       </div>
       <div class="text-container">
         
-        <input type="text" name="otp-value" id="otp-value" placeholder="Enter OTP" required/>
+        <input type="text" name="otp-value-verify" id="otp-value" placeholder="Enter OTP" required/>
       </div>
       <div class="submitBtn">
         <button type="submit" name="singlechangeBtn"  class="otp-btn" value="verification">Verify</button>

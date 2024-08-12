@@ -36,6 +36,7 @@ public class UserDao {
     return user;
   }
 
+  //all users
   public List<User> getUserByType(String type) {
     Session s = this.factory.openSession();
     Query q = s.createQuery("From User WHERE userType = :type", User.class);
@@ -157,14 +158,15 @@ public class UserDao {
   public boolean updateUserPicture(String email, String filepath) {
     boolean status = false;
     User user = this.getUseByEmail(email);
+    int userId = user.getUserId();
     String hql = "";
     int rowCount = 0;
     Session session = this.factory.openSession();
     Transaction tx = session.beginTransaction();
     try {
-      hql = "update User as u SET u.userName=:name, u.userPic=:file  WHERE u.userEmail=:mail";
+      hql = "update User as u SET u.userPic=:file  WHERE u.userId=:id";
       rowCount = session.createMutationQuery(hql)
-              .setParameter("mail", email)
+              .setParameter("id", userId)
               .setParameter("file", filepath)
               .executeUpdate();
       System.out.println("Rows affected: " + rowCount);
@@ -181,6 +183,35 @@ public class UserDao {
     }
     return status;
   }
+  
+  
+  public boolean updateUserType(String type, int userId) {
+    boolean status = false;
+    String hql = "";
+    int rowCount = 0;
+    Session session = this.factory.openSession();
+    Transaction tx = session.beginTransaction();
+    try {
+      hql = "update User as u SET u.userType=:type  WHERE u.userId=:id";
+      rowCount = session.createMutationQuery(hql)
+              .setParameter("type", type)
+              .setParameter("id", userId)
+              .executeUpdate();
+      System.out.println("Rows affected: " + rowCount);
+      if (rowCount >= 1) {
+        status = true;
+      }
+      tx.commit();
+    } catch (Exception e) {
+      e.printStackTrace();
+      tx.rollback();
+      status = false;
+    } finally {
+      session.close();
+    }
+    return status;
+  }
+  
 
   //will get a field through which status of the field will be toggled but not for email verification
   public boolean toggleUserNotificationSettings(String email, String field) {

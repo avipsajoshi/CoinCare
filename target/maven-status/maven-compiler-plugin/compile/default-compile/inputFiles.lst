@@ -14,6 +14,7 @@ D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\LoginServlet.j
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\RegisterServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\UpdateProfileServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\ForgetPasswordServlet.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\UpdateProfilePhotoServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\LogoutServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Expense.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\SuperCategory.java

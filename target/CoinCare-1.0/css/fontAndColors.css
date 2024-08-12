@@ -1,6 +1,10 @@
 @font-face {
-  font-family: 'Roboto'; 
-  src: url('../components/Font/Roboto-Light.ttf');
+  font-family: 'Body'; 
+  src: url('../components/Font/FiraSans-SemiBold.otf');
+}
+@font-face{
+  font-family: 'Head'; 
+  src: url('../components/Font/Mangolaine.otf');
 }
 
 :root{

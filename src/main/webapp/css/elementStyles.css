@@ -120,7 +120,7 @@ textarea{
   font-style: italic;
   font-size: medium;
 }
-.submitBtn-exp {
+.submitBtn-exp,.submitBtn-inc {
   margin-top: 1rem;
   margin-bottom: 1rem;
   width: 200px;
@@ -134,7 +134,7 @@ textarea{
   color: var(--back);
   transition: 0.3s;
 }
-.submitBtn-product:hover {
+.submitBtn-exp:hover, .submitBtn-inc:hover {
   background-color: var(--back);
   border: 2px solid var(--action);
   color: var(--text);

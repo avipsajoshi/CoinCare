@@ -63,7 +63,7 @@ public class ExpenseDao {
     return exp;
   }
 
-  public boolean updateExpense(String expenseTitle, String expenseRemarks, float amount, int category, String user, int expenseId) {
+  public boolean updateExpense(String expenseTitle, String expenseRemarks, double amount, int category,int expenseId) {
     boolean status = false;
     CategoryDao catDao = new CategoryDao(FactoryProvider.getFactory());
     Category categoryUpdate = catDao.getCategoryById(category);
@@ -78,6 +78,34 @@ public class ExpenseDao {
               .setParameter("des", expenseRemarks)
               .setParameter("cat", categoryUpdate)
               .setParameter("amt", amount)
+              .setParameter("id", expenseId)
+              .executeUpdate();
+      System.out.println("Rows affected: " + rowCount);
+      if (rowCount >= 1) {
+        status = true;
+      }
+      tx.commit();
+    } catch (Exception e) {
+      e.printStackTrace();
+      tx.rollback();
+      status = false;
+    } finally {
+      session.close();
+    }
+    return status;
+  }
+
+  public boolean deleteById(int expenseIdToDelete) {
+     boolean status = false;
+    
+    String hql = "";
+    int rowCount = 0;
+    Session session = this.factory.openSession();
+    Transaction tx = session.beginTransaction();
+    try {
+      hql = "DELETE from Expense WHERE expenseId=:id";
+      rowCount = session.createMutationQuery(hql)
+              .setParameter("id", expenseIdToDelete)
               .executeUpdate();
       System.out.println("Rows affected: " + rowCount);
       if (rowCount >= 1) {

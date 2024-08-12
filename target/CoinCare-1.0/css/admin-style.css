@@ -1,0 +1,56 @@
+/* 
+    Created on : 11 Aug 2024, 20:48:42
+    Author     : Dell
+*/
+
+/* Tab container styling */
+.tab-container {
+  max-width: 800px;
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Tab navigation */
+.tab-nav {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab-nav button {
+  flex: 1;
+  padding: 10px;
+  background-color: #f7f7f7;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  outline: none;
+}
+
+.tab-nav button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Active tab */
+.tab-nav button.active {
+  background-color: #fff;
+  border-bottom: 3px solid var(--action);
+}
+
+/* Tab content */
+.tab-content {
+  padding: 15px;
+  display: none;
+  background-color: #fff;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.user-profile-img{
+  width: 150px;
+  border-radius: 100%;
+  border: none;
+}

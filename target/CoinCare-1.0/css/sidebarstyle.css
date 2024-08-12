@@ -1,6 +1,10 @@
 @font-face {
-  font-family: 'Roboto'; 
-  src: url('../components/Font/Roboto-Light.ttf');
+  font-family: 'Body'; 
+  src: url('../components/Font/FiraSans-SemiBold.otf');
+}
+@font-face{
+  font-family: 'Head'; 
+  src: url('../components/Font/Mangolaine.otf');
 }
 
 :root{
@@ -12,7 +16,7 @@
   --action-alt:#b5ffe9;
   font-weight: 500;
   --boxShadow: 0;
-  font-family: 'Roboto' !important;
+  font-family: 'Body' !important;
 }
 
 .light_mode{
@@ -27,7 +31,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Roboto';
+  font-family: 'Body';
   font-weight: bolder;
 }
 
@@ -37,12 +41,16 @@ body{
 
 .user-img{
   width: 50px;
+  height: 50px;
   border-radius: 100%;
   border: 1px solid #eee;
 }
 
 .sidebar{
   position: absolute;
+  position: fixed;
+  height: -webkit-fill-available;
+  z-index: 3;
   top: 0;
   left: 0;
   width: 80px;
@@ -95,10 +103,10 @@ body{
 
 }
 .sidebar.active .user{
-  margin: 1rem 1rem;
+  margin: 0.2rem 0.5rem;
 }
 .sidebar .user{
-  margin: 1rem 0;
+  margin: 0.2rem 0;
 }
 
 .top .logo i{
@@ -134,7 +142,7 @@ body{
   list-style-type: none;
   height: 50px;
   width: 90%;
-  margin: 0.8rem auto;
+/*  margin: 0.8rem auto;*/
   line-height: 50px;
 }
 
@@ -197,7 +205,7 @@ body{
   position: relative;
   /* background-color: var(--primary-color-alt); */
   min-height: 100%;
-  top: 0;
+  top: 0; 
   left: 80px;
   transition: all 0.5s ease;
   width: calc(100% - 80px);

@@ -24,6 +24,7 @@
     <property name="hibernate.use_sql_comments">true</property>
     
     <mapping class="com.coincare.entities.User" />
+    <mapping class="com.coincare.entities.Admin" />
     <mapping class="com.coincare.entities.BudgetPlan" />
     <mapping class="com.coincare.entities.Category" />
     <mapping class="com.coincare.entities.Expense" />

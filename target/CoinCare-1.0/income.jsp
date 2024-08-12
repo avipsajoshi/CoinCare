@@ -5,13 +5,49 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.List" %>
+<%@page import="com.coincare.entities.Income" %>
+<%@page import="com.coincare.dao.IncomeDao" %>
+<%@page import="com.coincare.entities.User" %>
+<%@page import="com.coincare.dao.UserDao" %>
+<%@page import="java.time.LocalDate"%>
+<%@page import="java.time.Month"%>
+<%
+    LocalDate currentDate = LocalDate.now();
+    int currentYear = currentDate.getYear();
+    int currentDay = currentDate.getDayOfMonth();
+    Month currentMonth = currentDate.getMonth();
+%>
 <!DOCTYPE html>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Income</title>
-
+    <link rel="stylesheet" href="css/fontAndColors.css"/>
+    <link rel="stylesheet" href="css/elementStyles.css"/>
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
+
+    <script>
+      pop_i = "popup-income";
+      pop_iu = "update-popup-income";
+      let dynamicBtnId;
+      function openPopup(popup, id) {
+        document.getElementById(popup).style.display = "block";
+        dynamicBtnId = id;
+      }
+
+      function closePopup(popup, id) {
+        document.getElementById(popup).style.display = "none";
+      }
+      function openPopup(popup) {
+        document.getElementById(popup).style.display = "block";
+      }
+
+      function closePopup(popup) {
+        document.getElementById(popup).style.display = "none";
+      }
+    </script>
+
   </head>
   <body class="body">
     <script src="js/light-dark.js"></script>
@@ -21,13 +57,195 @@
       <div class="container">
         <h1>Coin Care</h1>
       </div>
+      <%@include file="components/message.jsp" %>
       <div class="container">
         <h2>Your Income Sources</h2>
+        <div class="summary" style="display: flex; column-count: 3; justify-content: space-between;">
+          <h3><%=currentDay%> <%=currentMonth.toString()%>, <%=currentYear%></h3>
+          <label id="totalInc">Total Income: </label>
+        </div>
+
+        <div class="custom-content">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Topic</th>
+                <th scope="col">Remarks</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Category</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% IncomeDao eDao = new IncomeDao(FactoryProvider.getFactory());
+              UserDao uDao = new UserDao(FactoryProvider.getFactory());
+              User thisUser = uDao.getUseByEmail(user.getUserEmail());
+              int uId=thisUser.getUserId();
+              double totalIncomesToday=0;
+              List<Income> allIncomes = eDao.getIncomeByUserId(uId);
+              for(Income e : allIncomes){
+            
+                totalIncomesToday +=e.getIncomeAmount();
+              %>
+              <tr>
+                <td scope="row"><%=e.getIncomeTitle()%></td>
+                <td><%=e.getIncomeRemarks()%></td>
+                <td><%=e.getIncomeAmount()%></td>
+                <td><%=(e.getCategory() != null ? e.getCategory().getCategoryTitle() : "No Category") %></td>
+                <td><button type="button" name="editBtn" value="<%=e.getIncomeId()%>" class="btn action-btn" onclick="openPopup(pop_i, this.value)">Edit</button></td>
+              </tr>
+              <%}%>
+            </tbody>
+          </table>
+
+          <div id="update-popup-inc" class="popup-container">
+            <div class="close-button" onclick="closePopup(pop_iu)">X</div>
+            <form id="update-inc-form" action="./IncomeServlet" method="post" style="padding-left:inherit;">
+              <input type="hidden" value="add" name="operationType">
+              <input type="hidden" value="<%=user.getUserId()%>" name="userId">
+              <input type="hidden" value="" name="incId" id="up-inc-id">
+              <h3> Change a few errs</h3>
+              <br>
+              <label for="inc-name">Income on: </label>
+              <br>
+              <small id="up-inc-name-error" class="error"></small>
+              <br>
+              <input type="text" id="up-inc-name" name="inc-name" placeholder="Title"/>
+              <br>
+              <label for="inc-price">Amount: </label>
+              <br><small id="up-inc-price-error" class="error"></small>
+              <br>
+              <input type="number" id="up-inc-price" name="inc-price" placeholder="Amount in numbers" />
+
+              <br>
+              <label for="up-select-category">Type: </label>
+              <br>
+              <!--incense category drop down-->
+              <select name="catId" class="select-category">
+                <!--add categorydao with user-category for incenses. for now -->
+                <option value="1"> Salary (monthly) </option>
+              </select>
+              <button type="submit" name="operationType" value="update" class="submitBtn-inc">Update Changes</button>
+            </form>
+            <form id="del-inc-form" action="./IncomeServlet" method="get" style="padding-left:inherit;">
+              <input type="hidden" value="" name="incId" id="del-inc-id">
+              <button type="button" name="operationType" value="delete" class="submitBtn-inc">Delete</button>
+            </form>
+          </div>
+
+        </div>
       </div>
 
-      <div class="custom-content">
 
+
+      <!--add income-->
+      <button class="add-button" id="dashboard-add-button" onclick="openPopup(pop_i)">+</button>
+      <div id="popup-inc" class="popup-container">
+        <div class="close-button" onclick="closePopup(pop_i)">X</div>
+        <form id="inc-form" action="./IncomeServlet" method="post" style="padding-left:inherit;">
+          <input type="hidden" value="add" name="operationType">
+          <input type="hidden" value="<%=user.getUserId()%>" name="userId">
+          <!-- date added in backend -->
+          <h3> Add New Income</h3>
+          <br>
+          <label for="inc-name">Income source:</label>
+          <small id="inc-name-error" class="error"></small>
+          <br>
+          <input type="text" id="inc-name" name="inc-name" placeholder="Title"/>
+          <br>
+          <label for="inc-price">Amount: </label>
+          <small id="inc-price-error" class="error"></small>
+          <br>
+          <input type="number" id="inc-price" name="inc-price" placeholder="Amount in numbers" />
+
+          <br>
+          <label for="select-category">Type </label>
+          <br>
+          <!--incense category drop down-->
+          <select name="catId" class="select-category">
+            <!--add categorydao with user-category for incenses. for now -->
+            <option value="1"> Salary(monthly)</option>
+          </select>
+          <button type="submit" class="submitBtn-inc">Add</button>
+        </form>
       </div>
-    </div>
+      <script>
+        //inc from validation input
+        const totalIncomeloaded = document.getElementById("totalIncome");
+        const totalInc = document.getElementById("totalInc");
+        const incForm = document.getElementById("inc-form");
+        const incNameInput = document.getElementById("inc-name");
+        const incPriceInput = document.getElementById("inc-price");
+        const incNameError = document.getElementById("inc-name-error");
+        const incPriceError = document.getElementById("inc-price-error");
+
+        let delincid = document.getElementById("del-inc-id");
+        let upincid = document.getElementById("up-inc-id");
+        delincid.value = dynamicIncomeId;
+        upincid.value = dynamicIncomeId;
+        const upincForm = document.getElementById("update-inc-form");
+        const delincForm = document.getElementById("del-inc-form");
+        const upincNameInput = document.getElementById("up-inc-name");
+        const upincPriceInput = document.getElementById("up-inc-price");
+        const upincNameError = document.getElementById("up-inc-name-error");
+        const upincPriceError = document.getElementById("up-inc-price-error");
+
+
+        //category form validation
+        document.addEventListener('DOMContentLoaded', function () {
+          totalInc.innerHTML = 'Total Income: ' + totalIncomeloaded.textContent;
+
+          upincForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            if (
+                    validateText(incNameInput, incNameError) && validateText(incPriceInput, incPriceError)
+                    ) {
+              upincForm.submit();
+            }
+          });
+
+          delincForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            window.confirm("Are you sure?");
+            delincForm.submit();
+          });
+
+
+
+          incForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            if (
+                    validateText(incNameInput, incNameError) && validateText(incPriceInput, incPriceError)
+                    ) {
+              incForm.submit();
+            }
+          });
+
+
+          function validateText(input, error_class) {
+            const namevalue = input.value.trim();
+            const error = error_class;
+            const nameregex = /^[a-zA-Z&+\-\/\d\s]+$/;
+            if (namevalue === "") {
+              setError(input, " Cannot be Empty", error);
+              return false;
+            } else {
+              removeError(input, error);
+              return true;
+            }
+          }
+          // Set error message
+          function setError(inputElement, message, errorId) {
+            const errorElement = errorId;
+            errorElement.textContent = message;
+          }
+
+          // Remove error message
+          function removeError(inputElement, errorId) {
+            const errorElement = errorId;
+            errorElement.textContent = "";
+          }
+        });
+      </script>
   </body>
 </html>

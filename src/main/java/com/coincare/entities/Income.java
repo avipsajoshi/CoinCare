@@ -12,6 +12,8 @@ public class Income {
   private String incomeSource;
   @Column(name = "incomeAmount")
   private double incomeAmount;
+  @Column(name = "incomeType")
+  private String incomeType;
   //one to many
   private int user;
 }

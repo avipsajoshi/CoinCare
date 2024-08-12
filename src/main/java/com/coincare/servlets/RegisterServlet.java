@@ -30,7 +30,7 @@ public class RegisterServlet extends HttpServlet {
         response.sendRedirect("./register.jsp");
         return;// exit early
       }
-      int year = Year.now().getValue();
+      int year = Year.now().getValue()-5;
       User existUser = userDao.getUseByEmail(userEmail);
       if (existUser == null) {
         User user = new User(userName, userEmail, userPassword, "./user-images/user-image.png","Enter Country","user",  year, 1, 1, "on","on","Verify");
