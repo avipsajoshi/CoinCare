@@ -1,6 +1,7 @@
 package com.coincare.entities;
 
 import jakarta.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "income")
@@ -17,28 +18,32 @@ public class Income {
   private double incomeAmount;
   @Column(name = "incomeType")
   private String incomeType;
+  @Column(length = 1500, name = "incomeDate")
+  private Timestamp incomeDate;
   @ManyToOne
   private User user;
 
   public Income() {
   }
 
-  public Income(int incomeId, String incomeSource, String incomeDescription, double incomeAmount, String incomeType, User user) {
+  public Income(int incomeId, String incomeSource, String incomeDescription, double incomeAmount, String incomeType, Timestamp incomeDate, User user) {
     this.incomeId = incomeId;
     this.incomeSource = incomeSource;
     this.incomeDescription = incomeDescription;
     this.incomeAmount = incomeAmount;
     this.incomeType = incomeType;
+    this.incomeDate = incomeDate;
     this.user = user;
   }
-
-  public Income(String incomeSource, String incomeDescription, double incomeAmount, String incomeType, User user) {
+  public Income(String incomeSource, String incomeDescription, double incomeAmount, String incomeType, Timestamp incomeDate, User user) {
     this.incomeSource = incomeSource;
     this.incomeDescription = incomeDescription;
     this.incomeAmount = incomeAmount;
     this.incomeType = incomeType;
+    this.incomeDate = incomeDate;
     this.user = user;
   }
+  
 
   public int getIncomeId() {
     return incomeId;
@@ -89,5 +94,14 @@ public class Income {
   public void setUser(User user) {
     this.user = user;
   }
+
+  public Timestamp getIncomeDate() {
+    return incomeDate;
+  }
+
+  public void setIncomeDate(Timestamp incomeDate) {
+    this.incomeDate = incomeDate;
+  }
+  
 
 }

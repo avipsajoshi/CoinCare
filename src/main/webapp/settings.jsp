@@ -43,6 +43,9 @@
       <div class="custom-content">
         <% User user1 =user;%>
         <div class="collapse-container">
+
+          <!--user change-->
+
           <div class="collapsible">
             <button class="collapsible-button">Edit Profile</button>
             <div class="collapse-content">
@@ -208,6 +211,7 @@
                   <div id="update-popup-cat<%=c.getCategoryId()%>" class="popup-container update-cat-form scroll-container">
                     <div class="close-button" onclick="closePopup(pop_cu, '<%=c.getCategoryId()%>')">X</div>
                     <form id="up-cat-form<%=c.getCategoryId()%>" action="./CategoryServlet" method="post" style="padding-left:inherit;">
+                      <input type="hidden" name="operationType" value="update">
                       <input type="hidden" value="<%=uId%>" name="userId">
                       <input type="hidden" value="<%=c.getCategoryId()%>" name="catId" id="up-cat-id">
                       <h3> Change a few errs</h3>
@@ -227,7 +231,7 @@
                       <label for="up-select-category-type">Category Type: </label>
                       <br>
 
-                      <select name="catType" id="category-type-dropdown" class="select-category-type">
+                      <select name="up-catType" id="category-type-dropdown" class="select-category-type">
                         <% if (c.getCategoryType() != null){
                         %>
                         <option value="<%=c.getCategoryType()%>" selected><%=c.getCategoryType()%></option>
@@ -235,11 +239,12 @@
                         <option value="Fixed Expense"> Fixed Expense</option>
                         <% }%>
                       </select>
-                      <button type="submit" name="operationType" value="update" class="submitBtn-cat">Update Changes</button>
+                      <button type="submit" class="submitBtn-cat">Update Changes</button>
                     </form>
                     <form id="del-cat-form" action="./CategoryServlet" method="get" style="padding-left:inherit;">
+                      <input type="hidden" name="operationType" value="delete">
                       <input type="hidden" value="<%=c.getCategoryId()%>" name="catId" id="del-cat-id">
-                      <button type="submit" name="operationType" value="delete" class="submitBtn-cat">Delete Record</button>
+                      <button type="submit" class="submitBtn-cat">Delete Record</button>
                     </form>
                   </div>
 
@@ -253,6 +258,8 @@
                 <p>Add a New Category</p>
 
                 <form id="cat-form" action="./CategoryServlet" method="post" style="padding-left:inherit;">
+                  <input type="hidden" name="operationType" value="add">
+                  <input type="hidden" value="<%=uId%>" name="userId">
                   <div class="text-container">
                     <label for="cat-name">Category Title : </label>
                     <br>
@@ -401,15 +408,63 @@
           const catDescriptionInput = document.getElementById("cat-description");
           const catNameError = document.getElementById("cat-name-error");
           const catDescriptionError = document.getElementById("cat-description-error");
-          
-  
-          const upcatAddForm = document.getElementById("up-cat-form"+dynamicBtnId);
+
+
+          const upcatAddForm = document.getElementById("up-cat-form" + dynamicBtnId);
           const upcatNameInput = document.getElementById("up-cat-name");
           const upcatDescriptionInput = document.getElementById("up-cat-description");
           const upcatNameError = document.getElementById("up-cat-name-error");
           const upcatDescriptionError = document.getElementById("up-cat-description-error");
 
+          document.addEventListener('DOMContentLoaded', function () {
+            upcatAddForm.addEventListener("submit", function (event) {
+              event.preventDefault();
+              if (
+                      validateText(upcatNameInput, upcatNameError) && validateText(upcatDescriptionInput, upcatDescriptionError)
+                      ) {
+                upcatAddForm.submit();
+              }
+            });
+            delexpForm.addEventListener("button", function (event) {
+              event.preventDefault();
+              window.confirm("Are you sure?");
+              delexpForm.submit();
+            });
+            catAddForm.addEventListener("submit", function (event) {
+              event.preventDefault();
+              if (
+                      validateText(catNameInput, catNameError) && validateText(catDescriptionInput, catDescriptionError)
+                      ) {
+                catAddForm.submit();
+              }
+            });
 
+
+
+            function validateText(input, error_class) {
+              const namevalue = input.value.trim();
+              const error = error_class;
+              const nameregex = /^[a-zA-Z&+\-\/\d\s]+$/;
+              if (namevalue === "") {
+                setError(input, " Cannot be Empty", error);
+                return false;
+              } else {
+                removeError(input, error);
+                return true;
+              }
+            }
+            // Set error message
+            function setError(inputElement, message, errorId) {
+              const errorElement = errorId;
+              errorElement.textContent = message;
+            }
+
+            // Remove error message
+            function removeError(inputElement, errorId) {
+              const errorElement = errorId;
+              errorElement.textContent = "";
+            }
+          });
         </script>
       </div>
   </body>

@@ -10,6 +10,7 @@ com\coincare\servlets\IncomeServlet.class
 com\coincare\dao\ExpenseDao.class
 com\coincare\servlets\UpdateProfileServlet.class
 com\coincare\entities\Category.class
+com\coincare\servlets\CategoryServlet.class
 com\coincare\servlets\ResetPasswordServlet.class
 com\coincare\entities\Expense.class
 com\coincare\servlets\NewPasswordServlet.class
@@ -20,6 +21,7 @@ com\coincare\dao\CategoryDao.class
 com\coincare\dao\UserDao.class
 com\coincare\helper\SendMail.class
 com\coincare\servlets\LoginServlet.class
+com\coincare\servlets\BudgetPlanServlet.class
 com\coincare\servlets\RegisterServlet.class
 com\coincare\helper\SendMail$1.class
 com\coincare\JakartaRestConfiguration.class

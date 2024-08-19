@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import com.coincare.entities.Category;
 import com.coincare.entities.User;
 import com.coincare.helper.FactoryProvider;
+import java.util.ArrayList;
 import org.hibernate.query.Query;
 
 public class CategoryDao {
@@ -35,8 +36,9 @@ public class CategoryDao {
   }
 
   public List<Category> getAllCategory() {
+    List<Category> listOfCategorys = new ArrayList<>();
     Session s = this.factory.openSession();
-    List<Category> listOfCategorys = s.createQuery("From Category", Category.class).list();
+    listOfCategorys = s.createQuery("From Category", Category.class).list();
     s.close();
     return listOfCategorys;
   }
@@ -56,29 +58,31 @@ public class CategoryDao {
   }
 
   //get category by user and admin for new expense
-  public List<Category> getAllCategoryForNewExpense(int userId, int adminId) {
+  public List<Category> getAllCategoryForNewExpense(int userId) {
+    List<Category> listOfCategories = new ArrayList<>();
+    int adminId = 3;
     Session s = this.factory.openSession();
-    Query q = s.createQuery("From Category WHERE user.userId=:uid or user.userId=:aid", Category.class);
+    Query q = s.createQuery("From Category WHERE user.userId=:uid or user.userId=:aid ORDER BY categoryType desc", Category.class);
     q.setParameter("uid", userId);
     q.setParameter("aid", adminId);
-    List<Category> listOfCategories = q.list();
+    listOfCategories = q.list();
     return listOfCategories;
   }
-  
+
   //get category by user and admin for new expense
   public List<Category> getAllCategoryByUserId(int userId) {
+    List<Category> listOfCategories = new ArrayList<>();
+
     Session s = this.factory.openSession();
     Query q = s.createQuery("From Category WHERE user.userId=:uid", Category.class);
     q.setParameter("uid", userId);
-    List<Category> listOfCategories = q.list();
+    listOfCategories = q.list();
     return listOfCategories;
   }
 
   //update category by user
-  public boolean updateExpense(String categoryTitle, String categoryDescription, String categoryType, int categoryId, int userId) {
+  public boolean updateCategory(String categoryTitle, String categoryDescription, String categoryType, int categoryId, int userId) {
     boolean status = false;
-    UserDao uDao = new UserDao(FactoryProvider.getFactory());
-    User categorUserUpdate = uDao.getUserById(userId);
     String hql = "";
     int rowCount = 0;
     Session session = this.factory.openSession();

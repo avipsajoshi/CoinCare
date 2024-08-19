@@ -12,6 +12,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class IncomeServlet extends HttpServlet {
 
@@ -26,14 +29,18 @@ public class IncomeServlet extends HttpServlet {
       UserDao userDao = new UserDao(FactoryProvider.getFactory());
       Income inc = null;
       boolean status = false;
-      if (operation.trim().equals("add")) {
+      if (operation != null && operation.trim().equals("add")) {
         //add income
         User userAdd = userDao.getUserById(Integer.parseInt(user));
         String incSource = request.getParameter("inc-name");
-        String incDescription = request.getParameter("inc-description");
+        String incDescription = request.getParameter("inc-des");
         double incAmount = Double.parseDouble(request.getParameter("inc-price"));
         String incCategory = request.getParameter("catId");
-        inc = new Income(incSource, incDescription, incAmount,incCategory, userAdd);
+        Timestamp currentTime;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        var now = LocalDateTime.now();
+        currentTime = Timestamp.valueOf(now);
+        inc = new Income(incSource, incDescription, incAmount,incCategory,currentTime, userAdd);
         status = incDao.addIncome(inc);
         if (status) {
           session.setAttribute("message", "Income added");
@@ -43,14 +50,14 @@ public class IncomeServlet extends HttpServlet {
         response.sendRedirect("./income.jsp");
         return;
 
-      } else if (operation.trim().equals("update")) {
+      } else if (operation != null && operation.trim().equals("update")) {
         //update income
         int incomeIdToUpdate = Integer.parseInt(request.getParameter("incId"));
-        User userAdd = userDao.getUserById(Integer.parseInt(user));
-        String incSource = request.getParameter("inc-name");
-        String incDescription = request.getParameter("inc-description");
-        double incAmount = Double.parseDouble(request.getParameter("inc-price"));
-        String incCategory = request.getParameter("catId");
+//        User userAdd = userDao.getUserById(Integer.parseInt(user));
+        String incSource = request.getParameter("up-inc-name");
+        String incDescription = request.getParameter("up-inc-des");
+        double incAmount = Double.parseDouble(request.getParameter("up-inc-price"));
+        String incCategory = request.getParameter("up-catId");
         status = incDao.updateIncome(incSource, incDescription, incAmount, incCategory, incomeIdToUpdate);
         if (status) {
           session.setAttribute("message", "Income record updated");
@@ -60,11 +67,11 @@ public class IncomeServlet extends HttpServlet {
         response.sendRedirect("./income.jsp");
         return;
 
-      } else if (operation.trim().equals("delete")) {
+      } else if (operation != null && operation.trim().equals("delete")) {
         //delete income with id
         System.out.println("Deleteing");
         int incomeIdToDelete = Integer.parseInt(request.getParameter("incId"));
-        status = incDao.deleteById(incomeIdToDelete);
+        status = incDao.deleteIncome(incomeIdToDelete);
         if (status) {
           System.out.println("Deleted");
           session.setAttribute("message", "Income deleted");

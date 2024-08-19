@@ -73,7 +73,7 @@ public class ExpenseDao {
     LocalDateTime endOfDay = now.atTime(LocalTime.MAX);
     Session session = this.factory.openSession();
     try {
-      Query pq = session.createQuery("from Expense as e WHERE user.userId=:uid and expenseDate<=:endofday and expenseDate>=:startofday", Expense.class);
+      Query pq = session.createQuery("from Expense as e WHERE user.userId=:uid and expenseDate<=:endofday and expenseDate>=:startofday ORDER BY e.expenseDate DESC", Expense.class);
       pq.setParameter("uid", uid);
       pq.setParameter("startofday", startOfDay);
       pq.setParameter("endofday", endOfDay);

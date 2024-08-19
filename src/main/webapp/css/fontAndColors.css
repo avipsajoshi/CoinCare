@@ -1,11 +1,12 @@
 @font-face {
-  font-family: 'Body'; 
+  font-family: 'Body';
   src: url('../components/Font/FiraSans-SemiBold.otf');
 }
 @font-face{
-  font-family: 'Head'; 
+  font-family: 'Head';
   src: url('../components/Font/Mangolaine.ttf');
 }
+
 
 :root{
   --primary-color:#13262f;
@@ -17,6 +18,11 @@
   --action-btn:#49bcb4;
   --action-btn-alt:#a0e2ce;
   --font-family: 'Body';
+  --logo1:#9cefee;
+  --logo2:#4ECDC4;
+  --logo3:#3FA3AB;
+  --logo4:#28616E;
+  --logobody1:#53D8CF;
   font-weight: 500;
   --boxShadow: 0;
   font-family: 'Body' !important;
@@ -32,10 +38,28 @@
 }
 
 .dark_mode{
-  --primary:var(--action-alt);
+  --primary:var(--action-primar);
   --back:var(--primary-color);
   --action:var(--action-primary);
   --text: var(--primary-text);
   --text-alt: var(--primary-text-alt);
   --btn:var(--action-alt);
+}
+
+/*for index page: */
+.flickity-button {
+  display: none;
+}
+.flickity-page-dots{
+  display: none;
+}
+
+.logobody{
+  padding: .5rem;
+  border-radius: 7px;
+  background-color: var(--logo2);
+}
+
+.logobodybody:hover{
+  color: var(--logo2);
 }

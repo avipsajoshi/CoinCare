@@ -1,6 +1,13 @@
 package com.coincare.dao;
 
 import com.coincare.entities.User;
+import com.coincare.entities.UserFinancials;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -38,10 +45,12 @@ public class UserDao {
 
   //all users
   public List<User> getUserByType(String type) {
+    List<User> list = new ArrayList<>();
+
     Session s = this.factory.openSession();
     Query q = s.createQuery("From User WHERE userType = :type", User.class);
     q.setParameter("type", type);
-    List<User> list = q.list();
+    list = q.list();
     return list;
   }
 
@@ -183,8 +192,7 @@ public class UserDao {
     }
     return status;
   }
-  
-  
+
   public boolean updateUserType(String type, int userId) {
     boolean status = false;
     String hql = "";
@@ -211,7 +219,6 @@ public class UserDao {
     }
     return status;
   }
-  
 
   //will get a field through which status of the field will be toggled but not for email verification
   public boolean toggleUserNotificationSettings(String email, String field) {
@@ -269,4 +276,30 @@ public class UserDao {
     }
     return status;
   }
+
+  public List<UserFinancials> getUserReportForToday(int userId, LocalDate now) {
+    List<UserFinancials> list = new ArrayList();
+    LocalDateTime startOfDay = LocalDateTime.of(now, LocalTime.MIDNIGHT);
+    LocalDateTime endOfDay = now.atTime(LocalTime.MAX);
+    try {
+      Session session = this.factory.openSession();
+
+//      Query<UserFinancials> query = session.createNamedQuery("UserFinancials.getUserFinancials", UserFinancials.class);
+//      query.setParameter("user_userId", userId);
+      Query pq = session.createQuery("FROM UserFinancials WHERE user_userId =:id AND date<=:endofday and date>=:startofday ORDER BY date DESC", UserFinancials.class);
+      pq.setParameter("id", userId);
+      pq.setParameter("startofday", startOfDay);
+      pq.setParameter("endofday", endOfDay);
+      list = pq.list();
+      System.out.println("Result size: " + list.size());
+      for (UserFinancials uf : list) {
+        System.out.println(uf.getTitle());
+      }
+      session.close();
+    } catch (Exception w) {
+      w.printStackTrace();
+    }
+    return list;
+  }
+
 }

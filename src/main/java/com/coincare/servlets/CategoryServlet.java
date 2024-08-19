@@ -20,13 +20,20 @@ public class CategoryServlet extends HttpServlet {
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       String operation = request.getParameter("operationType");
-      String user = request.getParameter("userId");
+      String userid = request.getParameter("userId");
       HttpSession session = request.getSession();
       CategoryDao catDao = new CategoryDao(FactoryProvider.getFactory());
       UserDao userDao = new UserDao(FactoryProvider.getFactory());
       Category cat = null;
       boolean status = false;
+      //add category by user
       if (operation.trim().equals("add")) {
+        String catTitle = request.getParameter("cat-name");
+        String catDes = request.getParameter("cat-description");
+        String catType = request.getParameter("catType");
+        User user = userDao.getUserById(Integer.parseInt(userid));
+        cat = new Category(catTitle, catDes, user, catType);
+        status = catDao.addCategory(cat);
         //add user category
         if (status) {
           session.setAttribute("message", "Category added");
@@ -36,7 +43,13 @@ public class CategoryServlet extends HttpServlet {
         response.sendRedirect("./settings.jsp");
         return;
 
-      } else if (operation.trim().equals("update")) {
+      } //update category by user
+      else if (operation.trim().equals("update")) {
+        String catTitle = request.getParameter("up-cat-name");
+        String catDes = request.getParameter("up-cat-description");
+        String catType = request.getParameter("up-catType");
+        String catId = request.getParameter("catId");
+        status = catDao.updateCategory(catTitle, operation, catType, Integer.parseInt(catId), Integer.parseInt(userid));
         //update user category
         if (status) {
           session.setAttribute("message", "Category record updated");
@@ -48,11 +61,14 @@ public class CategoryServlet extends HttpServlet {
 
       } else if (operation.trim().equals("delete")) {
         //delete user category with id
+
+        String catId = request.getParameter("catId");
+        status = catDao.deleteCategoryById(Integer.parseInt(catId));
         if (status) {
           System.out.println("Deleted");
           session.setAttribute("message", "Category deleted");
         } else {
-          System.out.println("Not Deleted");
+          System.out.println("Error while deleting");
 
           session.setAttribute("message", "Error deleting category");
         }

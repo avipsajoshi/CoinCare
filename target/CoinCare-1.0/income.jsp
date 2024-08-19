@@ -67,72 +67,74 @@
               UserDao uDao = new UserDao(FactoryProvider.getFactory());
               User thisUser = uDao.getUseByEmail(user.getUserEmail());
               int uId=thisUser.getUserId();
-              double totalIncomesToday=0;
+              double totalIncomeToday=0;
               List<Income> allIncomes = eDao.getIncomeByUserId(uId);
               for(Income e : allIncomes){
             
-                totalIncomesToday +=e.getIncomeAmount();
+                totalIncomeToday +=e.getIncomeAmount();
               %>
               <tr>
                 <td scope="row"><%=e.getIncomeSource()%></td>
                 <td><%=e.getIncomeDescription()%></td>
                 <td><%=e.getIncomeAmount()%></td>
-                <td><button type="button" name="editBtn" value="<%=e.getIncomeId()%>" class="btn action-btn" onclick="openPopup(pop_i, this.value)">Edit</button></td>
-              </tr>
-              <%}%>
+                <td><%=e.getIncomeType()%></td>
+                <td><button type="button" name="editBtn" class="btn action-btn" onclick="openUpdatePopup(pop_iu,'<%=e.getIncomeId()%>')">Edit</button></td>
+            <div id="update-popup-inc<%=e.getIncomeId()%>" class="popup-container scroll-container">
+              <div class="close-button" onclick="closeUpdatePopup(pop_iu, '<%=e.getIncomeId()%>')">X</div>
+              <form id="update-inc-form" action="./IncomeServlet" method="post" style="padding-left:inherit;">
+                <input type="hidden" name="operationType"  value="update" >
+                <input type="hidden" value="<%=user.getUserId()%>" name="userId">
+                <input type="hidden" value="<%=e.getIncomeId()%>" name="incId" id="up-inc-id">
+                <h3> Change a few errs</h3>
+                <br>
+                <div class="text-container">
+                  <label for="inc-name">Income on: </label>
+                  <br>
+                  <small id="up-inc-name-error" class="error"></small>
+                  <br>
+                  <input type="text" id="up-inc-name" name="up-inc-name" placeholder="Title" value="<%=e.getIncomeSource()%>"/>
+                  <br>
+                </div>
+                <div class="text-container">
+                  <label for="inc-name">Description: </label>
+                  <br>
+                  <small id="up-inc-des-error" class="error"></small>
+                  <br>
+                  <input type="text" id="up-inc-des" name="up-inc-des" placeholder="Description" value="<%=e.getIncomeDescription()%>"/>
+                  <br>
+                </div>
+                <div class="text-container">
+                  <label for="inc-price">Amount: </label>
+                  <br><small id="up-inc-price-error" class="error"></small>
+                  <br>
+                  <input type="number" id="up-inc-price" name="up-inc-price" placeholder="Amount in numbers" value="<%=e.getIncomeAmount()%>"/>
+                  <br>
+                </div>
+                <label for="up-select-category">Type: </label>
+                <br>
+                <!--incense category drop down-->
+                <select name="up-catId" class="select-category">
+                  <!--add categorydao with user-category for incenses. for now -->
+                  <option value="1"> Salary (monthly) </option>
+                </select>
+                <button type="submit" class="submitBtn-inc">Update Changes</button>
+              </form>
+              <form id="del-inc-form" action="./IncomeServlet" method="get" style="padding-left:inherit;">
+                <input type="hidden" value="<%=e.getIncomeId()%>" name="incId" id="del-inc-id">
+                <input type="hidden" name="operationType"  value="delete" >
+                <button type="submit" class="submitBtn-inc">Delete</button>
+              </form>
+            </div>
+            </tr>
+
+            <%}%>
             </tbody>
           </table>
-
-          <div id="update-popup-inc" class="popup-container scroll-container">
-            <div class="close-button" onclick="closePopup(pop_iu)">X</div>
-            <form id="update-inc-form" action="./IncomeServlet" method="post" style="padding-left:inherit;">
-              <input type="hidden" value="add" name="operationType">
-              <input type="hidden" value="<%=user.getUserId()%>" name="userId">
-              <input type="hidden" value="" name="incId" id="up-inc-id">
-              <h3> Change a few errs</h3>
-              <br>
-              <div class="text-container">
-                <label for="inc-name">Income on: </label>
-                <br>
-                <small id="up-inc-name-error" class="error"></small>
-                <br>
-                <input type="text" id="up-inc-name" name="inc-name" placeholder="Title"/>
-                <br>
-              </div>
-              <div class="text-container">
-                <label for="inc-name">Description: </label>
-                <br>
-                <small id="up-inc-des-error" class="error"></small>
-                <br>
-                <input type="text" id="up-inc-des" name="inc-name" placeholder="Description"/>
-                <br>
-              </div>
-              <div class="text-container">
-                <label for="inc-price">Amount: </label>
-                <br><small id="up-inc-price-error" class="error"></small>
-                <br>
-                <input type="number" id="up-inc-price" name="inc-price" placeholder="Amount in numbers" />
-                <br>
-              </div>
-              <label for="up-select-category">Type: </label>
-              <br>
-              <!--incense category drop down-->
-              <select name="catId" class="select-category">
-                <!--add categorydao with user-category for incenses. for now -->
-                <option value="1"> Salary (monthly) </option>
-              </select>
-              <button type="submit" name="operationType" value="update" class="submitBtn-inc">Update Changes</button>
-            </form>
-            <form id="del-inc-form" action="./IncomeServlet" method="get" style="padding-left:inherit;">
-              <input type="hidden" value="" name="incId" id="del-inc-id">
-              <button type="button" name="operationType" value="delete" class="submitBtn-inc">Delete</button>
-            </form>
-          </div>
 
         </div>
       </div>
 
-
+      <label id="totalIncome" style="display:none;"> <%=totalIncomeToday%> </label>  
 
       <!--add income-->
       <button class="add-button" id="dashboard-add-button" onclick="openPopup(pop_i)">+</button>
@@ -156,7 +158,7 @@
             <br>
             <small id="inc-des-error" class="error"></small>
             <br>
-            <input type="text" id="inc-des" name="inc-name" placeholder="Description"/>
+            <input type="text" id="inc-des" name="inc-des" placeholder="Description"/>
             <br>
           </div>
           <div class="text-container">
@@ -179,13 +181,15 @@
       </div>
       <script>
 
-        function openPopup(popup, id) {
-          document.getElementById(popup).style.display = "block";
+        function openUpdatePopup(popup, id) {
+          pop = popup+id;
+          document.getElementById(pop).style.display = "block";
           dynamicBtnId = id;
         }
 
-        function closePopup(popup, id) {
-          document.getElementById(popup).style.display = "none";
+        function closeUpdatePopup(popup, id) {
+          pop = popup+id;
+          document.getElementById(pop).style.display = "none";
         }
         function openPopup(popup) {
           document.getElementById(popup).style.display = "block";
@@ -207,10 +211,6 @@
         const incPriceError = document.getElementById("inc-price-error");
         const incDesError = document.getElementById("inc-des-error");
 
-        let delincid = document.getElementById("del-inc-id");
-        let upincid = document.getElementById("up-inc-id");
-        delincid.value = dynamicIncomeId;
-        upincid.value = dynamicIncomeId;
         const upincForm = document.getElementById("update-inc-form");
         const delincForm = document.getElementById("del-inc-form");
         const upincNameInput = document.getElementById("up-inc-name");

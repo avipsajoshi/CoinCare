@@ -50,7 +50,7 @@ public class IncomeDao {
     List<Income> inc = null;
     Session session = this.factory.openSession();
     try {
-      Query pq = session.createQuery("from Income as e WHERE user.userId=:uid", Income.class);
+      Query pq = session.createQuery("from Income as e WHERE user.userId=:uid ORDER BY incomeDate desc", Income.class);
       pq.setParameter("uid", uid);
       inc = pq.list();
       session.close();
@@ -60,22 +60,23 @@ public class IncomeDao {
     return inc;
   }
 
-  public boolean updateIncome(String incomeSource, String incomeDescriptions, double amount, String category,int incomeId) {
+  public boolean updateIncome(String incomeSource, String incomeDescriptions, double amount, String type,int incomeId) {
     boolean status = false;
-    CategoryDao catDao = new CategoryDao(FactoryProvider.getFactory());
+//    Income currentIncome = this.getIncomeById(incomeId);
     String hql = "";
     int rowCount = 0;
     Session session = this.factory.openSession();
     Transaction tx = session.beginTransaction();
     try {
-      hql = "update Income SET incomeSource=:title, incomeDescription=:des, incomeAmount=:amt,incomeType=:cat WHERE incomeId=:id";
+      hql = "update Income as i SET i.incomeSource=:title, i.incomeDescription=:des, i.incomeAmount=:amt, i.incomeType=:cat WHERE i.incomeId=:id";
       rowCount = session.createMutationQuery(hql)
               .setParameter("title", incomeSource)
               .setParameter("des", incomeDescriptions)
-              .setParameter("cat", category)
               .setParameter("amt", amount)
+              .setParameter("cat", type)
               .setParameter("id", incomeId)
               .executeUpdate();
+      
       System.out.println("Rows affected: " + rowCount);
       if (rowCount >= 1) {
         status = true;
@@ -91,7 +92,7 @@ public class IncomeDao {
     return status;
   }
 
-  public boolean deleteById(int incomeIdToDelete) {
+  public boolean deleteIncome(int incomeIdToDelete) {
      boolean status = false;
     
     String hql = "";

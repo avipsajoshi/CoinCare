@@ -53,7 +53,7 @@ public class SendMail {
     //step1: to get session object 
     Authenticator auth = new Authenticator(){
       public PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication(mailFrom, "hags cruz dukw qfse");
+        return new PasswordAuthentication(mailFrom, "");
       }
     };
     Session session = Session.getInstance(properties, auth);

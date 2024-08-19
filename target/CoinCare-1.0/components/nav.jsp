@@ -26,6 +26,7 @@
     User user = udao.getUseByEmail(logged_user.getUserEmail());
 %>
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet"/>
 <link rel="stylesheet" href="css/sidebarstyle.css">
 <div class="sidebar">
   <div class="top">
@@ -39,8 +40,9 @@
       <img src="images/<%=user.getUserPic()%>" alt="user" class="user-img"></a>
     <a href="./settings.jsp" style="text-decoration: none; " ><div class="user-info">
         <p class="bold"><%= user.getUserName() %></p>
-        <p><%= user.getUserType() %></p>
-      </div></a>
+        </a>
+        <p><a href="./LogoutServlet">Logout</a></p>
+      </div>
   </div>
   <ul>
     <li>
@@ -49,6 +51,13 @@
         <span class="nav-item">Dashboard</span>
       </a>
       <span class="tooltip">Dashboard</span>
+    </li>
+    <li>
+      <a href="./expense.jsp">
+        <i class='bx bx-money-withdraw'></i>
+        <span class="nav-item">Expenses</span>
+      </a>
+      <span class="tooltip">Expenses</span>
     </li>
 
     <li>
@@ -69,7 +78,7 @@
 
     <li>
       <a href="./statements.jsp">
-        <i class='bx bxs-report'></i>
+        <i class='bx bx-bar-chart-square'></i>
         <span class="nav-item">Statements</span>
       </a>
       <span class="tooltip">Statements</span>
