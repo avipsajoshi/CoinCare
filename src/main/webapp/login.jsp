@@ -14,7 +14,7 @@
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
   </head>
   <body class="body">
-    <script src="<%= request.getContextPath() %>/js/light-dark.js"></script>
+    <script src="./js/light-dark.js"></script>
     <form method="post" id="login-form" action="./LoginServlet">
       <div class="formheader">
         <h2>Welcome Back!</h2>

@@ -20,29 +20,36 @@ public class Income {
   private String incomeType;
   @Column(length = 1500, name = "incomeDate")
   private Timestamp incomeDate;
+  @Column(length = 1500, name = "mode")
+  private String mode;
   @ManyToOne
   private User user;
 
   public Income() {
   }
 
-  public Income(int incomeId, String incomeSource, String incomeDescription, double incomeAmount, String incomeType, Timestamp incomeDate, User user) {
+  public Income(int incomeId, String incomeSource, String incomeDescription, double incomeAmount, String incomeType, Timestamp incomeDate, String mode, User user) {
     this.incomeId = incomeId;
     this.incomeSource = incomeSource;
     this.incomeDescription = incomeDescription;
     this.incomeAmount = incomeAmount;
     this.incomeType = incomeType;
     this.incomeDate = incomeDate;
+    this.mode = mode;
     this.user = user;
   }
-  public Income(String incomeSource, String incomeDescription, double incomeAmount, String incomeType, Timestamp incomeDate, User user) {
+
+  public Income(String incomeSource, String incomeDescription, double incomeAmount, String incomeType, Timestamp incomeDate, String mode, User user) {
     this.incomeSource = incomeSource;
     this.incomeDescription = incomeDescription;
     this.incomeAmount = incomeAmount;
     this.incomeType = incomeType;
     this.incomeDate = incomeDate;
+    this.mode = mode;
     this.user = user;
   }
+
+ 
   
 
   public int getIncomeId() {
@@ -101,6 +108,14 @@ public class Income {
 
   public void setIncomeDate(Timestamp incomeDate) {
     this.incomeDate = incomeDate;
+  }
+
+  public String getMode() {
+    return mode;
+  }
+
+  public void setMode(String mode) {
+    this.mode = mode;
   }
   
 

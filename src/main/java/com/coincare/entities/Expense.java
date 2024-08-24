@@ -13,11 +13,13 @@ public class Expense {
   @Column(length = 1500, name = "expenseTitle")
   private String expenseTitle;
   @Column(length = 1500, name = "expenseRemark")
-  private String expenseRemarks;
+  private String expenseRemark;
   @Column(length = 1500, name = "expenseAmount")
   private double expenseAmount;
   @Column(length = 1500, name = "expenseDate")
   private Timestamp expenseDate;
+  @Column(length = 1500, name = "mode")
+  private String mode;
   //one to one
   @ManyToOne
   private Category category;
@@ -27,21 +29,23 @@ public class Expense {
   public Expense() {
   }
 
-  public Expense(int expenseId, String expenseTitle, String expenseRemarks, double expenseAmount, Timestamp expenseDate, Category category, User user) {
+  public Expense(int expenseId, String expenseTitle, String expenseRemarks, double expenseAmount, Timestamp expenseDate, String mode, Category category, User user) {
     this.expenseId = expenseId;
     this.expenseTitle = expenseTitle;
-    this.expenseRemarks = expenseRemarks;
+    this.expenseRemark = expenseRemarks;
     this.expenseAmount = expenseAmount;
     this.expenseDate = expenseDate;
+    this.mode = mode;
     this.category = category;
     this.user = user;
   }
 
-  public Expense(String expenseTitle, String expenseRemarks, double expenseAmount, Timestamp expenseDate, Category category, User user) {
+  public Expense(String expenseTitle, String expenseRemarks, double expenseAmount, Timestamp expenseDate, String mode, Category category, User user) {
     this.expenseTitle = expenseTitle;
-    this.expenseRemarks = expenseRemarks;
+    this.expenseRemark = expenseRemarks;
     this.expenseAmount = expenseAmount;
     this.expenseDate = expenseDate;
+    this.mode = mode;
     this.category = category;
     this.user = user;
   }
@@ -65,11 +69,11 @@ public class Expense {
   }
 
   public String getExpenseRemarks() {
-    return expenseRemarks;
+    return expenseRemark;
   }
 
   public void setExpenseRemarks(String expenseRemarks) {
-    this.expenseRemarks = expenseRemarks;
+    this.expenseRemark = expenseRemarks;
   }
 
   public double getExpenseAmount() {
@@ -104,8 +108,12 @@ public class Expense {
   public void setUser(User user) {
     this.user = user;
   }
-  
-  
-  
 
+  public String getMode() {
+    return mode;
+  }
+
+  public void setMode(String mode) {
+    this.mode = mode;
+  }
 }

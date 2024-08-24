@@ -35,12 +35,13 @@ public class IncomeServlet extends HttpServlet {
         String incSource = request.getParameter("inc-name");
         String incDescription = request.getParameter("inc-des");
         double incAmount = Double.parseDouble(request.getParameter("inc-price"));
+        String mode = request.getParameter("mode");
         String incCategory = request.getParameter("catId");
         Timestamp currentTime;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         var now = LocalDateTime.now();
         currentTime = Timestamp.valueOf(now);
-        inc = new Income(incSource, incDescription, incAmount,incCategory,currentTime, userAdd);
+        inc = new Income(incSource, incDescription, incAmount,incCategory,currentTime, mode, userAdd);
         status = incDao.addIncome(inc);
         if (status) {
           session.setAttribute("message", "Income added");
@@ -57,8 +58,9 @@ public class IncomeServlet extends HttpServlet {
         String incSource = request.getParameter("up-inc-name");
         String incDescription = request.getParameter("up-inc-des");
         double incAmount = Double.parseDouble(request.getParameter("up-inc-price"));
+        String mode = request.getParameter("mode");
         String incCategory = request.getParameter("up-catId");
-        status = incDao.updateIncome(incSource, incDescription, incAmount, incCategory, incomeIdToUpdate);
+        status = incDao.updateIncome(incSource, incDescription, incAmount, mode, incCategory, incomeIdToUpdate);
         if (status) {
           session.setAttribute("message", "Income record updated");
         } else {

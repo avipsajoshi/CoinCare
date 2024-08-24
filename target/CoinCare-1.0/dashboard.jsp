@@ -47,7 +47,7 @@
       <%@include file="components/message.jsp" %>
       <div class="container">
 
-        <h2>Transaction Analysis </h2>
+        <h2>Dashboard</h2>
         <div class="summary" style="display: flex; column-count: 3; justify-content: space-between;">
           <h3><%=currentDay%> <%=currentMonth.toString()%>, <%=currentYear%></h3>
           <label id="totalExp">Total Expense: </label>
@@ -80,7 +80,7 @@
       <br>
       <br>
       <center>
-        <%@include file="components/logo.jsp"%>
+        <%@include file="components/empty.jsp"%>
       </center>
       <%
         }else{
@@ -91,10 +91,10 @@
           <thead>
             <tr>
               <th scope="col">Transaction</th>
-              <th scope="col">Description</th>
-              <th scope="col">Amount</th>
+              <th scope="col">Remarks</th>
+              <th scope="col">For/From</th>
               <th scope="col">Mode</th>
-              <!--<th scope="col"></th>-->
+              <th scope="col">Amount</th>
             </tr>
           </thead>
           <tbody>
@@ -105,20 +105,25 @@
             <tr>
               <td scope="row"><%=uf.getTitle()%></td>
               <td><%=uf.getDescription()%></td>
+              <td><%=uf.getCategory()%></td>
+              <td><%=uf.getMode()%></td>
               <% if (uf.getType().equals("expense")){ %>
               <td style="color:red;"> - <%=uf.getAmount()%></td>
               <%}else if (uf.getType().equals("income")){%>
               <td style="color:#16c216;"> + <%=uf.getAmount()%></td>
-              <%}}%>
+              <%}%>
+              <%}%>
             </tr>
           </tbody>
         </table>
       </div>
+      <%@include file="components/testchart.jsp"%>
+
       <% }
       %>
+
+
     </div>
-
-
 
     <!--add expense-->
     <button class="add-button" id="dashboard-add-button" onclick="openAddPopup(pop_p)">+</button>
@@ -141,13 +146,22 @@
         <label for="exp-description">Additional Remarks: </label>
         <small id="exp-description-error" class="error"></small>
         <br>
-        <textarea id="exp-description" placeholder="Enter description about expense" class="exp-textarea" name="exp-description"></textarea>
+        <input id="exp-description" placeholder="Enter description about expense" class="exp-textarea" name="exp-description"/>
         <br>
         <label for="exp-price">Amount: </label>
         <small id="exp-price-error" class="error"></small>
         <br>
         <input type="number" id="exp-price" name="exp-price" placeholder="Amount in numbers" />
 
+        <br>
+        <label for="select-mode">Mode of Transaction: </label>
+        <br>
+        <select name="mode" class="select-category">
+          <% for(String m: modes){
+          %>
+          <option value="<%=m%>"><%=m%></option>
+          <%}%>
+        </select>
         <br>
         <label for="select-category">Category: </label>
         <br>
@@ -230,9 +244,7 @@
         });
         expForm.addEventListener("submit", function (event) {
           event.preventDefault();
-          if (
-                  validateText(expNameInput, expNameError) && validateText(expDescriptionInput, expDescriptionError) && validateText(expPriceInput, expPriceError)
-                  ) {
+          if (validateText(expNameInput, expNameError) && validateText(expDescriptionInput, expDescriptionError) && validateText(expPriceInput, expPriceError)) {
             expForm.submit();
           }
         });

@@ -17,6 +17,10 @@ public class UserFinancials {
   private String title;
   @Column(length = 100, name = "description")
   private String description;
+  @Column(length = 100, name = "modeOfTransaction")
+  private String mode;
+  @Column(length = 100, name = "category")
+  private String category;
   @Column(length = 100, name = "amount")
   private Double amount;
   @Column(length = 100, name = "date")
@@ -25,15 +29,31 @@ public class UserFinancials {
   public UserFinancials() {
   }
 
-  public UserFinancials(int transactionId, int user_userId, String type, String title, String description, Double amount, Timestamp date) {
+  public UserFinancials(int transactionId, int user_userId, String type, String title, String description, String mode, String category, Double amount, Timestamp date) {
     this.transactionId = transactionId;
     this.user_userId = user_userId;
     this.type = type;
     this.title = title;
     this.description = description;
+    this.mode = mode;
+    this.category = category;
     this.amount = amount;
     this.date = date;
   }
+
+  public UserFinancials(int user_userId, String type, String title, String description, String mode, String category, Double amount, Timestamp date) {
+    this.user_userId = user_userId;
+    this.type = type;
+    this.title = title;
+    this.description = description;
+    this.mode = mode;
+    this.category = category;
+    this.amount = amount;
+    this.date = date;
+  }
+  
+  
+ 
 
   public int getTransactionId() {
     return transactionId;
@@ -43,8 +63,15 @@ public class UserFinancials {
     this.transactionId = transactionId;
   }
 
-  
+  public String getCategory() {
+    return category;
+  }
 
+  public void setCategory(String category) {
+    this.category = category;
+  }
+  
+  
   public String getType() {
     return type;
   }
@@ -94,5 +121,12 @@ public class UserFinancials {
     this.user_userId = user_userId;
   }
 
+  public String getMode() {
+    return mode;
+  }
+
+  public void setMode(String mode) {
+    this.mode = mode;
+  }
   
 }

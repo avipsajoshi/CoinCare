@@ -49,7 +49,7 @@ function validateName() {
 
 function validateEmail() {
   const emailValue = emailInput.value.trim();
-  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const emailRegex = /^[A-Za-z][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   if (emailValue === "") {
     setError(emailInput, " Email is required", "email-error");
   } else if (!emailRegex.test(emailValue)) {
@@ -62,7 +62,7 @@ function validateEmail() {
 
 function validatePassword() {
   const passValue = passwordInput.value.trim();
-  const passRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_])/;
+  const passRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
   if (passValue === "") {
     setError(passwordInput, " Password is required", "password-error");
     return false;
@@ -74,14 +74,14 @@ function validatePassword() {
     );
     return false;
   }
-  // else if (!passRegex.test(passValue)) {
-  //   setError(
-  //     passwordInput,
-  //     "Password must contain at least least one uppercase letter, one lowercase letter, one digit, and one special character.",
-  //     "password-error"
-  //   );
-  //   return false;
-  // }
+   else if (!passRegex.test(passValue)) {
+     setError(
+       passwordInput,
+       "Password must contain at least least one uppercase letter, one lowercase letter, one digit, and one special character.",
+       "password-error"
+     );
+     return false;
+   }
   else {
     removeError(passwordInput, "password-error");
     return true;
@@ -115,14 +115,14 @@ function validateConfirmPassword() {
 function setError(inputElement, message, errorId) {
   const errorElement = document.getElementById(errorId);
   errorElement.textContent = message;
-  inputElement.classList.add("error-message");
+  errorElement.classList.add("error-message");
 }
 
 // Remove error message
 function removeError(inputElement, errorId) {
   const errorElement = document.getElementById(errorId);
   errorElement.textContent = "";
-  inputElement.classList.remove("error-message");
+  errorElement.classList.remove("error-message");
 }
 
 function togglePassword() {

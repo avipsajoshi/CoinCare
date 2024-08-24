@@ -104,7 +104,7 @@
 
 
 /*dashboard add expense popup*/
-#exp-form input, .exp-textarea, .select-category, 
+#exp-form input, .exp-textarea, .select-category,
 .update-exp-form input, .exp-textarea{
   padding: 10px;
   margin:10px 0;
@@ -116,7 +116,7 @@
 }
 
 .select-category .dropdown{
-  
+
 }
 .text-container{
   padding: 10px;
@@ -263,7 +263,7 @@ label{
 
 }
 
-.text-container input, select, 
+.text-container input, select,
 textarea {
   padding: 5px;
   padding-left: 15px;
@@ -362,3 +362,19 @@ select *{
   color: var(--text);
   width: 70%;
 }*/
+
+
+/* chart style*/
+.chart-container{
+  display: flex;
+  margin: 1rem;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+}
+.chart{
+  align-content: center;
+  height: 300px;
+  padding: 2rem;
+  border-radius: 1rem;
+}

@@ -53,8 +53,8 @@
 
 
       <%
-      String queryExpenseId = request.getParameter("ex");
-      if(queryExpenseId!=null){
+        String queryExpenseId = request.getParameter("ex");
+        if(queryExpenseId!=null){
       %>
       <script>
       openPopup(popup_u);
@@ -68,7 +68,8 @@
               <th scope="col">Topic</th>
               <th scope="col">Remarks</th>
               <th scope="col">Amount</th>
-              <th scope="col">Category</th>
+              <th scope="col">For</th>
+              <th scope="col">Mode</th>
               <th scope="col">Actions</th>
             </tr>
           </thead>
@@ -84,21 +85,22 @@
             List<Expense> allExpenses = eDao.getExpenseByUserIdToday(uId,currentDate);
             if(allExpenses.isEmpty()){
             %>
-          
-            <%@include file="components/logo.jsp"%>
 
-          <%
-            }else{
-          for(Expense e : allExpenses){
-          totalExpensesToday +=e.getExpenseAmount();
-          %>
-          <tr>
-            <td scope="row"><%=e.getExpenseTitle()%></td>
-            <td><%=e.getExpenseRemarks()%></td>
-            <td><%=e.getExpenseAmount()%></td>
-            <td><%=(e.getCategory() != null ? e.getCategory().getCategoryTitle() : "No Category") %></td>
-            <td><button type="button" name="editBtn" value="<%=e.getExpenseId()%>" class="btn action-btn" onclick="openPopup(pop_u, this.value)">Edit</button></td>
-            <!--update expense-->
+            <%@include file="components/empty.jsp"%>
+
+            <%
+              }else{
+            for(Expense e : allExpenses){
+            totalExpensesToday +=e.getExpenseAmount();
+            %>
+            <tr>
+              <td scope="row"><%=e.getExpenseTitle()%></td>
+              <td><%=e.getExpenseRemarks()%></td>
+              <td><%=e.getExpenseAmount()%></td>
+              <td><%=(e.getCategory() != null ? e.getCategory().getCategoryTitle() : "No Category") %></td>
+              <td><%=e.getMode()%></td>
+              <td><button type="button" name="editBtn" value="<%=e.getExpenseId()%>" class="btn action-btn" onclick="openPopup(pop_u, this.value)">Edit</button></td>
+              <!--update expense-->
           <div id="update-popup-exp<%=e.getExpenseId()%>" class="popup-container update-exp-form scroll-container">
             <div class="close-button" onclick="closePopup(pop_u, '<%=e.getExpenseId()%>')">X</div>
             <form id="update-exp-form" action="./ExpenseServlet" method="post" style="padding-left:inherit;">
@@ -112,22 +114,30 @@
               <br>
               <small id="up-exp-name-error" class="error"></small>
               <br>
-              <input type="text" id="up-exp-name" name="exp-name" placeholder="Title" value="<%=e.getExpenseTitle()%>"/>
+              <input type="text" id="up-exp-name" name="up-exp-name" placeholder="Title" value="<%=e.getExpenseTitle()%>"/>
               <br>
               <label for="exp-description">Additional Remarks: </label>
               <br>
               <small id="up-exp-description-error" class="error"></small>
               <br>
-              <input id="up-exp-description" placeholder="Enter description about expense" class="exp-textarea" name="exp-description" value="<%=e.getExpenseRemarks()%>"/>
+              <input id="up-exp-description" placeholder="Enter description about expense" class="exp-textarea" name="up-exp-description" value="<%=e.getExpenseRemarks()%>"/>
               <br>
               <label for="exp-price">Amount: </label>
               <br><small id="up-exp-price-error" class="error"></small>
               <br>
-              <%
-              double amt = e.getExpenseAmount();
-              %>
-              <input type="number" id="up-exp-price" name="exp-price" placeholder="Amount in numbers"  value="<%=amt%>" />
+              <input type="number" id="up-exp-price" name="up-exp-price" placeholder="Amount in numbers"  value="<%=e.getExpenseAmount()%>" />
 
+              <br>
+              <label for="up-select-mode">Mode of Transaction: </label>
+              <br>
+              <select name="mode" class="select-category">
+                <option value="<%=(e.getMode() != null ? e.getMode() : "No Mode") %>" selected><%=(e.getMode() != null ? e.getMode() : "No Mode") %></option>
+                <% for(String m: modes){
+                if(e.getMode().equals(m)) continue;
+                %>
+                <option value="<%=m%>"><%=m%></option>
+                <%}%>
+              </select>
               <br>
               <label for="up-select-category">Category: </label>
               <br>
@@ -135,7 +145,7 @@
               <select name="catId" class="select-category">
                 <!--add categorydao with user-category for expenses. for now -->
 
-                <option value="<%=(e.getCategory() != null ? e.getCategory().getCategoryTitle() : "No Category") %>" selected> <%=(e.getCategory() != null ? e.getCategory().getCategoryTitle() : "No Category") %> </option>
+                <option value="<%=(e.getCategory() != null ? e.getCategory().getCategoryId() : 11) %>" selected> <%=(e.getCategory() != null ? e.getCategory().getCategoryTitle() : "No Category") %> </option>
                 <%
             for(Category c : allCategory){
             if(c.getCategoryId() == e.getCategory().getCategoryId()) continue;
@@ -149,7 +159,7 @@
             <form id="del-exp-form" action="./ExpenseServlet" method="get" style="padding-left:inherit;">
               <input type="hidden" value="<%=e.getExpenseId()%>" name="expId" id="del-exp-id">
               <input type="hidden"name="operationType" value="delete">
-              <button type="submit"  value="delete" class="submitBtn-exp">Delete Record</button>
+              <button type="submit" class="submitBtn-exp">Delete Record</button>
             </form>
           </div>
 
@@ -193,6 +203,15 @@
         <br>
         <input type="number" id="exp-price" name="exp-price" placeholder="Amount in numbers" />
 
+        <br>
+        <label for="select-mode">Mode of Transaction: </label>
+        <br>
+        <select name="mode" class="select-category">
+          <% for(String m: modes){
+          %>
+          <option value="<%=m%>"><%=m%></option>
+          <%}%>
+        </select>
         <br>
         <label for="select-category">Category: </label>
         <br>

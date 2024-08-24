@@ -59,6 +59,7 @@
                 <th scope="col">Remarks</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Category</th>
+                <th scope="col">Mode</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
@@ -78,7 +79,8 @@
                 <td><%=e.getIncomeDescription()%></td>
                 <td><%=e.getIncomeAmount()%></td>
                 <td><%=e.getIncomeType()%></td>
-                <td><button type="button" name="editBtn" class="btn action-btn" onclick="openUpdatePopup(pop_iu,'<%=e.getIncomeId()%>')">Edit</button></td>
+                <td><%=e.getMode()%></td>
+                <td><button type="button" name="editBtn" class="btn action-btn" onclick="openUpdatePopup(pop_iu, '<%=e.getIncomeId()%>')">Edit</button></td>
             <div id="update-popup-inc<%=e.getIncomeId()%>" class="popup-container scroll-container">
               <div class="close-button" onclick="closeUpdatePopup(pop_iu, '<%=e.getIncomeId()%>')">X</div>
               <form id="update-inc-form" action="./IncomeServlet" method="post" style="padding-left:inherit;">
@@ -104,18 +106,36 @@
                   <br>
                 </div>
                 <div class="text-container">
-                  <label for="inc-price">Amount: </label>
+                  <label for="up-inc-price">Amount: </label>
                   <br><small id="up-inc-price-error" class="error"></small>
                   <br>
                   <input type="number" id="up-inc-price" name="up-inc-price" placeholder="Amount in numbers" value="<%=e.getIncomeAmount()%>"/>
                   <br>
                 </div>
+
+                <label for="up-select-mode">Mode of Transaction: </label>
+                <br>
+                <select name="mode" class="select-category">
+                  <option value="<%=(e.getMode() != null ? e.getMode() : "No Mode") %>" selected><%=(e.getMode() != null ? e.getMode() : "No Mode") %></option>
+                  <% for(String m: modes){
+                  if(e.getMode().equals(m)) continue;
+                  %>
+                  <option value="<%=m%>"><%=m%></option>
+                  <%}%>
+                </select>
+                <br>
                 <label for="up-select-category">Type: </label>
                 <br>
                 <!--incense category drop down-->
                 <select name="up-catId" class="select-category">
                   <!--add categorydao with user-category for incenses. for now -->
-                  <option value="1"> Salary (monthly) </option>
+                  <option value="Salary(Monthly)"> Salary(monthly)</option>
+                  <option value="Wages(weekly)"> Wages(weekly)</option>
+                  <option value="Family allowance"> Family allowance</option>
+                  <option value="Sale of possession">Sale of possession</option>
+                  <option value="Dividend/profit received"> Dividends/profit received</option>
+                  <option value="Interest from loan or Fixed Deposit"> Interest from loan or Fixed Deposit</option>
+                  <option value="Other Incomes"> Other Incomes</option>
                 </select>
                 <button type="submit" class="submitBtn-inc">Update Changes</button>
               </form>
@@ -169,12 +189,29 @@
 
             <br>
           </div>
+
+          <label for="up-select-mode">Mode of Transaction: </label>
+          <br>
+          <select name="mode" class="select-category">
+            <% for(String m: modes){
+            %>
+            <option value="<%=m%>"><%=m%></option>
+            <%}%>
+          </select>
+          <br>
+
           <label for="select-category">Type </label>
           <br>
           <!--incense category drop down-->
           <select name="catId" class="select-category">
             <!--add categorydao with user-category for incenses. for now -->
-            <option value="1"> Salary(monthly)</option>
+            <option value="Salary(Monthly)"> Salary(monthly)</option>
+            <option value="Wages(weekly)"> Wages(weekly)</option>
+            <option value="Family allowance"> Family allowance</option>
+            <option value="Sale of possession">Sale of possession</option>
+            <option value="Dividend/profit received"> Dividends/profit received</option>
+            <option value="Interest from loan or Fixed Deposit"> Interest from loan or Fixed Deposit</option>
+            <option value="Other Incomes"> Other Incomes</option>
           </select>
           <button type="submit" class="submitBtn-inc">Add</button>
         </form>
@@ -182,13 +219,13 @@
       <script>
 
         function openUpdatePopup(popup, id) {
-          pop = popup+id;
+          pop = popup + id;
           document.getElementById(pop).style.display = "block";
           dynamicBtnId = id;
         }
 
         function closeUpdatePopup(popup, id) {
-          pop = popup+id;
+          pop = popup + id;
           document.getElementById(pop).style.display = "none";
         }
         function openPopup(popup) {

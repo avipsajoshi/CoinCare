@@ -191,7 +191,7 @@
             <tbody>
           <%
             CategoryDao cDao = new CategoryDao(FactoryProvider.getFactory());
-          List<Category> allCategories = cDao.getAllCategories();
+          List<Category> allCategories = cDao.getAllCategory();
           for(Category c : allCategories){
           %>
           <tr>

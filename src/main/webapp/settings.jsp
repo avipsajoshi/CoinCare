@@ -187,7 +187,7 @@
                   List<Category> allUserCategories = cDao.getAllCategoryByUserId(uId);
                   if(allUserCategories == null || allUserCategories.isEmpty()){
                 %>
-                <img src="nothingtoshow.png" alt="Empty. Use the add button to fill this area!">
+                <p>You have no custom categories. Fill the form to add one!</p>
                 <%} else{%>
                 <table class="table">
                   <thead>

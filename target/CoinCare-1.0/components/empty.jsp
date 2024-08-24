@@ -9,7 +9,6 @@
   href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
   rel="stylesheet"
   />
-
 <div>
   <svg width="auto" height="48px" viewBox="0 0 199 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <g id="Work-in-Progress" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

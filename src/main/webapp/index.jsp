@@ -205,6 +205,7 @@
         </svg>
       </div>
     </nav>
+    <%@include file="components/message.jsp" %>
     <div class="w-full px-6">
       <div
         class="mt-8 relative rounded-lg logobody container mx-auto flex flex-col items-center pt-12 sm:pt-24 pb-24 sm:pb-32 md:pb-48 lg:pb-56 xl:pb-64"

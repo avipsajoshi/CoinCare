@@ -62,7 +62,7 @@ public class CategoryDao {
     List<Category> listOfCategories = new ArrayList<>();
     int adminId = 3;
     Session s = this.factory.openSession();
-    Query q = s.createQuery("From Category WHERE user.userId=:uid or user.userId=:aid ORDER BY categoryType desc", Category.class);
+    Query q = s.createQuery("From Category WHERE user.userId=:uid or user.userId=:aid ORDER BY categoryTitle desc", Category.class);
     q.setParameter("uid", userId);
     q.setParameter("aid", adminId);
     listOfCategories = q.list();

@@ -85,7 +85,7 @@ public class ExpenseDao {
     return exp;
   }
 
-  public boolean updateExpense(String expenseTitle, String expenseRemarks, double amount, int categoryId,int expenseId) {
+  public boolean updateExpense(String expenseTitle, String expenseRemarks, double amount,String mode, int categoryId,int expenseId) {
     boolean status = false;
     CategoryDao catDao = new CategoryDao(FactoryProvider.getFactory());
     Category categoryUpdate = catDao.getCategoryById(categoryId);
@@ -94,12 +94,13 @@ public class ExpenseDao {
     Session session = this.factory.openSession();
     Transaction tx = session.beginTransaction();
     try {
-      hql = "update Expense SET expenseTitle=:title, expenseRemark=:des, expenseAmount=:amt,category_categoryId=:cat WHERE expenseId=:id";
+      hql = "update Expense SET expenseTitle=:title, expenseRemark=:des, expenseAmount=:amt, mode=:mode, category=:cat WHERE expenseId=:id";
       rowCount = session.createMutationQuery(hql)
               .setParameter("title", expenseTitle)
               .setParameter("des", expenseRemarks)
-              .setParameter("cat", categoryId)
+              .setParameter("cat", categoryUpdate)
               .setParameter("amt", amount)
+              .setParameter("mode", mode)
               .setParameter("id", expenseId)
               .executeUpdate();
       System.out.println("Rows affected: " + rowCount);

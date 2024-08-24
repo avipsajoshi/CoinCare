@@ -60,7 +60,7 @@ public class IncomeDao {
     return inc;
   }
 
-  public boolean updateIncome(String incomeSource, String incomeDescriptions, double amount, String type,int incomeId) {
+  public boolean updateIncome(String incomeSource, String incomeDescriptions, double amount, String mode, String type,int incomeId) {
     boolean status = false;
 //    Income currentIncome = this.getIncomeById(incomeId);
     String hql = "";
@@ -68,11 +68,12 @@ public class IncomeDao {
     Session session = this.factory.openSession();
     Transaction tx = session.beginTransaction();
     try {
-      hql = "update Income as i SET i.incomeSource=:title, i.incomeDescription=:des, i.incomeAmount=:amt, i.incomeType=:cat WHERE i.incomeId=:id";
+      hql = "update Income SET incomeSource=:title, incomeDescription=:des, incomeAmount=:amt, mode=:mode, incomeType=:cat WHERE incomeId=:id";
       rowCount = session.createMutationQuery(hql)
               .setParameter("title", incomeSource)
               .setParameter("des", incomeDescriptions)
               .setParameter("amt", amount)
+              .setParameter("mode", mode)
               .setParameter("cat", type)
               .setParameter("id", incomeId)
               .executeUpdate();

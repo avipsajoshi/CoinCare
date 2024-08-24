@@ -33,19 +33,20 @@ public class ExpenseServlet extends HttpServlet {
       CategoryDao catDao = new CategoryDao(FactoryProvider.getFactory());
       Expense exp = null;
       boolean status = false;
-      if (operation.trim().equals("add")) {
+      if (operation.equals("add")) {
         //add expense
         User userAdd = userDao.getUserById(Integer.parseInt(user));
         String expTitle = request.getParameter("exp-name");
         String expRemark = request.getParameter("exp-description");
         double expAmount = Double.parseDouble(request.getParameter("exp-price"));
+        String mode = request.getParameter("mode");
         String expCategory = request.getParameter("catId");
         Category cat = catDao.getCategoryById(Integer.parseInt(expCategory));
         Timestamp currentTime;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         var now = LocalDateTime.now();
         currentTime = Timestamp.valueOf(now);
-        exp = new Expense(expTitle, expRemark, expAmount, currentTime, cat, userAdd);
+        exp = new Expense(expTitle, expRemark, expAmount, currentTime, mode, cat, userAdd);
         status = expDao.addExpense(exp);
         if (status) {
           session.setAttribute("message", "Expense added");
@@ -55,16 +56,17 @@ public class ExpenseServlet extends HttpServlet {
         response.sendRedirect("./dashboard.jsp");
         return;
 
-      } else if (operation.trim().equals("update")) {
+      } else if (operation.equals("update")) {
         //update expense
         int expenseIdToUpdate = Integer.parseInt(request.getParameter("expId"));
         User userAdd = userDao.getUserById(Integer.parseInt(user));
-        String expTitle = request.getParameter("exp-name");
-        String expRemark = request.getParameter("exp-description");
-        double expAmount = Double.parseDouble(request.getParameter("exp-price"));
+        String expTitle = request.getParameter("up-exp-name");
+        String expRemark = request.getParameter("up-exp-description");
+        double expAmount = Double.parseDouble(request.getParameter("up-exp-price"));
+        String mode = request.getParameter("mode");
         String expCategory = request.getParameter("catId");
         int cat = Integer.parseInt(expCategory);
-        status = expDao.updateExpense(expTitle, expRemark, expAmount, cat, expenseIdToUpdate);
+        status = expDao.updateExpense(expTitle, expRemark, expAmount,mode, cat, expenseIdToUpdate);
         if (status) {
           session.setAttribute("message", "Expense record updated");
         } else {
@@ -73,7 +75,7 @@ public class ExpenseServlet extends HttpServlet {
         response.sendRedirect("./dashboard.jsp");
         return;
 
-      } else if (operation.trim().equals("delete")) {
+      } else if (operation.equals("delete")) {
         //delete expense with id
         System.out.println("Deleteing");
         int expenseIdToDelete = Integer.parseInt(request.getParameter("expId"));

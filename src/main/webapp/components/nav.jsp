@@ -24,6 +24,7 @@
     }
     UserDao udao = new UserDao(FactoryProvider.getFactory());
     User user = udao.getUseByEmail(logged_user.getUserEmail());
+    String[] modes = {"Cash", "Credit","Wallet","Bank"};
 %>
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet"/>
