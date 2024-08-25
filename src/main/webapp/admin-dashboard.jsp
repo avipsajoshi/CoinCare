@@ -13,6 +13,8 @@
 <%@page import="com.coincare.dao.UserDao" %>
 <%@page import="com.coincare.dao.CategoryDao" %>
 <%@page import="com.coincare.dao.BudgetPlanDao" %>
+<%@page import="java.time.LocalDate"%>
+<%@page import="java.time.Month"%>
 <%@page import="java.util.List" %>
 <%
    User user =(User) session.getAttribute("logged_user");
@@ -28,6 +30,12 @@
         return;
       }
     }
+    LocalDate currentDate = LocalDate.now();
+    int currentYear = currentDate.getYear();
+    int currentDay = currentDate.getDayOfMonth();
+    Month currentMonth = currentDate.getMonth();
+
+
 %>
 <!DOCTYPE html>
 <html>
@@ -51,18 +59,19 @@
   </head>
   <body class="light_mode">
     <script src="js/light-dark.js"></script>
+
+    <%@include file="components/message.jsp" %>
     <div class="main-content">
       <div class="container">
-        <h1>CoinCare</h1>
+        <h2><a href="./dashboard.jsp">Coin Care</a>\<a href="./admin-dashboard.jsp">Admin Dashboard</a></h2>
+        <h2><%=currentDay%> <%=currentMonth.toString()%>, <%=currentYear%></h2>
+        <a href="./LogoutServlet"><button class="btn action-btn" style="float:right; margin-right: 20px;">Logout</button></a>
       </div>
-      <div class="container">
-        <h2>Admin Page</h2> <a href="./LogoutServlet"><button class="btn action-btn" style="float:right; margin-right: 20px;">Logout</button></a>
-        <div class="admin-user">
-          <img src="images/<%=user.getUserPic()%>" alt="user" class="user-profile-img">
-          <div class="user-info">
-            <p class="bold"><%= user.getUserName() %></p><br>
-            <p><%= user.getUserType() %></p>
-          </div>
+      <div class="admin-user">
+        <img src="images/<%=user.getUserPic()%>" alt="user" class="user-profile-img">
+        <div class="user-info">
+          <label class="bold"><%= user.getUserName() %></label><br>
+          <label><%= user.getUserType() %></label>
         </div>
       </div>
     </div>

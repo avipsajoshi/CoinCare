@@ -42,20 +42,21 @@
 
   var ctx = document.getElementById('doughnutChart').getContext('2d');
   var ctx2 = document.getElementById('doughnutChart1').getContext('2d');
-  var labeldata = ['Category1', 'Category2', 'Category3', 'Category4', 'Category5'];
-  var datasetData = [300, 50, 100, 75, 25];
+//  var labeldata = ['Category1', 'Category2', 'Category3', 'Category4', 'Category5'];
+//  var datasetData = [300, 50, 100, 75, 25];
   var labelString = 'Spent %';
 //      var colorData = [getRandomColor(100), getRandomColor(100), getRandomColor(100), getRandomColor(100), getRandomColor(100)];
   var colorData = ['#4ECDC4', '#15A79D', '#64C3E2', '#00FFEE', '#8ADDD8'];
-  var chartType;
-  var typeINEX = {
+  
+  //for income and expense
+  var typeInEx = {
     type: 'doughnut',
     data: {
       label: 'Amount Spent',
       labels: ['Income', 'Expense'],
       datasets: [{
           label: 'Amount',
-          data: [1000, 30],
+          data: datasetDataInEx,
           backgroundColor: ['#00FFEE', '#15A79D'],
           borderWidth: 1
         }]
@@ -74,7 +75,7 @@
   var typeDoughnut = {
     type: 'doughnut',
     data: {
-      labels: labeldata,
+      labels: labelData,
       datasets: [{
           label: labelString,
           data: datasetData,
@@ -93,10 +94,7 @@
       }
     }
   };
-
-  var chartType = 'douhnut';
-  var myDoughnutChart = new Chart(ctx, typeDoughnut);
-  var chartType = 'bar';
-  var myBarChart = new Chart(ctx2, typeINEX);
+  var categoryExpenseChart = new Chart(ctx, typeDoughnut);
+  var incomeExpenseChart = new Chart(ctx2, typeInEx);
 
 </script>

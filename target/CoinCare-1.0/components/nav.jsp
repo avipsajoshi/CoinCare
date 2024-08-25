@@ -7,6 +7,9 @@
 <%@page import="com.coincare.helper.FactoryProvider" %>
 <%@page import="com.coincare.entities.User" %>
 <%@page import="com.coincare.dao.UserDao" %>
+<%@page import="java.time.LocalDate"%>
+<%@page import="java.time.Month"%>
+<%@page import="java.util.List" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
   User logged_user =(User) session.getAttribute("logged_user");
@@ -22,6 +25,10 @@
         return;
       }
     }
+    LocalDate currentDate = LocalDate.now();
+    int currentYear = currentDate.getYear();
+    int currentDay = currentDate.getDayOfMonth();
+    Month currentMonth = currentDate.getMonth();
     UserDao udao = new UserDao(FactoryProvider.getFactory());
     User user = udao.getUseByEmail(logged_user.getUserEmail());
     String[] modes = {"Cash", "Credit","Wallet","Bank"};

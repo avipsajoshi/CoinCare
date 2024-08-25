@@ -51,9 +51,9 @@ public class AdminServlet extends HttpServlet {
         int userId = Integer.parseInt(user);
         status = userDao.updateUserType("admin", userId);
         if (status) {
-          session.setAttribute("message", "Change Successful");
+          session.setAttribute("message", "Admin Added");
         } else {
-          session.setAttribute("message", "Change Unsuccessful");
+          session.setAttribute("message", "Error adding admin");
         }
         response.sendRedirect("./admin-dashboard.jsp");
         return;
@@ -63,9 +63,9 @@ public class AdminServlet extends HttpServlet {
         int userId = Integer.parseInt(user);
         status = userDao.updateUserType("owner", userId);
         if (status) {
-          session.setAttribute("message", "Admin Removed");
+          session.setAttribute("message", "Admin made Owner");
         } else {
-          session.setAttribute("message", "Change Unsuccessful");
+          session.setAttribute("message", "Error in making Admin to an owner");
         }
         response.sendRedirect("./admin-dashboard.jsp");
         return;
@@ -77,7 +77,7 @@ public class AdminServlet extends HttpServlet {
         if (status) {
           session.setAttribute("message", "Admin Removed");
         } else {
-          session.setAttribute("message", "Change Unsuccessful");
+          session.setAttribute("message", "Error removing admin");
         }
         response.sendRedirect("./admin-dashboard.jsp");
         return;

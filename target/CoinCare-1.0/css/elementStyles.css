@@ -1,3 +1,9 @@
+.container{
+  display: flex;
+  justify-content: space-between;
+}
+
+
 /*dashboard table*/
 .table {
   width: 100%;
@@ -106,7 +112,7 @@
 /*dashboard add expense popup*/
 #exp-form input, .exp-textarea, .select-category,
 .update-exp-form input, .exp-textarea{
-  padding: 10px;
+  padding: 10px!important;
   margin:10px 0;
   width: 80%;
   border: 1px solid var(--action);
@@ -132,7 +138,7 @@ textarea{
   font-style: italic;
   font-size: medium;
 }
-.submitBtn-exp,.submitBtn-inc {
+.submitBtn-exp,.submitBtn-inc, .submitBtn-cat {
   margin-top: 1rem;
   margin-bottom: 1rem;
   width: 200px;
@@ -146,7 +152,7 @@ textarea{
   color: var(--back);
   transition: 0.3s;
 }
-.submitBtn-exp:hover, .submitBtn-inc:hover {
+.submitBtn-exp:hover, .submitBtn-inc:hover, .submitBtn-cat:hover {
   background-color: var(--back);
   border: 2px solid var(--action);
   color: var(--text);
@@ -263,7 +269,7 @@ label{
 
 }
 
-.text-container input, select,
+.text-container input,
 textarea {
   padding: 5px;
   padding-left: 15px;
@@ -275,11 +281,12 @@ textarea {
   width: 70%;
 }
 select{
-  padding: 5px;
+  padding: 5px !important;
   border: 1px solid var(--action);
   outline: none;
   border-radius: 5px;
   color: var(--text);
+  
 }
 select *{
   background-color: var(--back);
@@ -375,6 +382,5 @@ select *{
 .chart{
   align-content: center;
   height: 300px;
-  padding: 2rem;
   border-radius: 1rem;
 }

@@ -11,14 +11,6 @@
 <%@page import="com.coincare.entities.Category" %>
 <%@page import="com.coincare.dao.UserDao" %>
 <%@page import="com.coincare.dao.CategoryDao" %>
-<%@page import="java.time.LocalDate"%>
-<%@page import="java.time.Month"%>
-<%
-    LocalDate currentDate = LocalDate.now();
-    int currentYear = currentDate.getYear();
-    int currentDay = currentDate.getDayOfMonth();
-    Month currentMonth = currentDate.getMonth();
-%>
 <!DOCTYPE html>
 <html>
   <head>
@@ -39,14 +31,12 @@
 
     <div class="main-content">
       <div class="container">
-        <h1>Coin Care</h1>
+        <h2><a href="./dashboard.jsp">Coin Care</a>\<a href="./expense.jsp">Expenses</a></h2>
+        <h2><%=currentDay%> <%=currentMonth.toString()%>, <%=currentYear%></h2>
       </div>
       <%@include file="components/message.jsp" %>
       <div class="container">
-
-        <h2>Expenses today </h2>
         <div class="summary" style="display: flex; column-count: 3; justify-content: space-between;">
-          <h3><%=currentDay%> <%=currentMonth.toString()%>, <%=currentYear%></h3>
           <label id="totalExp">Total Expense: </label>
         </div>
       </div>
@@ -62,6 +52,28 @@
       </script>
       <%}%>
       <div class="custom-content">
+        <% 
+          ExpenseDao eDao = new ExpenseDao(FactoryProvider.getFactory());
+          CategoryDao cDao = new CategoryDao(FactoryProvider.getFactory());
+          UserDao uDao = new UserDao(FactoryProvider.getFactory());
+          User thisUser = uDao.getUseByEmail(user.getUserEmail());
+          int uId=thisUser.getUserId();
+          double totalExpensesToday=0;
+          List<Category> allCategory = cDao.getAllCategoryForNewExpense(uId);
+          List<Expense> allExpenses = eDao.getExpenseByUserIdToday(uId,currentDate);
+          if(allExpenses.isEmpty()){
+        %>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <center>
+          <%@include file="components/empty.jsp"%>
+        </center>
+        <%
+          }else{
+        %>
         <table class="table">
           <thead>
             <tr>
@@ -74,22 +86,7 @@
             </tr>
           </thead>
           <tbody>
-            <% 
-            ExpenseDao eDao = new ExpenseDao(FactoryProvider.getFactory());
-            CategoryDao cDao = new CategoryDao(FactoryProvider.getFactory());
-            UserDao uDao = new UserDao(FactoryProvider.getFactory());
-            User thisUser = uDao.getUseByEmail(user.getUserEmail());
-            int uId=thisUser.getUserId();
-            double totalExpensesToday=0;
-            List<Category> allCategory = cDao.getAllCategoryForNewExpense(uId);
-            List<Expense> allExpenses = eDao.getExpenseByUserIdToday(uId,currentDate);
-            if(allExpenses.isEmpty()){
-            %>
-
-            <%@include file="components/empty.jsp"%>
-
             <%
-              }else{
             for(Expense e : allExpenses){
             totalExpensesToday +=e.getExpenseAmount();
             %>
@@ -107,7 +104,6 @@
               <input type="hidden"name="operationType" value="update">
               <input type="hidden" value="<%=uId%>" name="userId">
               <input type="hidden" value="<%=e.getExpenseId()%>" name="expId" id="up-exp-id">
-
               <h3> Change a few errs</h3>
               <br>
               <label for="exp-name">Expense on: </label>
@@ -169,8 +165,8 @@
           </tbody>
         </table>
 
+        <%}%>
       </div>
-      <%}%>
     </div>
     <label id="totalExpense" style="display:none;"> <%=totalExpensesToday%> </label>  
 

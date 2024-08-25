@@ -30,7 +30,7 @@
     ></script>
   </head>
 
-  <body class="">
+  <body class="index-page">
     <!--Section one starts-->
     <nav class="w-full">
       <div class="container mx-auto px-6 flex items-center justify-between">
@@ -574,7 +574,8 @@
         >
         <div class="relative sm:w-2/3 w-11/12 relative">
           <div class="relative z-20 xl:py-12 xl:px-8 py-8 px-4">
-            <img src="./images/picMgm1.jpg" alt="" />
+            <!--<img src="./images/picMgm1.jpg" alt="" />-->
+            <img src="./images/picMgm1.png" alt="" />
           </div>
         </div>
       </div>

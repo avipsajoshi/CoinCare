@@ -2,6 +2,12 @@
     Created on : 11 Aug 2024, 20:48:42
     Author     : Dell
 */
+.container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 
 /* Tab container styling */
 .tab-container {
@@ -174,7 +180,7 @@
   background-color: var(--action);
   border-radius: 20px;
   cursor: pointer;
-  font-size: large;
+  font-size: small;
   font-family: 'Body';
   color: var(--back);
   transition: 0.3s;

@@ -63,3 +63,11 @@
 .logobodybody:hover{
   color: var(--logo2);
 }
+
+button:focus{
+  outline:none !important;
+}
+
+.index-page{
+  margin: 2rem;
+}

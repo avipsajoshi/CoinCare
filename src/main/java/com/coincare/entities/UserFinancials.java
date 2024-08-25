@@ -55,13 +55,6 @@ public class UserFinancials {
   
  
 
-  public int getTransactionId() {
-    return transactionId;
-  }
-
-  public void setTransactionId(int transactionId) {
-    this.transactionId = transactionId;
-  }
 
   public String getCategory() {
     return category;

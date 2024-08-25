@@ -41,14 +41,15 @@ public class IncomeServlet extends HttpServlet {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         var now = LocalDateTime.now();
         currentTime = Timestamp.valueOf(now);
-        inc = new Income(incSource, incDescription, incAmount,incCategory,currentTime, mode, userAdd);
+        inc = new Income(incSource, incDescription, incAmount, incCategory, currentTime, mode, userAdd);
         status = incDao.addIncome(inc);
         if (status) {
           session.setAttribute("message", "Income added");
+          response.sendRedirect("./dashboard.jsp");
         } else {
           session.setAttribute("message", "Error adding income");
+          response.sendRedirect("./income.jsp");
         }
-        response.sendRedirect("./income.jsp");
         return;
 
       } else if (operation != null && operation.trim().equals("update")) {
@@ -63,10 +64,11 @@ public class IncomeServlet extends HttpServlet {
         status = incDao.updateIncome(incSource, incDescription, incAmount, mode, incCategory, incomeIdToUpdate);
         if (status) {
           session.setAttribute("message", "Income record updated");
+        response.sendRedirect("./dashboard.jsp");
         } else {
           session.setAttribute("message", "Error updating income");
-        }
         response.sendRedirect("./income.jsp");
+        }
         return;
 
       } else if (operation != null && operation.trim().equals("delete")) {

@@ -83,18 +83,20 @@ public class CategoryDao {
   //update category by user
   public boolean updateCategory(String categoryTitle, String categoryDescription, String categoryType, int categoryId, int userId) {
     boolean status = false;
+    UserDao uDao = new UserDao(this.factory);
+    User updateUser = uDao.getUserById(userId);
     String hql = "";
     int rowCount = 0;
     Session session = this.factory.openSession();
     Transaction tx = session.beginTransaction();
     try {
-      hql = "update Category SET categoryTitle=:title, categoryDescription=:des, categoryType=:type WHERE categoryId=:id and user_userId=:uid";
+      hql = "update Category SET categoryTitle=:title, categoryDescription=:des, categoryType=:type WHERE categoryId=:id and user=:uid";
       rowCount = session.createMutationQuery(hql)
               .setParameter("title", categoryTitle)
               .setParameter("des", categoryDescription)
               .setParameter("type", categoryType)
               .setParameter("id", categoryId)
-              .setParameter("uid", userId)
+              .setParameter("uid", updateUser)
               .executeUpdate();
       System.out.println("Rows affected: " + rowCount);
       if (rowCount >= 1) {

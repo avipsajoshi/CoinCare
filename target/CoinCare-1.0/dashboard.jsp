@@ -14,14 +14,7 @@
 <%@page import="com.coincare.entities.Category" %>
 <%@page import="com.coincare.dao.UserDao" %>
 <%@page import="com.coincare.dao.CategoryDao" %>
-<%@page import="java.time.LocalDate"%>
-<%@page import="java.time.Month"%>
-<%
-    LocalDate currentDate = LocalDate.now();
-    int currentYear = currentDate.getYear();
-    int currentDay = currentDate.getDayOfMonth();
-    Month currentMonth = currentDate.getMonth();
-%>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -42,21 +35,29 @@
 
     <div class="main-content">
       <div class="container">
-        <h1>Coin Care</h1>
+        <h2><a href="./dashboard.jsp">Coin Care</a>\<a href="./dashboard.jsp">Dashboard</a></h2>
+        <h2><%=currentDay%> <%=currentMonth.toString()%>, <%=currentYear%></h2>
       </div>
       <%@include file="components/message.jsp" %>
       <div class="container">
-
-        <h2>Dashboard</h2>
         <div class="summary" style="display: flex; column-count: 3; justify-content: space-between;">
-          <h3><%=currentDay%> <%=currentMonth.toString()%>, <%=currentYear%></h3>
-          <label id="totalExp">Total Expense: </label>
+          
+          <div>
+            <label id="totalIncomeShow">Total Income:0.0</label>
+            <br>
+            <label id="totalExpenseShow">Total Expense: 0.0</label>
+            <br>
+            <label id="balanceShow">Balance: 0.0</label>
+          </div>
         </div>
       </div>
 
 
       <%
       String queryExpenseId = request.getParameter("ex");
+      double totalExpensesToday = 0;
+      double totalIncomesToday = 0;
+      double calculatedBalance = 0;
       if(queryExpenseId!=null){
       %>
       <script>
@@ -71,7 +72,7 @@
         User thisUser = uDao.getUseByEmail(user.getUserEmail());
         int uId=thisUser.getUserId();
         List<Category> allCategory = cDao.getAllCategoryForNewExpense(uId);
-        List<UserFinancials> allTransactions = uDao.getUserReportForToday(uId,currentDate);
+        List<UserFinancials> allTransactions = uDao.getUserReportForToday(uId, currentDate);
         if(allTransactions.isEmpty()){
       %>
       <br>
@@ -99,24 +100,93 @@
           </thead>
           <tbody>
             <% 
-            for(UserFinancials uf: allTransactions){
-//              totalExpensesToday +=e.getExpenseAmount();
+            for(UserFinancials uf: allTransactions){     
+
             %>
             <tr>
               <td scope="row"><%=uf.getTitle()%></td>
               <td><%=uf.getDescription()%></td>
-              <td><%=uf.getCategory()%></td>
+              <td class="dashboard-category"><%=uf.getCategory()%></td>
               <td><%=uf.getMode()%></td>
-              <% if (uf.getType().equals("expense")){ %>
-              <td style="color:red;"> - <%=uf.getAmount()%></td>
-              <%}else if (uf.getType().equals("income")){%>
+              <% if (uf.getType().equals("expense")){
+              totalExpensesToday +=uf.getAmount();%>
+              <td style="color:red;" class="dashboard-exp-amount"> - <%=uf.getAmount()%></td>
+              <%}else if (uf.getType().equals("income")){
+              totalIncomesToday +=uf.getAmount();%>
               <td style="color:#16c216;"> + <%=uf.getAmount()%></td>
-              <%}%>
-              <%}%>
+              <%}else{} }%>
             </tr>
           </tbody>
         </table>
       </div>
+      <%calculatedBalance = totalIncomesToday-totalExpensesToday; %>
+      <label id="totalExpenses" style="display:none;"> <%=totalExpensesToday%> </label>  
+      <label id="totalIncome" style="display:none;"> <%=totalIncomesToday%> </label>  
+      <label id="calculatedBalance" style="display:none;"> <%=calculatedBalance%> </label>  
+
+      <script>
+        //for report visualization
+        var totalExpenseDisplay = document.getElementById("totalExpenseShow");
+        var totalIncomeDisplay = document.getElementById("totalIncomeShow");
+        var balanceDisplay = document.getElementById("balanceShow");
+
+        const totalExpenseloaded = document.getElementById("totalExpenses");
+        const totalIncomeloaded = document.getElementById("totalIncome");
+        const calculatedBalanceloaded = document.getElementById("calculatedBalance");
+        var datasetDataInEx = [totalIncomeloaded.textContent, totalExpenseloaded.textContent];
+
+        // Step 1 & 2: Get all amounts and corresponding categories
+        const amounts = document.querySelectorAll('td.dashboard-exp-amount');
+        const datasetData = []; // a. Array to store added amounts per category
+        const labelData = []; // b. Array to store category labels
+        const categoryTotals = {}; // Object to store total amounts per category
+        const totalExpenseAmount = parseFloat(totalExpenseloaded.textContent);
+        console.log('Amount elements found:', amounts.length);
+
+        amounts.forEach(amountCell => {
+          const categoryCell = (amountCell.previousElementSibling).previousElementSibling; // Get the previous sibling (category)
+
+          // Check if categoryCell exists
+          if (!categoryCell) {
+            console.error('No sibling found for:', amountCell);
+            return;
+          }
+
+          // Clean up the amount text (remove hyphens and extra spaces)
+          let amountText = amountCell.textContent.trim().replace('-', '');
+
+          const amount = parseFloat(amountText); // Convert cleaned text to a number
+          const category = categoryCell.textContent.trim(); // Get category text
+
+          if (!isNaN(amount)) {
+            // Aggregate amounts by category
+            if (categoryTotals[category]) {
+              categoryTotals[category] += amount;
+            } else {
+              categoryTotals[category] = amount;
+            }
+          } else {
+            console.error('Invalid amount found:', amountCell.textContent);
+          }
+        });
+
+        console.log('Total Expense Loaded:', totalExpenseAmount);
+
+        // Step 3: Add amounts under a category and multiply by 100/totalExpense
+        for (const category in categoryTotals) {
+          const categoryAmount = categoryTotals[category];
+          const percentage = (categoryAmount * 100) / totalExpenseAmount;
+
+          // Step 5: Push data to the arrays
+          datasetData.push(percentage);
+          labelData.push(category);
+        }
+
+        // Check the results
+        console.log('Categories:', labelData);
+        console.log('Dataset (percentages):', datasetData);
+      </script>
+
       <%@include file="components/testchart.jsp"%>
 
       <% }
@@ -125,7 +195,7 @@
 
     </div>
 
-    <!--add expense-->
+    <!--add expense form-->
     <button class="add-button" id="dashboard-add-button" onclick="openAddPopup(pop_p)">+</button>
 
 
@@ -200,8 +270,6 @@
       }
 
       //exp from validation input add
-      const totalExpenseloaded = document.getElementById("totalExpense");
-      const totalExp = document.getElementById("totalExp");
       const expForm = document.getElementById("exp-form");
       const expNameInput = document.getElementById("exp-name");
       const expDescriptionInput = document.getElementById("exp-description");
@@ -209,13 +277,6 @@
       const expNameError = document.getElementById("exp-name-error");
       const expDescriptionError = document.getElementById("exp-description-error");
       const expPriceError = document.getElementById("exp-price-error");
-      //update and delete
-
-//      let delexpid = document.getElementById("del-exp-id");
-//      let upexpid = document.getElementById("up-exp-id");
-//      delexpid.value = dynamicBtnId;
-//      upexpid.value = dynamicBtnId;
-
 
 
       const upexpForm = document.getElementById("update-exp-form");
@@ -228,26 +289,21 @@
       const upexpPriceError = document.getElementById("up-exp-price-error");
 //category form validation
       document.addEventListener('DOMContentLoaded', function () {
-        totalExp.innerHTML = 'Total Expense: ' + totalExpenseloaded.textContent;
-        upexpForm.addEventListener("submit", function (event) {
-          event.preventDefault();
-          if (
-                  validateText(upexpNameInput, upexpNameError) && validateText(upexpDescriptionInput, upexpDescriptionError) && validateText(upexpPriceInput, upexpPriceError)
-                  ) {
-            upexpForm.submit();
-          }
-        });
-        delexpForm.addEventListener("button", function (event) {
-          event.preventDefault();
-          window.confirm("Are you sure?");
-          delexpForm.submit();
-        });
+
+        //display income/expenses
+        totalExpenseDisplay.innerHTML = 'Total Expense: ' + totalExpenseloaded.textContent;
+        totalIncomeDisplay.innerHTML = 'Total Income: ' + totalIncomeloaded.textContent;
+        balanceDisplay.innerHTML = 'Balance: ' + calculatedBalanceloaded.textContent;
+
+
+        //add expense form validation
         expForm.addEventListener("submit", function (event) {
           event.preventDefault();
           if (validateText(expNameInput, expNameError) && validateText(expDescriptionInput, expDescriptionError) && validateText(expPriceInput, expPriceError)) {
             expForm.submit();
           }
         });
+
         function validateText(input, error_class) {
           const namevalue = input.value.trim();
           const error = error_class;

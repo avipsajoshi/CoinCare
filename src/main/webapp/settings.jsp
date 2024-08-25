@@ -41,7 +41,10 @@
       </div>
 
       <div class="custom-content">
-        <% User user1 =user;%>
+        <% 
+          User user1 =user;
+          String[] categoryTypes = {"Fixed Expenses", "Non-fixed Expenses","Emergency Expenses","Education Expenses", "Other Expenses"};
+        %>
         <div class="collapse-container">
 
           <!--user change-->
@@ -216,29 +219,32 @@
                       <input type="hidden" value="<%=c.getCategoryId()%>" name="catId" id="up-cat-id">
                       <h3> Change a few errs</h3>
                       <br>
-                      <label for="cat-name">Category Title : </label>
-                      <br>
-                      <small id="up-cat-name-error" class="error"></small>
-                      <br>
-                      <input type="text" id="up-cat-name" name="cat-name" placeholder="Title" value="<%=c.getCategoryTitle()%>"/>
-                      <br>
-                      <label for="cat-description">Category Description :</label>
-                      <br>
-                      <small id="up-cat-description-error" class="error"></small>
-                      <br>
-                      <textarea id="up-cat-description" placeholder="Enter description about the category" class="cat-textarea" name="cat-description"><%=c.getCategoryDescription()%></textarea>
-                      <br>
-                      <label for="up-select-category-type">Category Type: </label>
-                      <br>
-
-                      <select name="up-catType" id="category-type-dropdown" class="select-category-type">
-                        <% if (c.getCategoryType() != null){
-                        %>
-                        <option value="<%=c.getCategoryType()%>" selected><%=c.getCategoryType()%></option>
-                        <% } else{%>
-                        <option value="Fixed Expense"> Fixed Expense</option>
-                        <% }%>
-                      </select>
+                      <div class="text-container">
+                        <label for="cat-name">Category Title : </label>
+                        <br>
+                        <small id="up-cat-name-error" class="error"></small>
+                        <br>
+                        <input type="text" id="up-cat-name" name="up-cat-name" placeholder="Title" value="<%=c.getCategoryTitle()%>"/>
+                      </div>
+                      <div class="text-container">
+                        <label for="cat-description">Category Description :</label>
+                        <br>
+                        <small id="up-cat-description-error" class="error"></small>
+                        <br>
+                        <input id="up-cat-description" placeholder="Enter description about the category" class="cat-textarea" name="up-cat-description" value="<%=c.getCategoryDescription()%>"/>
+                      </div>
+                      <div class="text-container">
+                        <label for="up-select-category-type">Category Type: </label>
+                        <br>
+                        <select name="up-catType" id="category-type-dropdown" class="select-category-type">
+                          <option value="<%=(c.getCategoryType() != null ? c.getCategoryType() : "No Category") %>" selected><%=(c.getCategoryType() != null ? c.getCategoryType() : "No Category") %></option>
+                          <% for(String ct: categoryTypes){
+                          if(c.getCategoryType().equals(ct)) continue;
+                          %>
+                          <option value="<%=ct%>"><%=ct%></option>
+                          <%}%>
+                        </select>
+                      </div>
                       <button type="submit" class="submitBtn-cat">Update Changes</button>
                     </form>
                     <form id="del-cat-form" action="./CategoryServlet" method="get" style="padding-left:inherit;">
@@ -266,21 +272,23 @@
                     <small id="cat-name-error" class="error"></small>
                     <br>
                     <input type="text" id="cat-name" name="cat-name" placeholder="Enter Title"/>
-                    <br>
                   </div>
                   <div class="text-container">
                     <label for="cat-description">Category Description :</label>
                     <br>
                     <small id="cat-description-error" class="error"></small>
-                    <br>
-                    <textarea id="cat-description" placeholder="Enter description about the category" class="cat-textarea" name="cat-description"></textarea>
+                    <input id="cat-description" placeholder="Enter description about the category" class="cat-textarea" name="cat-description"/>
                     <br>
                   </div>
-                  <label for="select-category-type">Category Type: </label>
+                  <div class="text-container">
+                    <label for="select-category-type">Category Type: </label>
+                    <select name="catType" id="category-type-dropdown" class="select-category-type" placeholder="Select one">
+                      <% for(String ct: categoryTypes){%>
+                      <option value="<%=ct%>"><%=ct%></option>
+                      <%}%>
+                    </select>
+                  </div>
                   <br>
-                  <select name="catType" id="category-type-dropdown" class="select-category-type">
-                    <option value="Fixed Expense"> Fixed Expense</option>
-                  </select>
                   <button type="submit" class="submitBtn-exp">Add</button>
                 </form>
 

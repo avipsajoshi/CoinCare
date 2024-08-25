@@ -14,6 +14,7 @@ com\coincare\servlets\CategoryServlet.class
 com\coincare\servlets\ResetPasswordServlet.class
 com\coincare\entities\Expense.class
 com\coincare\servlets\NewPasswordServlet.class
+com\coincare\entities\Article.class
 com\coincare\servlets\SingleChangeServlet.class
 com\coincare\entities\BudgetPlan.class
 com\coincare\entities\User.class
@@ -28,3 +29,4 @@ com\coincare\JakartaRestConfiguration.class
 com\coincare\dao\IncomeDao.class
 com\coincare\servlets\AdminServlet.class
 com\coincare\dao\BudgetPlanDao.class
+com\coincare\entities\UserFinancials.class
