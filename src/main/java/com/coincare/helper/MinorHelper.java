@@ -1,5 +1,10 @@
 package com.coincare.helper;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 /**
  *
  * @author Dell
@@ -94,5 +99,37 @@ public class MinorHelper {
         break;
     }
     return month;
+  }
+
+  public static String getDateFormatted(Timestamp dateTimeStamp) {
+    String dateString = dateTimeStamp.toString();
+    try {
+      // Parse the date string into LocalDate
+      LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
+
+      // Define the desired output format
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+      // Format the date
+      String formattedDate = date.format(formatter);
+      return formattedDate;
+    } catch (DateTimeParseException e) {
+      System.out.println("Invalid date format: " + e.getMessage());
+    }
+    return dateString;
+  }
+
+  public static LocalDate getStringToDate(String dateString) {
+    // Optionally, define a formatter if the date string is not in the default ISO format
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDate localDate= LocalDate.now(); 
+    try {
+      // Parse the string to LocalDate
+      localDate = LocalDate.parse(dateString, formatter);
+      System.out.println("Converted LocalDate: " + localDate);
+    } catch (DateTimeParseException e) {
+      System.out.println("Invalid date format: " + e.getMessage());
+    }
+    return localDate;
   }
 }

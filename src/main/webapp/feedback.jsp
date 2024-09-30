@@ -9,7 +9,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Feedback</title>
+    <title>Feedback | CoinCare</title>
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
   </head>
   <body class="body">
@@ -18,11 +18,7 @@
 
     <div class="main-content">
       <div class="container">
-        <h1>Coin Care</h1>
-      </div>
-
-      <div class="container">
-        <h2>Give Your Feedback</h2>
+        <h2><a href="./dashboard.jsp">Coin Care</a>\<a href="./feedback.jsp">Give Your Feedback</a></h2>
       </div>
 
       <div class="custom-content">

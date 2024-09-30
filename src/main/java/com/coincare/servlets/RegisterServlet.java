@@ -3,6 +3,7 @@ package com.coincare.servlets;
 import com.coincare.dao.UserDao;
 import com.coincare.entities.User;
 import com.coincare.helper.FactoryProvider;
+import com.coincare.helper.HashPassword;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -20,20 +21,29 @@ public class RegisterServlet extends HttpServlet {
           throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
+      HttpSession httpSession = request.getSession();
       String userName = request.getParameter("user_name");
       String userEmail = request.getParameter("user_email");
       String userPassword = request.getParameter("user_password");
+      String hashedPassword="";
+      try {
+        hashedPassword = HashPassword.hashUserPassword(userPassword);
+        System.out.println("Password hashed" + hashedPassword);
+      } catch (Exception e) {
+        httpSession.setAttribute("message", "Unsuccessful. Please Try Again");
+        response.sendRedirect("./register.jsp");
+      }
       UserDao userDao = new UserDao(FactoryProvider.getFactory());
-      HttpSession httpSession = request.getSession();
       if (userName.isEmpty()) {
         httpSession.setAttribute("message", "Name Cannot be empty");
         response.sendRedirect("./register.jsp");
         return;// exit early
       }
-      int year = Year.now().getValue()-5;
+      int year = Year.now().getValue() - 5;
       User existUser = userDao.getUseByEmail(userEmail);
       if (existUser == null) {
-        User user = new User(userName, userEmail, userPassword, "./user-images/user-image.png","Enter Country","user",  year, 1, 1, "on","on","Verify");
+        User user = new User(userName, userEmail, hashedPassword, "./user-images/user-image.png", "Enter Country", "user", year, 1, 1, "on", "on", "Verify");
+        
         Session hibernateSession = FactoryProvider.getFactory().openSession();
         Transaction tx = hibernateSession.beginTransaction();
         try {
@@ -52,13 +62,12 @@ public class RegisterServlet extends HttpServlet {
         } finally {
           hibernateSession.close();
         }
-      }
-      else{
+      } else {
         if (userEmail.equals(existUser.getUserEmail())) {
-        httpSession.setAttribute("message", "Email already exists");
-        response.sendRedirect("./register.jsp");
-        return;//exit early
-      }
+          httpSession.setAttribute("message", "Email already exists");
+          response.sendRedirect("./register.jsp");
+          return;//exit early
+        }
       }
     }
   }

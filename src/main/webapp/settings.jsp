@@ -20,7 +20,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Profile Settings</title>
+    <title>Profile Settings | CoinCare</title>
     <link rel="stylesheet" href="css/fontAndColors.css"/>
     <link rel="stylesheet" href="css/elementStyles.css"/>
 
@@ -37,7 +37,7 @@
     <div class="main-content">
       <%@include file="components/message.jsp"%>
       <div class="container">
-        <h1>Coin Care</h1>
+        <h2><a href="./dashboard.jsp">Coin Care</a>\<a href="./settings.jsp">Settings</a></h2>
       </div>
 
       <div class="custom-content">
@@ -168,8 +168,11 @@
           <div class="collapsible">
             <button class="collapsible-button">Edit Budget Plan</button>
             <div class="collapse-content">
-              <p>Your Budget Plan: </p>
-              <p>Budget Plan Description</p>
+              <h3><u>Your Budget Plans: </u></h3>
+              <p><%=user1.getSubscribedBudgetPlan().getBudgetPlanTitle() %></p>
+              <h3><u>Budget Plan Description</u></h3>
+              <p><%=user1.getSubscribedBudgetPlan().getBudgetPlanDescription() %></p>
+              <button type="button" name="editBtn" class="btn action-btn" onclick="openPopup(pop_bu, this.value)">Change</button>
             </div>
           </div>
 

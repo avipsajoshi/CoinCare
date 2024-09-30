@@ -1,9 +1,6 @@
 package com.coincare.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -41,6 +38,13 @@ public class User {
   @ColumnDefault("'1'")
   private int userDobDay;
 
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<BudgetPlan> budgetPlans;
+
+  @ManyToOne
+  @JoinColumn(name = "subscribedBudgetPlanId")
+  private BudgetPlan subscribedBudgetPlan;
+
 //  @NotNull
   @Column(name = "enableReportNotification")
   @ColumnDefault("'on'")
@@ -55,6 +59,7 @@ public class User {
   @Column(name = "userVerify")
   @ColumnDefault("'Verify'")
   private String userVerify;
+
   public User() {
 
   }
@@ -89,6 +94,25 @@ public class User {
     this.enableTipsNotification = enableTipsNotification;
     this.userVerify = userVerify;
   }
+
+  public User(String userName, String userEmail, String userPassword, String userPic, String userCountry, String userType, int userDobYear, int userDobMonth, int userDobDay, List<BudgetPlan> budgetPlans, BudgetPlan subscribedBudgetPlan, String enableReportNotification, String enableTipsNotification, String userVerify) {
+    this.userName = userName;
+    this.userEmail = userEmail;
+    this.userPassword = userPassword;
+    this.userPic = userPic;
+    this.userCountry = userCountry;
+    this.userType = userType;
+    this.userDobYear = userDobYear;
+    this.userDobMonth = userDobMonth;
+    this.userDobDay = userDobDay;
+    this.budgetPlans = budgetPlans;
+    this.subscribedBudgetPlan = subscribedBudgetPlan;
+    this.enableReportNotification = enableReportNotification;
+    this.enableTipsNotification = enableTipsNotification;
+    this.userVerify = userVerify;
+  }
+  
+  
 
   public User(String userName, String userEmail, String userPassword, String userPic, String userType) {
     this.userName = userName;
@@ -202,6 +226,22 @@ public class User {
     this.userVerify = userVerify;
   }
 
+  public List<BudgetPlan> getBudgetPlans() {
+    return budgetPlans;
+  }
+
+  public void setBudgetPlans(List<BudgetPlan> budgetPlans) {
+    this.budgetPlans = budgetPlans;
+  }
+
+  public BudgetPlan getSubscribedBudgetPlan() {
+    return subscribedBudgetPlan;
+  }
+
+  public void setSubscribedBudgetPlan(BudgetPlan subscribedBudgetPlan) {
+    this.subscribedBudgetPlan = subscribedBudgetPlan;
+  }
+  
   @PrePersist
   protected void onCreate() {
     if (this.enableReportNotification == null) {

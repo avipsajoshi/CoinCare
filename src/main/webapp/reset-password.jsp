@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="css/fontAndColors.css" />
     <link rel="stylesheet" href="css/formStyle.css" />
-    <title>Update Profile</title>
+    <title>Update Profile | CoinCare</title>
 
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
   </head>

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "budgetPlan")
 public class BudgetPlan {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int budgetPlanId;
@@ -19,19 +20,10 @@ public class BudgetPlan {
   @Column(name = "budgetPlanWants")
   private int budgetPlanWants;
   @ManyToOne
+  @JoinColumn(name = "user_userId", nullable = false)
   private User user;
 
   public BudgetPlan() {
-  }
-
-  public BudgetPlan(int budgetPlanId, String budgetPlanTitle, String budgetPlanDescription, int budgetPlanExpense, int budgetPlanSavings, int budgetPlanWants, User user) {
-    this.budgetPlanId = budgetPlanId;
-    this.budgetPlanTitle = budgetPlanTitle;
-    this.budgetPlanDescription = budgetPlanDescription;
-    this.budgetPlanExpense = budgetPlanExpense;
-    this.budgetPlanSavings = budgetPlanSavings;
-    this.budgetPlanWants = budgetPlanWants;
-    this.user = user;
   }
 
   public BudgetPlan(String budgetPlanTitle, String budgetPlanDescription, int budgetPlanExpense, int budgetPlanSavings, int budgetPlanWants, User user) {

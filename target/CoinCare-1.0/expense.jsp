@@ -15,7 +15,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Expenses Today</title>
+    <title>Your Expenses | CoinCare</title>
     <link rel="stylesheet" href="css/fontAndColors.css"/>
     <link rel="stylesheet" href="css/elementStyles.css"/>
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
@@ -77,12 +77,13 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Topic</th>
-              <th scope="col">Remarks</th>
-              <th scope="col">Amount</th>
-              <th scope="col">For</th>
-              <th scope="col">Mode</th>
-              <th scope="col">Actions</th>
+              <th scope="col"><u>Date</u></th>
+              <th scope="col"><u>Transaction</u></th>
+              <th scope="col"><u>Remarks</u></th>
+              <th scope="col"><u>Amount</u></th>
+              <th scope="col"><u>Category</u></th>
+              <th scope="col"><u>Mode</u></th>
+              <th scope="col"><u>Actions</u></th>
             </tr>
           </thead>
           <tbody>
@@ -91,6 +92,7 @@
             totalExpensesToday +=e.getExpenseAmount();
             %>
             <tr>
+              <td scope="row"><%=MinorHelper.getDateFormatted(e.getExpenseDate())%></td>
               <td scope="row"><%=e.getExpenseTitle()%></td>
               <td><%=e.getExpenseRemarks()%></td>
               <td><%=e.getExpenseAmount()%></td>
@@ -105,6 +107,34 @@
               <input type="hidden" value="<%=uId%>" name="userId">
               <input type="hidden" value="<%=e.getExpenseId()%>" name="expId" id="up-exp-id">
               <h3> Change a few errs</h3>
+              <br>
+              <label for="up-select-category">Category: </label>
+              <br>
+              <!--expense category drop down-->
+              <select name="catId" class="select-category">
+                <!--add categorydao with user-category for expenses. for now -->
+
+                <option value="<%=(e.getCategory() != null ? e.getCategory().getCategoryId() : 11) %>" selected> <%=(e.getCategory() != null ? e.getCategory().getCategoryTitle() : "No Category") %> </option>
+                <%
+            for(Category c : allCategory){
+            if(c.getCategoryId() == e.getCategory().getCategoryId()) continue;
+                %>
+                <option value="<%=c.getCategoryId()%>"> <%=c.getCategoryTitle()%> </option>
+                <%}%>
+              </select>
+              <br>
+              
+              <br>
+              <label for="up-select-mode">Mode of Transaction: </label>
+              <br>
+              <select name="mode" class="select-category">
+                <option value="<%=(e.getMode() != null ? e.getMode() : "No Mode") %>" selected><%=(e.getMode() != null ? e.getMode() : "No Mode") %></option>
+                <% for(String m: modes){
+                if(e.getMode().equals(m)) continue;
+                %>
+                <option value="<%=m%>"><%=m%></option>
+                <%}%>
+              </select>
               <br>
               <label for="exp-name">Expense on: </label>
               <br>
@@ -122,34 +152,7 @@
               <br><small id="up-exp-price-error" class="error"></small>
               <br>
               <input type="number" id="up-exp-price" name="up-exp-price" placeholder="Amount in numbers"  value="<%=e.getExpenseAmount()%>" />
-
               <br>
-              <label for="up-select-mode">Mode of Transaction: </label>
-              <br>
-              <select name="mode" class="select-category">
-                <option value="<%=(e.getMode() != null ? e.getMode() : "No Mode") %>" selected><%=(e.getMode() != null ? e.getMode() : "No Mode") %></option>
-                <% for(String m: modes){
-                if(e.getMode().equals(m)) continue;
-                %>
-                <option value="<%=m%>"><%=m%></option>
-                <%}%>
-              </select>
-              <br>
-              <label for="up-select-category">Category: </label>
-              <br>
-              <!--expense category drop down-->
-              <select name="catId" class="select-category">
-                <!--add categorydao with user-category for expenses. for now -->
-
-                <option value="<%=(e.getCategory() != null ? e.getCategory().getCategoryId() : 11) %>" selected> <%=(e.getCategory() != null ? e.getCategory().getCategoryTitle() : "No Category") %> </option>
-                <%
-            for(Category c : allCategory){
-            if(c.getCategoryId() == e.getCategory().getCategoryId()) continue;
-                %>
-                <option value="<%=c.getCategoryId()%>"> <%=c.getCategoryTitle()%> </option>
-                <%}%>
-
-              </select>
               <button type="submit"class="submitBtn-exp">Update Changes</button>
             </form>
             <form id="del-exp-form" action="./ExpenseServlet" method="get" style="padding-left:inherit;">
@@ -184,6 +187,26 @@
         <!-- date added in backend -->
         <h3> Add New Expense</h3>
         <br>
+        <label for="select-category">Category: </label>
+        <br>
+        <!--expense category drop down-->
+        <select name="catId" class="select-category">
+          <%
+            for(Category c : allCategory){
+          %>
+          <option value="<%=c.getCategoryId()%>"> <%=c.getCategoryTitle()%> </option>
+          <%}%>
+        </select>
+        <br>
+         <label for="select-mode">Mode of Transaction: </label>
+        <br>
+        <select name="mode" class="select-category">
+          <% for(String m: modes){
+          %>
+          <option value="<%=m%>"><%=m%></option>
+          <%}%>
+        </select>
+        <br>
         <label for="exp-name">What was the Expense on? </label>
         <small id="exp-name-error" class="error"></small>
         <br>
@@ -197,29 +220,7 @@
         <label for="exp-price">Amount: </label>
         <small id="exp-price-error" class="error"></small>
         <br>
-        <input type="number" id="exp-price" name="exp-price" placeholder="Amount in numbers" />
-
-        <br>
-        <label for="select-mode">Mode of Transaction: </label>
-        <br>
-        <select name="mode" class="select-category">
-          <% for(String m: modes){
-          %>
-          <option value="<%=m%>"><%=m%></option>
-          <%}%>
-        </select>
-        <br>
-        <label for="select-category">Category: </label>
-        <br>
-        <!--expense category drop down-->
-        <select name="catId" class="select-category">
-          <!--add categorydao with user-category for expenses. for now -->
-          <%
-            for(Category c : allCategory){
-          %>
-          <option value="<%=c.getCategoryId()%>"> <%=c.getCategoryTitle()%> </option>
-          <%}%>
-        </select>
+        <input type="number" id="exp-price" name="exp-price" placeholder="Amount in numbers" />       
         <button type="submit" class="submitBtn-exp">Add</button>
       </form>
     </div>

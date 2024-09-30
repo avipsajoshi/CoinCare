@@ -12,6 +12,7 @@ D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\BudgetPlanDao.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\UserFinancials.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\helper\SendMail.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\BudgetPlan.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\helper\HashPassword.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\LoginServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\RegisterServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\UpdateProfileServlet.java
@@ -19,6 +20,7 @@ D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\ForgetPassword
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\AdminServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\LogoutServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Expense.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\StatementServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Category.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\helper\MinorHelper.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Income.java

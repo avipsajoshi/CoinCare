@@ -35,6 +35,9 @@
   display: none;
   background-color: var(--back);
 }
+.tab-content {
+  position: relative; /* Ensure the icon can be positioned within the tab content */
+}
 
 .tab-content.active {
   display: block;
@@ -43,4 +46,76 @@
 
 .table {
   margin: 0 !important;
+}
+
+.hidden {
+  display: none;
+}
+.visuals-button{
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  width: 50px;
+  height: 50px;
+  border-radius: 40%;
+  background-color: var(--action);
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.chart-container{
+  display: flex;
+
+}
+.export-data{
+  display: flex !important;
+  width: 100px;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.csv, .pdf{
+  color: var(--primary-text-alt);
+  border: none;
+  font-size: 34px;
+  cursor: pointer;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+#dateForm input{
+  padding: 10px!important;
+  margin:10px 0;
+  border: 1px solid var(--action);
+  outline: none;
+  border-radius: 10px;
+  color: var(--text);
+}
+
+#dateForm button{
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  width: 200px;
+  height: 40px;
+  border: none;
+  background-color: var(--action);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: large;
+  font-family: var(--font-family);
+  color: var(--back);
+  transition: 0.3s;
+}
+
+.summary-summary{
+  display: flex;
+  justify-content: space-between;
 }

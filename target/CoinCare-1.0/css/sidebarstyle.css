@@ -175,37 +175,51 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .sidebar .nav-item{
-  opacity: 0;
+  /*opacity: 0;*/
+  display: none;
 }
 
 .sidebar.active .nav-item{
-  opacity: 1;
+  display: block;
+  /*opacity: 1;*/
   font-weight: 800;
 }
 
-.sidebar ul li .tooltip{
+.sidebar ul li {
+  /*width: 2rem;*/
+  position: relative;
+  
+/*  overflow-x: hidden;*/
+}
+
+.sidebar ul li .tooltip {
   position: absolute;
   left: 125px;
-  top:50%;
-  transform:  translate(-50%, -50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
   box-shadow: 0 0.5rem 0.8rem rgba(0, 0, 0, 0.2);
   border-radius: .6rem;
   background: var(--back);
   padding: .4rem 1.2rem;
   line-height: 1.8rem;
-  opacity: 1;
+  opacity: 0;
   display: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
   font-weight: 700;
   z-index: 20;
+  
+  
 }
 
-.sidebar ul li:hover .tooltip{
-  display: inherit;
+.sidebar ul li a:hover + .tooltip {
+  opacity: 1;
+  display: block !important;
+}
+.sidebar.active ul li a:hover + .tooltip {
+  opacity: 1;
+  display: none !important;
 }
 
-.sidebar.active ul li .tooltip{
-  display: none;
-}
 
 .main-content{
   position: relative;

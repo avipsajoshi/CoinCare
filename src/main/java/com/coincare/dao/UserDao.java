@@ -1,12 +1,15 @@
 package com.coincare.dao;
 
+import com.coincare.entities.BudgetPlan;
 import com.coincare.entities.User;
 import com.coincare.entities.UserFinancials;
+import com.coincare.helper.HashPassword;
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,14 +31,16 @@ public class UserDao {
     User user = null;
     try {
       //using Hibernate Query HQL
-      String query = "From User WHERE userEmail = :e AND userPassword = :p";
+      String query = "From User WHERE userEmail = :e";
       Session session = this.factory.openSession();
       List<User> results = session.createQuery(query, User.class)
               .setParameter("e", email)
-              .setParameter("p", pass)
               .getResultList();
       if (!results.isEmpty()) {
         user = results.get(0);//returns single user object(row)
+        if (HashPassword.verifyPassword(pass, user.getUserPassword())) {
+          return user;
+        }
       }
       session.close();
     } catch (Exception e) {
@@ -302,18 +307,14 @@ public class UserDao {
 
   public List<UserFinancials> getUserReportForTheWeek(int userId, LocalDate now) {
     List<UserFinancials> list = new ArrayList();
-
-    //week calculation
+    LocalDateTime startOfDay = LocalDateTime.of(now, LocalTime.MIDNIGHT);
+    LocalDateTime endOfDay = now.atTime(LocalTime.MAX);
     DayOfWeek dayOfWeek = now.getDayOfWeek();
-    int minusDays = dayOfWeek.getValue();
-    int addDays = dayOfWeek.getValue() + 1 < 7 ? 7 - (dayOfWeek.getValue() + 1) : 0;
+    LocalDate startOfWeek = now.minusDays(dayOfWeek.getValue() % 7);  // Adjust to get Sunday
+    LocalDate endOfWeek = startOfWeek.plusDays(6);  // Saturday
 
-    LocalDateTime startOfWeekDay = LocalDateTime.of(now, LocalTime.MIDNIGHT);
-    LocalDateTime endOfWeekDay = LocalDateTime.of(now, LocalTime.MAX);
-
-    LocalDateTime startOfQueryTime = startOfWeekDay.minusDays(minusDays);
-    LocalDateTime endOfQueryTime = endOfWeekDay.plusDays(addDays);
-
+    LocalDateTime startOfQueryTime = LocalDateTime.of(startOfWeek, LocalTime.MIDNIGHT);
+    LocalDateTime endOfQueryTime = LocalDateTime.of(endOfWeek, LocalTime.MAX);
     try {
       Session session = this.factory.openSession();
       Query pq = session.createQuery("FROM UserFinancials WHERE user_userId =:id AND date BETWEEN :startofday AND :endofday ORDER BY date DESC", UserFinancials.class);
@@ -334,14 +335,19 @@ public class UserDao {
 
   public List<UserFinancials> getUserReportForTheMonth(int userId, LocalDate now) {
     List<UserFinancials> list = new ArrayList();
-    LocalDateTime startOfDay = LocalDateTime.of(now, LocalTime.MIDNIGHT);
-    LocalDateTime endOfDay = now.atTime(LocalTime.MAX);
+    // Get first day of the current month
+    LocalDate firstDayOfMonth = now.with(TemporalAdjusters.firstDayOfMonth());
+
+    // Get last day of the current month
+    LocalDate lastDayOfMonth = now.with(TemporalAdjusters.lastDayOfMonth());
+    LocalDateTime startOfMonth = LocalDateTime.of(firstDayOfMonth, LocalTime.MIDNIGHT);
+    LocalDateTime endOfMonth = LocalDateTime.of(lastDayOfMonth, LocalTime.MAX);
     try {
       Session session = this.factory.openSession();
-      Query pq = session.createQuery("FROM UserFinancials WHERE user_userId =:id AND date BETWEEN :startofday AND :endofday ORDER BY date DESC", UserFinancials.class);
+      Query pq = session.createQuery("FROM UserFinancials WHERE user_userId =:id AND date BETWEEN :startOfMonth AND :endOfMonth ORDER BY date DESC", UserFinancials.class);
       pq.setParameter("id", userId);
-      pq.setParameter("startofday", startOfDay);
-      pq.setParameter("endofday", endOfDay);
+      pq.setParameter("startOfMonth", startOfMonth);
+      pq.setParameter("endOfMonth", endOfMonth);
       list = pq.list();
       System.out.println("Result size: " + list.size());
       for (UserFinancials uf : list) {
@@ -356,14 +362,40 @@ public class UserDao {
 
   public List<UserFinancials> getUserReportForTheYear(int userId, LocalDate now) {
     List<UserFinancials> list = new ArrayList();
-    LocalDateTime startOfDay = LocalDateTime.of(now, LocalTime.MIDNIGHT);
-    LocalDateTime endOfDay = now.atTime(LocalTime.MAX);
+
+    // Get first day of the current year
+    LocalDate firstDayOfYear = now.with(TemporalAdjusters.firstDayOfYear());
+
+    // Get last day of the current year
+    LocalDate lastDayOfYear = now.with(TemporalAdjusters.lastDayOfYear());
+    LocalDateTime startOfYear = LocalDateTime.of(firstDayOfYear, LocalTime.MIDNIGHT);
+    LocalDateTime endOfYear = LocalDateTime.of(lastDayOfYear, LocalTime.MAX);
     try {
       Session session = this.factory.openSession();
-      Query pq = session.createQuery("FROM UserFinancials WHERE user_userId =:id AND date BETWEEN :startofday AND :endofday ORDER BY date DESC", UserFinancials.class);
+      Query pq = session.createQuery("FROM UserFinancials WHERE user_userId =:id AND date BETWEEN :startOfYear AND :endOfYear ORDER BY date DESC", UserFinancials.class);
       pq.setParameter("id", userId);
-      pq.setParameter("startofday", startOfDay);
-      pq.setParameter("endofday", endOfDay);
+      pq.setParameter("startOfYear", startOfYear);
+      pq.setParameter("endOfYear", endOfYear);
+      list = pq.list();
+      System.out.println("Result size: " + list.size());
+      session.close();
+    } catch (Exception w) {
+      w.printStackTrace();
+    }
+    return list;
+  }
+
+  public List<UserFinancials> getUserReportForCustomTime(int userId, LocalDate start, LocalDate end) {
+    List<UserFinancials> list = new ArrayList();
+    
+    LocalDateTime startOfTime = LocalDateTime.of(start, LocalTime.MIDNIGHT);
+    LocalDateTime endOfTime = end.atTime(LocalTime.MAX);
+    try {
+      Session session = this.factory.openSession();
+      Query pq = session.createQuery("FROM UserFinancials WHERE user_userId =:id AND date BETWEEN :startOfTime AND :endOfTime ORDER BY date DESC", UserFinancials.class);
+      pq.setParameter("id", userId);
+      pq.setParameter("startOfTime", startOfTime);
+      pq.setParameter("endOfTime", endOfTime);
       list = pq.list();
       System.out.println("Result size: " + list.size());
       for (UserFinancials uf : list) {
@@ -375,27 +407,27 @@ public class UserDao {
     }
     return list;
   }
-
-  public List<UserFinancials> getUserReportForCustomTime(int userId, LocalDate start, LocalDate end) {
-    List<UserFinancials> list = new ArrayList();
-    LocalDateTime startOfDay = LocalDateTime.of(start, LocalTime.MIDNIGHT);
-    LocalDateTime endOfDay = start.atTime(LocalTime.MAX);
+  
+  public BudgetPlan getSubscribedBudgetPlan(int userId) {
+    BudgetPlan bp = null;
+    User u=null;
     try {
       Session session = this.factory.openSession();
-      Query pq = session.createQuery("FROM UserFinancials WHERE user_userId =:id AND date BETWEEN :startofday AND :endofday ORDER BY date DESC", UserFinancials.class);
-      pq.setParameter("id", userId);
-      pq.setParameter("startofday", startOfDay);
-      pq.setParameter("endofday", endOfDay);
-      list = pq.list();
-      System.out.println("Result size: " + list.size());
-      for (UserFinancials uf : list) {
-        System.out.println(uf.getTitle());
+      Query pq = session.createQuery("subscribedBudgetPlanId from User as u WHERE u.userId =:uid", User.class);
+      pq.setParameter("uid", userId);
+      List<User> list = pq.list();
+      if (!list.isEmpty()) {
+        u = list.get(0);//returns single user object(row)
       }
+      
+      BudgetPlanDao bpDao = new BudgetPlanDao(this.factory);
+      bp = bpDao.getBudgetPlanById(u.getSubscribedBudgetPlan().getBudgetPlanId());
       session.close();
     } catch (Exception w) {
       w.printStackTrace();
+
     }
-    return list;
+    return bp;
   }
 
 }

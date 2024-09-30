@@ -10,13 +10,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="css/fontAndColors.css" />
     <link rel="stylesheet" href="css/formStyle.css" />
-    <title>Login</title>
+    <title>Login | CoinCare</title>
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
   </head>
   <body class="body">
     <script src="./js/light-dark.js"></script>
     <form method="post" id="login-form" action="./LoginServlet">
       <div class="formheader">
+<!--        <div class="logo" style="width: 1022px;">
+          <a href="index.jsp"><%//@include file="components/logo.jsp"%></a>
+        </div>-->
         <h2>Welcome Back!</h2>
         <h4>Log in and let’s continue the tracking!</h4>
         <p class="invalid"><%@include file="components/message.jsp" %></p>
@@ -43,6 +46,7 @@
         <a href="register.jsp" id="register-href">Register Now</a>
       </div>
     </form>
+
     <script src="js/login-signup-validation.js"></script>
   </body>
 </html>

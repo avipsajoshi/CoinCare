@@ -11,7 +11,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="css/fontAndColors.css" />
     <link rel="stylesheet" href="css/formStyle.css" />
-    <title>Register</title>
+    <title>Register | CoinCare</title>
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
   </head>
   <body class="light_mode">

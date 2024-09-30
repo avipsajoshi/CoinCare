@@ -60,6 +60,14 @@
         <servlet-name>BudgetPlanServlet</servlet-name>
         <servlet-class>com.coincare.servlets.BudgetPlanServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StatementServlet</servlet-name>
+        <servlet-class>com.coincare.servlets.StatementServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StatementDownloadServlet</servlet-name>
+        <servlet-class>com.coincare.servlets.StatementDownloadServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SendMailServlet</servlet-name>
         <url-pattern>/SendMailServlet</url-pattern>
@@ -119,6 +127,14 @@
     <servlet-mapping>
         <servlet-name>BudgetPlanServlet</servlet-name>
         <url-pattern>/BudgetPlanServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StatementServlet</servlet-name>
+        <url-pattern>/StatementServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StatementDownloadServlet</servlet-name>
+        <url-pattern>/StatementDownloadServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

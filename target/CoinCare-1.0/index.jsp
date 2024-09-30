@@ -962,9 +962,6 @@
                 <li class="text-base text-gray-600 hover:text-gray-700 mb-5">
                   <a href="#">About Us</a>
                 </li>
-                <li class="text-base text-gray-600 hover:text-gray-700 mb-5">
-                  <a href="#">Guidelines and how to</a>
-                </li>
               </ul>
             </div>
             <div
@@ -975,10 +972,7 @@
                   Getting Started
                 </li>
                 <li class="text-base text-gray-600 hover:text-gray-700 mb-5">
-                  <a href="#">About Us</a>
-                </li>
-                <li class="text-base text-gray-600 hover:text-gray-700 mb-5">
-                  <a href="#">Guidelines and how to</a>
+                  <a href="#">Guidelines and How to</a>
                 </li>
               </ul>
             </div>

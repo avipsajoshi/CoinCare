@@ -14,7 +14,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Income</title>
+    <title>Your Income | CoinCare</title>
     <link rel="stylesheet" href="css/fontAndColors.css"/>
     <link rel="stylesheet" href="css/elementStyles.css"/>
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
@@ -39,7 +39,7 @@
       <%@include file="components/message.jsp" %>
       <div class="container">
         <div class="summary" style="display: flex; column-count: 3; justify-content: space-between;">
-          <h3 id="totalInc">Total Income: </h3>
+          <label id="totalInc">Total Income: </label>
         </div>
       </div>
 
@@ -50,7 +50,7 @@
         User thisUser = uDao.getUseByEmail(user.getUserEmail());
         int uId=thisUser.getUserId();
         double totalIncomeToday=0;
-        List<Income> allIncomes = eDao.getIncomeByUserId(uId);
+        List<Income> allIncomes = eDao.getUserIncomeForTheMonth(uId);
         if(allIncomes.isEmpty()){
         %>
 
@@ -69,12 +69,13 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Topic</th>
-              <th scope="col">Remarks</th>
-              <th scope="col">Amount</th>
-              <th scope="col">Category</th>
-              <th scope="col">Mode</th>
-              <th scope="col">Actions</th>
+              <th scope="col"><u>Date</u></th>
+              <th scope="col"><u>Transaction</u></th>
+              <th scope="col"><u>Remarks</u></th>
+              <th scope="col"><u>Amount</u></th>
+              <th scope="col"><u>Category</u></th>
+              <th scope="col"><u>Mode</u></th>
+              <th scope="col"><u>Actions</u></th>
             </tr>
           </thead>
           <tbody>
@@ -84,6 +85,7 @@
               totalIncomeToday +=e.getIncomeAmount();
             %>
             <tr>
+              <td scope="row"><%=MinorHelper.getDateFormatted(e.getIncomeDate())%></td>
               <td scope="row"><%=e.getIncomeSource()%></td>
               <td><%=e.getIncomeDescription()%></td>
               <td><%=e.getIncomeAmount()%></td>
@@ -98,41 +100,6 @@
               <input type="hidden" value="<%=e.getIncomeId()%>" name="incId" id="up-inc-id">
               <h3> Change a few errs</h3>
               <br>
-              <div class="text-container">
-                <label for="inc-name">Income on: </label>
-                <br>
-                <small id="up-inc-name-error" class="error"></small>
-                <br>
-                <input type="text" id="up-inc-name" name="up-inc-name" placeholder="Title" value="<%=e.getIncomeSource()%>"/>
-                <br>
-              </div>
-              <div class="text-container">
-                <label for="inc-name">Description: </label>
-                <br>
-                <small id="up-inc-des-error" class="error"></small>
-                <br>
-                <input type="text" id="up-inc-des" name="up-inc-des" placeholder="Description" value="<%=e.getIncomeDescription()%>"/>
-                <br>
-              </div>
-              <div class="text-container">
-                <label for="up-inc-price">Amount: </label>
-                <br><small id="up-inc-price-error" class="error"></small>
-                <br>
-                <input type="number" id="up-inc-price" name="up-inc-price" placeholder="Amount in numbers" value="<%=e.getIncomeAmount()%>"/>
-                <br>
-              </div>
-
-              <label for="up-select-mode">Mode of Transaction: </label>
-              <br>
-              <select name="mode" class="select-category">
-                <option value="<%=(e.getMode() != null ? e.getMode() : "No Mode") %>" selected><%=(e.getMode() != null ? e.getMode() : "No Mode") %></option>
-                <% for(String m: modes){
-                if(e.getMode().equals(m)) continue;
-                %>
-                <option value="<%=m%>"><%=m%></option>
-                <%}%>
-              </select>
-              <br>
               <label for="up-select-category">Type: </label>
               <br>
               <!--incense category drop down-->
@@ -145,6 +112,35 @@
                 <option value="Dividend/profit received"> Dividends/profit received</option>
                 <option value="Interest from loan or Fixed Deposit"> Interest from loan or Fixed Deposit</option>
                 <option value="Other Incomes"> Other Incomes</option>
+              </select>
+              <br>
+              <label for="inc-name">Income on: </label>
+              <br>
+              <small id="up-inc-name-error" class="error"></small>
+              <br>
+              <input type="text" id="up-inc-name" name="up-inc-name" placeholder="Title" value="<%=e.getIncomeSource()%>"/>
+              <br>
+              <label for="inc-name">Description: </label>
+              <br>
+              <small id="up-inc-des-error" class="error"></small>
+              <br>
+              <input type="text" id="up-inc-des" name="up-inc-des" placeholder="Description" value="<%=e.getIncomeDescription()%>"/>
+              <br>
+              <label for="up-inc-price">Amount: </label>
+              <br><small id="up-inc-price-error" class="error"></small>
+              <br>
+              <input type="number" id="up-inc-price" name="up-inc-price" placeholder="Amount in numbers" value="<%=e.getIncomeAmount()%>"/>
+              <br>
+
+              <label for="up-select-mode">Mode of Transaction: </label>
+              <br>
+              <select name="mode" class="select-category">
+                <option value="<%=(e.getMode() != null ? e.getMode() : "No Mode") %>" selected><%=(e.getMode() != null ? e.getMode() : "No Mode") %></option>
+                <% for(String m: modes){
+                if(e.getMode().equals(m)) continue;
+                %>
+                <option value="<%=m%>"><%=m%></option>
+                <%}%>
               </select>
               <button type="submit" class="submitBtn-inc">Update Changes</button>
             </form>
@@ -176,41 +172,7 @@
         <!-- date added in backend -->
         <h3> Add New Income</h3>
         <br>
-        <div class="text-container">
-          <label for="inc-name">Income source:</label>
-          <small id="inc-name-error" class="error"></small>
-          <br>
-          <input type="text" id="inc-name" name="inc-name" placeholder="Title"/>
-          <br>
-        </div>
-        <div class="text-container">
-          <label for="inc-name">Description: </label>
-          <br>
-          <small id="inc-des-error" class="error"></small>
-          <br>
-          <input type="text" id="inc-des" name="inc-des" placeholder="Description"/>
-          <br>
-        </div>
-        <div class="text-container">
-          <label for="inc-price">Amount: </label>
-          <small id="inc-price-error" class="error"></small>
-          <br>
-          <input type="number" id="inc-price" name="inc-price" placeholder="Amount in numbers" />
-
-          <br>
-        </div>
-
-        <label for="up-select-mode">Mode of Transaction: </label>
-        <br>
-        <select name="mode" class="select-category">
-          <% for(String m: modes){
-          %>
-          <option value="<%=m%>"><%=m%></option>
-          <%}%>
-        </select>
-        <br>
-
-        <label for="select-category">Type </label>
+        <label for="select-category">Category: </label>
         <br>
         <!--incense category drop down-->
         <select name="catId" class="select-category">
@@ -223,6 +185,33 @@
           <option value="Interest from loan or Fixed Deposit"> Interest from loan or Fixed Deposit</option>
           <option value="Other Incomes"> Other Incomes</option>
         </select>
+        <br>        
+
+        <label for="inc-name">Income source:</label>
+        <small id="inc-name-error" class="error"></small>
+        <br>
+        <input type="text" id="inc-name" name="inc-name" placeholder="Title"/>
+        <br>
+        <label for="inc-name">Description: </label>
+        <small id="inc-des-error" class="error"></small>
+        <br>
+        <input type="text" id="inc-des" name="inc-des" placeholder="Description"/>
+        <br>
+        <label for="inc-price">Amount: </label>
+        <small id="inc-price-error" class="error"></small>
+        <br>
+        <input type="number" id="inc-price" name="inc-price" placeholder="Amount in numbers" />
+        <br>
+
+        <label for="up-select-mode">Mode of Transaction: </label>
+        <br>
+        <select name="mode" class="select-category">
+          <% for(String m: modes){
+          %>
+          <option value="<%=m%>"><%=m%></option>
+          <%}%>
+        </select>
+        <br>
         <button type="submit" class="submitBtn-inc">Add</button>
       </form>
     </div>

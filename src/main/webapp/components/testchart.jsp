@@ -16,38 +16,16 @@
   </div>
 </div>
 <script>
-  function getRandomColor(difference) {
-    var base = [78, 205, 196];
-    function getRandomShade(baseColor, variance) {
-      // Destructure the base color into RGB components
-      var [r, g, b] = baseColor;
-
-      // Generate random offsets within the variance range and apply to each color component
-      var newR = clamp(r + Math.floor(Math.random() * (2 * variance + 1)) - variance, 0, 255);
-      var newG = clamp(g + Math.floor(Math.random() * (2 * variance + 1)) - variance, 0, 255);
-      var newB = clamp(b + Math.floor(Math.random() * (2 * variance + 1)) - variance, 0, 255);
-
-      // Convert the new RGB values to a hexadecimal color code
-      var shade = "#" + ((1 << 24) + (newR << 16) + (newG << 8) + newB).toString(16).slice(1);
-
-      return shade;
-    }
-
-// Helper function to keep the values within the valid range (0-255)
-    function clamp(value, min, max) {
-      return Math.max(min, Math.min(max, value));
-    }
-    return getRandomShade(base, difference);
-  }
-
   var ctx = document.getElementById('doughnutChart').getContext('2d');
   var ctx2 = document.getElementById('doughnutChart1').getContext('2d');
 //  var labeldata = ['Category1', 'Category2', 'Category3', 'Category4', 'Category5'];
 //  var datasetData = [300, 50, 100, 75, 25];
   var labelString = 'Spent %';
 //      var colorData = [getRandomColor(100), getRandomColor(100), getRandomColor(100), getRandomColor(100), getRandomColor(100)];
-  var colorData = ['#4ECDC4', '#15A79D', '#64C3E2', '#00FFEE', '#8ADDD8'];
-  
+  const colorData = ['#4ECDC4', '#15A79D', '#64C3E2', '#00FFEE', '#8ADDD8', "#004D4B",
+    "#003E3E", "#A7E1DB", "#B8E9E4", "#C8F2ED", "#D4F6F4", "#E1F8F7", "#D1E3E0", "#B7DBD6",
+    "#A4D4D0", "#91C6C3", "#7EB1B0", "#6BA8A7", "#57A2A1", "#45A49D"];
+
   //for income and expense
   var typeInEx = {
     type: 'doughnut',

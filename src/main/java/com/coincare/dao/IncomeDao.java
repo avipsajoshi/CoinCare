@@ -3,6 +3,11 @@ package com.coincare.dao;
 import com.coincare.entities.Category;
 import com.coincare.entities.Income;
 import com.coincare.helper.FactoryProvider;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -60,6 +65,30 @@ public class IncomeDao {
     return inc;
   }
 
+  public List<Income> getUserIncomeForTheMonth(int userId) {
+    LocalDate now = LocalDate.now();
+    List<Income> list = new ArrayList();
+    // Get first day of the current month
+    LocalDate firstDayOfMonth = now.with(TemporalAdjusters.firstDayOfMonth());
+    // Get last day of the current month
+    LocalDate lastDayOfMonth = now.with(TemporalAdjusters.lastDayOfMonth());
+    LocalDateTime startOfMonth = LocalDateTime.of(firstDayOfMonth, LocalTime.MIDNIGHT);
+    LocalDateTime endOfMonth = LocalDateTime.of(lastDayOfMonth, LocalTime.MAX);
+    try {
+      Session session = this.factory.openSession();
+      Query pq = session.createQuery("FROM Income WHERE user.userId =:id AND incomeDate BETWEEN :startOfMonth AND :endOfMonth ORDER BY incomeDate DESC", Income.class);
+      pq.setParameter("id", userId);
+      pq.setParameter("startOfMonth", startOfMonth);
+      pq.setParameter("endOfMonth", endOfMonth);
+      list = pq.list();
+      session.close();
+    } catch (Exception w) {
+      w.printStackTrace();
+    }
+    return list;
+  }
+
+  
   public boolean updateIncome(String incomeSource, String incomeDescriptions, double amount, String mode, String type,int incomeId) {
     boolean status = false;
 //    Income currentIncome = this.getIncomeById(incomeId);
@@ -119,4 +148,14 @@ public class IncomeDao {
     }
     return status;
   }
+
+  public double getTotalMontlyIncome(int userId){
+    double totalIncome = 0.0;
+    List<Income> userIncomeForTheMonth = this.getUserIncomeForTheMonth(userId);
+    for(Income ic : userIncomeForTheMonth){
+      totalIncome += ic.getIncomeAmount();
+    }
+    return totalIncome;
+  }
+
 }

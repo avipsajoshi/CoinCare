@@ -5,6 +5,7 @@
 --%>
 
 <%@page import="com.coincare.helper.FactoryProvider" %>
+<%@page import="com.coincare.helper.MinorHelper" %>
 <%@page import="com.coincare.entities.User" %>
 <%@page import="com.coincare.dao.UserDao" %>
 <%@page import="java.time.LocalDate"%>
@@ -48,90 +49,90 @@
       <img src="images/<%=user.getUserPic()%>" alt="user" class="user-img"></a>
     <a href="./settings.jsp" style="text-decoration: none; " ><div class="user-info">
         <p class="bold"><%= user.getUserName() %></p>
-        </a>
-        <p><a href="./LogoutServlet">Logout</a></p>
-      </div>
+    </a>
+    <p><a href="./LogoutServlet">Logout</a></p>
   </div>
-  <ul>
-    <li>
-      <a href="./dashboard.jsp">
-        <i class='bx bxs-grid-alt'></i>
-        <span class="nav-item">Dashboard</span>
-      </a>
-      <span class="tooltip">Dashboard</span>
-    </li>
-    <li>
-      <a href="./expense.jsp">
-        <i class='bx bx-money-withdraw'></i>
-        <span class="nav-item">Expenses</span>
-      </a>
-      <span class="tooltip">Expenses</span>
-    </li>
+</div>
+<ul>
+  <li>
+    <a class="nav-links" href="./dashboard.jsp">
+      <i class='bx bxs-grid-alt'></i>
+      <span class="nav-item">Dashboard</span>
+    </a>
+    <span class="tooltip">Dashboard</span>
+  </li>
+  <li>
+    <a href="./expense.jsp">
+      <i class='bx bx-money-withdraw'></i>
+      <span class="nav-item">Expenses</span>
+    </a>
+    <span class="tooltip">Expenses</span>
+  </li>
 
-    <li>
-      <a href="./income.jsp">
-        <i class="bx bx-wallet-alt"></i>
-        <span class="nav-item">Income</span>
-      </a>
-      <span class="tooltip">Income</span>
-    </li>
+  <li>
+    <a href="./income.jsp">
+      <i class="bx bx-wallet-alt"></i>
+      <span class="nav-item">Income</span>
+    </a>
+    <span class="tooltip">Income</span>
+  </li>
 
-    <li>
-      <a href="./budget.jsp">
-        <i class='bx bx-dollar-circle'></i>
-        <span class="nav-item">Budgets</span>
-      </a>
-      <span class="tooltip">Budgets</span>
-    </li>
+  <li>
+    <a href="./budget.jsp">
+      <i class='bx bx-dollar-circle'></i>
+      <span class="nav-item">Budgets</span>
+    </a>
+    <span class="tooltip">Budgets</span>
+  </li>
 
-    <li>
-      <a href="./statements.jsp">
-        <i class='bx bx-bar-chart-square'></i>
-        <span class="nav-item">Statements</span>
-      </a>
-      <span class="tooltip">Statements</span>
-    </li>
+  <li>
+    <a href="./statements.jsp">
+      <i class='bx bxs-bar-chart-alt-2'></i>
+      <span class="nav-item">Statements</span>
+    </a>
+    <span class="tooltip">Statements</span>
+  </li>
 
-    <li>
-      <a href="./explore.jsp">
-        <i class='bx bx-search-alt'></i>
-        <span class="nav-item">Explore</span>
-      </a>
-      <span class="tooltip">Explore</span>
-    </li>
+  <li>
+    <a href="./explore.jsp">
+      <i class='bx bx-search-alt'></i>
+      <span class="nav-item">Explore</span>
+    </a>
+    <span class="tooltip">Explore</span>
+  </li>
 
-    <li>
-      <a href="./settings.jsp">
-        <i class="bx bx-cog"></i>
-        <span class="nav-item">Settings</span>
-      </a>
-      <span class="tooltip">Settings</span>
-    </li>
+  <li>
+    <a href="./settings.jsp">
+      <i class="bx bx-cog"></i>
+      <span class="nav-item">Settings</span>
+    </a>
+    <span class="tooltip">Settings</span>
+  </li>
 
-    <li>
-      <a href="./feedback.jsp">
-        <i class='bx bx-message-alt-edit' ></i>
-        <span class="nav-item">Feedback</span>
-      </a>
-      <span class="tooltip">Feedback</span>
-    </li>
+  <li>
+    <a href="./feedback.jsp">
+      <i class='bx bx-message-alt-edit' ></i>
+      <span class="nav-item">Feedback</span>
+    </a>
+    <span class="tooltip">Feedback</span>
+  </li>
 
-    <li>
-      <a href="./help.jsp">
-        <i class='bx bx-question-mark'></i>
-        <span class="nav-item">Help</span>
-      </a>
-      <span class="tooltip">Help</span>
-    </li>
+  <li>
+    <a href="./help.jsp">
+      <i class='bx bx-question-mark'></i>
+      <span class="nav-item">Help</span>
+    </a>
+    <span class="tooltip">Help</span>
+  </li>
 
-    <li>
-      <a href="./LogoutServlet">
-        <i class="bx bx-log-out"></i>
-        <span class="nav-item">Logout</span>
-      </a>
-      <span class="tooltip">Logout</span>
-    </li>
-  </ul>
+  <li>
+    <a href="./LogoutServlet">
+      <i class="bx bx-log-out"></i>
+      <span class="nav-item">Logout</span>
+    </a>
+    <span class="tooltip">Logout</span>
+  </li>
+</ul>
 </div>
 
 <script>

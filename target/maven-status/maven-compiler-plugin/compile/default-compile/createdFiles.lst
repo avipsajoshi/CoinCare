@@ -1,4 +1,5 @@
 com\coincare\servlets\ExpenseServlet.class
+com\coincare\helper\HashPassword.class
 com\coincare\helper\MinorHelper.class
 com\coincare\entities\Income.class
 com\coincare\servlets\ForgetPasswordServlet.class
@@ -19,6 +20,7 @@ com\coincare\servlets\SingleChangeServlet.class
 com\coincare\entities\BudgetPlan.class
 com\coincare\entities\User.class
 com\coincare\dao\CategoryDao.class
+com\coincare\servlets\StatementServlet.class
 com\coincare\dao\UserDao.class
 com\coincare\helper\SendMail.class
 com\coincare\servlets\LoginServlet.class

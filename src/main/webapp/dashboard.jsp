@@ -19,7 +19,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Dashboard</title>
+    <title>Dashboard | CoinCare</title>
     <link rel="stylesheet" href="css/fontAndColors.css"/>
     <link rel="stylesheet" href="css/elementStyles.css"/>
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
@@ -91,11 +91,12 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Transaction</th>
-              <th scope="col">Remarks</th>
-              <th scope="col">For/From</th>
-              <th scope="col">Mode</th>
-              <th scope="col">Amount</th>
+              <th scope="col"><u>Date</u></th>
+              <th scope="col"><u>Transaction</u></th>
+              <th scope="col"><u>Remarks</u></th>
+              <th scope="col"><u>Category</u></th>
+              <th scope="col"><u>Mode</u></th>
+              <th scope="col"><u>Amount</u></th>
             </tr>
           </thead>
           <tbody>
@@ -104,6 +105,7 @@
 
             %>
             <tr>
+              <td scope="row"><%=MinorHelper.getDateFormatted(uf.getDate())%></td>
               <td scope="row"><%=uf.getTitle()%></td>
               <td><%=uf.getDescription()%></td>
               <td class="dashboard-category"><%=uf.getCategory()%></td>
@@ -198,7 +200,7 @@
     <!--add expense form-->
     <button class="add-button" id="dashboard-add-button" onclick="openAddPopup(pop_p)">+</button>
 
-
+    <!--add new expense-->
 
     <div id="popup-exp" class="popup-container scroll-container">
       <div class="close-button" onclick="closeAddPopup(pop_p)">X</div>
@@ -208,6 +210,27 @@
         <!-- date added in backend -->
         <h3> Add New Expense</h3>
         <br>
+        <label for="select-category">Category: </label>
+        <br>
+        <!--expense category drop down-->
+        <select name="catId" class="select-category">
+          <%
+            for(Category c : allCategory){
+          %>
+          <option value="<%=c.getCategoryId()%>"> <%=c.getCategoryTitle()%> </option>
+          <%}%>
+        </select>
+        <br>
+         <label for="select-mode">Mode of Transaction: </label>
+        <br>
+        <select name="mode" class="select-category">
+          <% for(String m: modes){
+          %>
+          <option value="<%=m%>"><%=m%></option>
+          <%}%>
+        </select>
+        <br>
+        
         <label for="exp-name">What was the Expense on? </label>
         <small id="exp-name-error" class="error"></small>
         <br>
@@ -224,26 +247,8 @@
         <input type="number" id="exp-price" name="exp-price" placeholder="Amount in numbers" />
 
         <br>
-        <label for="select-mode">Mode of Transaction: </label>
-        <br>
-        <select name="mode" class="select-category">
-          <% for(String m: modes){
-          %>
-          <option value="<%=m%>"><%=m%></option>
-          <%}%>
-        </select>
-        <br>
-        <label for="select-category">Category: </label>
-        <br>
-        <!--expense category drop down-->
-        <select name="catId" class="select-category">
-          <!--add categorydao with user-category for expenses. for now -->
-          <%
-            for(Category c : allCategory){
-          %>
-          <option value="<%=c.getCategoryId()%>"> <%=c.getCategoryTitle()%> </option>
-          <%}%>
-        </select>
+       
+        
         <button type="submit" class="submitBtn-exp">Add</button>
       </form>
     </div>
