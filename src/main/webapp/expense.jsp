@@ -31,7 +31,7 @@
 
     <div class="main-content">
       <div class="container">
-        <h2><a href="./dashboard.jsp">Coin Care</a>\<a href="./expense.jsp">Expenses</a></h2>
+        <h2><a href="./dashboard.jsp"><i class='bx bx-left-arrow-alt'></i> Coin Care</a> / <a href="./expense.jsp">Expenses</a></h2>
         <h2><%=currentDay%> <%=currentMonth.toString()%>, <%=currentYear%></h2>
       </div>
       <%@include file="components/message.jsp" %>
@@ -123,7 +123,7 @@
                 <%}%>
               </select>
               <br>
-              
+
               <br>
               <label for="up-select-mode">Mode of Transaction: </label>
               <br>
@@ -183,14 +183,15 @@
       <div class="close-button" onclick="closeAddPopup(pop_p)">X</div>
       <form id="exp-form" action="./ExpenseServlet" method="post" style="padding-left:inherit;">
         <input type="hidden" value="add" name="operationType">
-        <input type="hidden" value="<%=user.getUserId()%>" name="userId">
+        <input type="hidden" value="<%=uId%>" id="userId" name="userId">
         <!-- date added in backend -->
         <h3> Add New Expense</h3>
         <br>
         <label for="select-category">Category: </label>
         <br>
         <!--expense category drop down-->
-        <select name="catId" class="select-category">
+        <select name="catId" class="select-category" id="selected-category" onchange="updatePrediction()">
+          <option selected value="26">Select a Category</option>
           <%
             for(Category c : allCategory){
           %>
@@ -198,7 +199,7 @@
           <%}%>
         </select>
         <br>
-         <label for="select-mode">Mode of Transaction: </label>
+        <label for="select-mode">Mode of Transaction: </label>
         <br>
         <select name="mode" class="select-category">
           <% for(String m: modes){
@@ -223,6 +224,31 @@
         <input type="number" id="exp-price" name="exp-price" placeholder="Amount in numbers" />       
         <button type="submit" class="submitBtn-exp">Add</button>
       </form>
+
+      <script>
+        function updatePrediction() {
+          var selectedCategory = document.getElementById("selected-category").value;
+          console.log(selectedCategory);
+          var userId = document.getElementById("userId").value;
+          var sending = selectedCategory + "." +userId;
+          console.log(userId);
+          console.log(sending);
+          // Make an AJAX request to send the selected category
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", "./ExpensePredictionServlet?category=" + selectedCategory, true);
+          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              // Update the predicted expense field with the returned value
+              var response = xhr.responseText;
+              document.getElementById("exp-price").value = response;
+            }
+          };
+          xhr.send();
+          
+        }
+      </script>
     </div>
     <script>
 

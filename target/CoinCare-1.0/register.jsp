@@ -13,8 +13,11 @@
     <link rel="stylesheet" href="css/formStyle.css" />
     <title>Register | CoinCare</title>
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   </head>
   <body class="light_mode">
+
+    <h2 style="margin: 10px 10px;"><a href="./index.jsp"><i class='bx bx-left-arrow-alt'></i> Coin Care</a></h2>
     <form method="post" id="register-form" action="./RegisterServlet">
       <div class="formheader">
         <h2>New here?</h2>

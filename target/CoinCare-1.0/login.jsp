@@ -12,14 +12,16 @@
     <link rel="stylesheet" href="css/formStyle.css" />
     <title>Login | CoinCare</title>
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   </head>
   <body class="body">
     <script src="./js/light-dark.js"></script>
+    <h2 style="margin: 10px 10px;"><a href="./index.jsp"><i class='bx bx-left-arrow-alt'></i> Coin Care</a></h2>
     <form method="post" id="login-form" action="./LoginServlet">
       <div class="formheader">
-<!--        <div class="logo" style="width: 1022px;">
-          <a href="index.jsp"><%//@include file="components/logo.jsp"%></a>
-        </div>-->
+        <!--        <div class="logo" style="width: 1022px;">
+                  <a href="index.jsp"><%//@include file="components/logo.jsp"%></a>
+                </div>-->
         <h2>Welcome Back!</h2>
         <h4>Log in and let’s continue the tracking!</h4>
         <p class="invalid"><%@include file="components/message.jsp" %></p>

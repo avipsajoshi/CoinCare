@@ -6,6 +6,7 @@ D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\User.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\UserDao.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\IncomeDao.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\JakartaRestConfiguration.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\service\ExpensePredictionService.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\CategoryDao.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\ResetPasswordServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\BudgetPlanDao.java
@@ -17,6 +18,7 @@ D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\LoginServlet.j
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\RegisterServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\UpdateProfileServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\ForgetPasswordServlet.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\StatementDownloadServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\AdminServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\LogoutServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Expense.java
@@ -29,5 +31,9 @@ D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\ExpenseDao.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Article.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\BudgetPlanServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\resources\JakartaEE10Resource.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\ArticleDao.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\SingleChangeServlet.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\FeedbackServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Admin.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\ArticleServlet.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\ExpensePredictionServlet.java

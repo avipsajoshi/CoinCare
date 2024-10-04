@@ -13,31 +13,44 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class StatementDownloadServlet extends HttpServlet {
+
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     try (PrintWriter out = response.getWriter()) {
-     UserDao uDao = new UserDao(FactoryProvider.getFactory());
+      UserDao uDao = new UserDao(FactoryProvider.getFactory());
       // Set response content type and headers for CSV file
       response.setContentType("text/csv");
       response.setHeader("Content-Disposition", "attachment; filename=\"transactions.csv\"");
       String user = request.getParameter("userId");
+      String when = request.getParameter("time");
       int userId = Integer.parseInt(user);
+      List<UserFinancials> transactions = null;
       // Sample data
-      List<UserFinancials> transactions = uDao.getUserReportForTheMonth(userId, LocalDate.now());
+      if (when.equals("weekly")) {
+        transactions = uDao.getUserReportForTheWeek(userId, LocalDate.now());
+
+      }
+      if (when.equals("monthly")) {
+        transactions = uDao.getUserReportForTheMonth(userId, LocalDate.now());
+
+      }
+      if (when.equals("yearly")) {
+        transactions = uDao.getUserReportForTheYear(userId, LocalDate.now());
+      }
 
       out.println("transactionId,type,title,description,mode,category,amount,date");
 
       // Loop over transactions and write each as a CSV row
       for (UserFinancials transaction : transactions) {
         out.printf("%d,%s,%s,%s,%s,%s,%.2f,%s\n",
-        transaction.getTransactionId(),
-        transaction.getType(),
-        transaction.getTitle(),
-        transaction.getDescription(),
-        transaction.getMode(),
-        transaction.getCategory(),
-        transaction.getAmount(),
-        transaction.getDate().toString()
+                transaction.getTransactionId(),
+                transaction.getType(),
+                transaction.getTitle(),
+                transaction.getDescription(),
+                transaction.getMode(),
+                transaction.getCategory(),
+                transaction.getAmount(),
+                transaction.getDate().toString()
         );
       }
 

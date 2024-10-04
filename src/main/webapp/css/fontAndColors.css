@@ -71,3 +71,12 @@ button:focus{
 .index-page{
   margin: 2rem;
 }
+
+a{
+  color: var(--text);
+  text-decoration: none;
+}
+
+a:visited{
+  text-decoration: none;
+}

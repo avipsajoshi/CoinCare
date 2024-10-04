@@ -14,12 +14,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 public class BudgetPlanServlet extends HttpServlet {
+
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       String operation = request.getParameter("operationType");
-      String user = request.getParameter("userId");
+      String userid = request.getParameter("userId");
       HttpSession session = request.getSession();
       BudgetPlanDao bpDao = new BudgetPlanDao(FactoryProvider.getFactory());
       UserDao userDao = new UserDao(FactoryProvider.getFactory());
@@ -27,26 +28,57 @@ public class BudgetPlanServlet extends HttpServlet {
       boolean status = false;
       if (operation.trim().equals("add")) {
         //add user bp
+        String budgetTitle = request.getParameter("budget-name");
+        String budgetDes = request.getParameter("budget-description");
+        String budgetExp = request.getParameter("budgetExp");
+        String budgetWant = request.getParameter("budgetWant");
+        String budgetSave = request.getParameter("budgetSave");
+
+        int exp = Integer.parseInt(budgetExp);
+        int want = Integer.parseInt(budgetWant);
+        int save = Integer.parseInt(budgetSave);
+        User user = userDao.getUserById(Integer.parseInt(userid));
+        bp = new BudgetPlan(budgetTitle, budgetDes, exp, want, save, user);
+        status = bpDao.addBudgetPlan(bp);
         if (status) {
           session.setAttribute("message", "BudgetPlan added");
         } else {
           session.setAttribute("message", "Error adding bpegory");
         }
-        response.sendRedirect("./settings.jsp");
+        response.sendRedirect("./budget.jsp");
         return;
 
       } else if (operation.trim().equals("update")) {
         //update user bp
+        String budgetid = request.getParameter("up-budget-id");
+        String budgetTitle = request.getParameter("up-budget-name");
+        String budgetDes = request.getParameter("up-budget-description");
+        String budgetExp = request.getParameter("up-budgetExp");
+        String budgetWant = request.getParameter("up-budgetWant");
+        String budgetSave = request.getParameter("up-budgetSave");
+
+        int bpId = Integer.parseInt(budgetid);
+        int exp = Integer.parseInt(budgetExp);
+        int want = 0;
+        if (budgetWant != null) {
+          want = Integer.parseInt(budgetWant);
+        }
+        int save = Integer.parseInt(budgetSave);
+        int user = Integer.parseInt(userid);
+
+        status = bpDao.updateBudgetPlanByUserId(budgetTitle, budgetDes, exp, want, save, bpId, user);
         if (status) {
           session.setAttribute("message", "BudgetPlan record updated");
         } else {
           session.setAttribute("message", "Error updating bpegory");
         }
-        response.sendRedirect("./settings.jsp");
-        return;
+        response.sendRedirect("./budget.jsp");
 
       } else if (operation.trim().equals("delete")) {
-        //delete user bp with id
+        //delete user bp with id        
+        String budgetid = request.getParameter("budget-id");
+        int bpId = Integer.parseInt(budgetid);
+        status = bpDao.deleteBudgetPlanById(bpId);
         if (status) {
           System.out.println("Deleted");
           session.setAttribute("message", "BudgetPlan deleted");
@@ -55,30 +87,62 @@ public class BudgetPlanServlet extends HttpServlet {
 
           session.setAttribute("message", "Error deleting bpegory");
         }
-        response.sendRedirect("./settings.jsp");
+        response.sendRedirect("./budget.jsp");
         return;
       } else if (operation.trim().equals("adminBpAdd")) {
         //add admin bp
+        String budgetTitle = request.getParameter("budget-name");
+        String budgetDes = request.getParameter("budget-description");
+        String budgetExp = request.getParameter("budgetExp");
+        String budgetWant = request.getParameter("budgetWant");
+        String budgetSave = request.getParameter("budgetSave");
+
+        int exp = Integer.parseInt(budgetExp);
+        int want = Integer.parseInt(budgetWant);
+        int save = Integer.parseInt(budgetSave);
+        User user = userDao.getUserById(Integer.parseInt(userid));
+        bp = new BudgetPlan(budgetTitle, budgetDes, exp, want, save, user);
+        status = bpDao.addBudgetPlan(bp);
         if (status) {
           session.setAttribute("message", "BudgetPlan added");
         } else {
           session.setAttribute("message", "Error adding bpegory");
         }
-        response.sendRedirect("./settings.jsp");
+        response.sendRedirect("./admin-dashboard.jsp");
         return;
 
       } else if (operation.trim().equals("adminBpUpdate")) {
         //update admin bp
+        String budgetid = request.getParameter("up-budget-id");
+        String budgetTitle = request.getParameter("up-budget-name");
+        String budgetDes = request.getParameter("up-budget-description");
+        String budgetExp = request.getParameter("up-budgetExp");
+        String budgetWant = request.getParameter("up-budgetWant");
+        String budgetSave = request.getParameter("up-budgetSave");
+
+        int bpId = Integer.parseInt(budgetid);
+        int exp = Integer.parseInt(budgetExp);
+        int want = 0;
+        if (budgetWant != null) {
+          want = Integer.parseInt(budgetWant);
+        }
+        int save = Integer.parseInt(budgetSave);
+        int user = Integer.parseInt(userid);
+
+        status = bpDao.updateBudgetPlanByUserId(budgetTitle, budgetDes, exp, want, save, bpId, user);
         if (status) {
           session.setAttribute("message", "BudgetPlan record updated");
         } else {
           session.setAttribute("message", "Error updating bpegory");
         }
-        response.sendRedirect("./settings.jsp");
+        response.sendRedirect("./admin-dashboard.jsp");
         return;
 
       } else if (operation.trim().equals("adminBpDelete")) {
         //delete admin bp with id
+        String budgetid = request.getParameter("budget-id");
+        int bpId = Integer.parseInt(budgetid);
+        status = bpDao.deleteBudgetPlanById(bpId);
         if (status) {
           System.out.println("Deleted");
           session.setAttribute("message", "BudgetPlan deleted");
@@ -87,7 +151,7 @@ public class BudgetPlanServlet extends HttpServlet {
 
           session.setAttribute("message", "Error deleting bpegory");
         }
-        response.sendRedirect("./settings.jsp");
+        response.sendRedirect("./admin-dashboard.jsp");
         return;
       }
     }

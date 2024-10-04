@@ -27,8 +27,10 @@
 
     <div class="main-content">
       <div class="container">
-        <h2><a href="./dashboard.jsp">Coin Care</a>\<a href="./budget.jsp">Your Budget Plans and Limits</a></h2>
+        <h2><a href="./dashboard.jsp"><i class='bx bx-left-arrow-alt'></i> Coin Care</a> / <a href="./budget.jsp">Your Budget Plans and Limits</a></h2>
       </div>
+
+      <%@include file="components/message.jsp"%>  
 
       <div class="custom-content">
         <%
@@ -41,7 +43,8 @@
         HashMap<String, String> dividedBudget = bDao.getDividedBudget(bpId, totalIncome);
         HashMap<String, String> spentBudget = bDao.getSpent(bpId, totalIncome, thisUser.getUserId());
         %>
-        <h3>Your Budget Plan :  <%=thisUser.getSubscribedBudgetPlan().getBudgetPlanTitle()%></h3> 
+        <br>
+        <h3>Your Subscribed Budget Plan :  <%=thisUser.getSubscribedBudgetPlan().getBudgetPlanTitle()%></h3> 
         <%=thisUser.getSubscribedBudgetPlan().getBudgetPlanDescription()%>
         <br><br><h3>
           Total Income: <%=totalIncome%></h3>
@@ -214,7 +217,7 @@
           progress.style.width = "100" + "%";
           progress.style.backgroundColor = "lightcoral";
           percentageText.textContent = "100" + "%";
-        }else {
+        } else {
           progress.style.width = percentage + "%";
           percentageText.textContent = percentage + "%";
         }

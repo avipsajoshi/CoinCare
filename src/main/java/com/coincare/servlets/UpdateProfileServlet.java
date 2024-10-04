@@ -35,7 +35,7 @@ public class UpdateProfileServlet extends HttpServlet {
       if (operationType == null) {
         session.setAttribute("message", "Operation type is missing. Please try again.");
         response.sendRedirect("./settings.jsp");
-        return;  
+        return;
       }
       if (operationType.equals("1")) {
         String username = request.getParameter("user-name");
@@ -63,6 +63,7 @@ public class UpdateProfileServlet extends HttpServlet {
           session.setAttribute("message", "Profile updated successfully.");
         }
 
+        response.sendRedirect("./settings.jsp");
       } else if (operationType.equals("2")) {
         Part filePart = request.getPart("user-update-image");
         String fileName = filePart.getSubmittedFileName();
@@ -105,10 +106,20 @@ public class UpdateProfileServlet extends HttpServlet {
           session.setAttribute("message", "Successfully updated.");
         }
 
+        response.sendRedirect("./settings.jsp");
+
+      } else if (operationType.equals("3")) {
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        int budgetPlanId = Integer.parseInt(request.getParameter("up-budget"));
+        boolean status = userDao.updateUserBudgetPlan(userId, budgetPlanId);
+        if (status) {
+          session.setAttribute("message", "Buget plan updated successfully");
+        } else {
+          session.setAttribute("message", "Error updating subscribed budget plan");
+        }
+        response.sendRedirect("./budget.jsp");
       } else {
       }
-
-      response.sendRedirect("./settings.jsp");
     }
   }
 

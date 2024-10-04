@@ -31,7 +31,7 @@
     %>  
     <div class="main-content">
       <div class="container">
-        <h2><a href="./dashboard.jsp">Coin Care</a>\<a href="./statements.jsp">Your Statements</a></h2>
+        <h2><a href="./dashboard.jsp"><i class='bx bx-left-arrow-alt'></i> Coin Care</a> / <a href="./statements.jsp">Your Statements</a></h2>
         <h2><%=currentDay%> <%=currentMonth.toString()%>, <%=currentYear%></h2>
       </div>
       <%@include file="components/message.jsp" %>
@@ -346,14 +346,28 @@
 
 
         <!--generated reports-->
-        <div class="tab-content" id="tab4">
-          <form id="dateForm" action="generate-statement.jsp">
-            <label for="startDate">Start Date:</label>
-            <input type="date" id="startDate" name="startDate" required>
-            <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" name="endDate" required>
-            <button type="submit">Get Statement</button>
-          </form>
+        <div class="tab-content" id="tab4"><center>
+            <form id="dateForm" action="generate-statement.jsp">
+              <small id="date-error" class="error"></small><br>
+              <label for="startDate">Start Date:</label>
+              <input type="date" id="startDate" name="startDate" required min="2024-07-01" max="">
+              <br>
+              <label for="endDate">End Date:</label>
+              <input type="date" id="endDate" name="endDate" required min="2024-01-01" max="">
+              <br>
+              <button type="submit">Get Statement</button>
+            </form>
+          </center>
+
+          <script>
+            // Get today's date
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0]; // Format YYYY-MM-DD
+
+            // Set the max attribute to today's date
+            document.getElementById('startDate').setAttribute('max', formattedDate);
+            document.getElementById('endDate').setAttribute('max', formattedDate);
+          </script>
 
           <%
             // Variables to store date parameters
@@ -868,26 +882,26 @@
           },
           body: params
         })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.blob(); // Expecting a file (e.g., PDF)
-        })
-        .then(blob => {
-          // Create a link element to trigger file download
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'statement.csv'; // Change file name as needed
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          window.URL.revokeObjectURL(url);
-        })
-        .catch(error => {
-          console.error('There was a problem with the request:', error);
-        });
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                  }
+                  return response.blob(); // Expecting a file (e.g., PDF)
+                })
+                .then(blob => {
+                  // Create a link element to trigger file download
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'statement.csv'; // Change file name as needed
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
+                  window.URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                  console.error('There was a problem with the request:', error);
+                });
       }
 
 

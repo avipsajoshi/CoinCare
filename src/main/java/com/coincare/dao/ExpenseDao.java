@@ -214,5 +214,18 @@ public class ExpenseDao {
     return list;
   }
 
-
+  public List<Expense> getExpenseByUserIdandCategory(int userId, int catId) {
+    List<Expense> exp = null;
+    Session session = this.factory.openSession();
+    try {
+      Query pq = session.createQuery("from Expense as e WHERE user.userId=:uid and category.categoryId=:catid", Expense.class);
+      pq.setParameter("uid", userId);
+      pq.setParameter("catid", catId);
+      exp = pq.list();
+      session.close();
+    } catch (Exception w) {
+      w.printStackTrace();
+    }
+    return exp;
+  }
 }

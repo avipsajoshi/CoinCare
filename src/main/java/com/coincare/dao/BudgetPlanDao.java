@@ -5,6 +5,8 @@ import com.coincare.entities.Expense;
 import com.coincare.entities.User;
 import com.coincare.entities.UserFinancials;
 import com.coincare.helper.FactoryProvider;
+import com.coincare.helper.SendMail;
+import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -71,7 +73,7 @@ public class BudgetPlanDao {
   }
 
   //update BudgetPlan by userid
-  public boolean updateBudgetPlanByUserId(String budgetPlanTitle, String budgetPlanDescription, String budgetPlanType, int budgetPlanId, int userId) {
+  public boolean updateBudgetPlanByUserId(String budgetPlanTitle, String budgetPlanDescription, int budgetPlanId, int userId) {
     boolean status = false;
     UserDao uDao = new UserDao(FactoryProvider.getFactory());
     User categorUserUpdate = uDao.getUserById(userId);
@@ -80,11 +82,45 @@ public class BudgetPlanDao {
     Session session = this.factory.openSession();
     Transaction tx = session.beginTransaction();
     try {
-      hql = "update BudgetPlan SET budgetPlanTitle=:title, budgetPlanDescription=:des, budgetPlanType=:type WHERE budgetPlanId=:id and user_userId=:uid";
+      hql = "update BudgetPlan SET budgetPlanTitle=:title, budgetPlanDescription=:des, WHERE budgetPlanId=:id and user_userId=:uid";
       rowCount = session.createMutationQuery(hql)
               .setParameter("title", budgetPlanTitle)
               .setParameter("des", budgetPlanDescription)
-              .setParameter("type", budgetPlanType)
+              .setParameter("id", budgetPlanId)
+              .setParameter("uid", userId)
+              .executeUpdate();
+      System.out.println("Rows affected: " + rowCount);
+      if (rowCount >= 1) {
+        status = true;
+      }
+      tx.commit();
+    } catch (Exception e) {
+      e.printStackTrace();
+      tx.rollback();
+      status = false;
+    } finally {
+      session.close();
+    }
+    return status;
+  }
+
+  //update BudgetPlan by userid
+  public boolean updateBudgetPlanByUserId(String budgetPlanTitle, String budgetPlanDescription, int budgetPlanExpense, int budgetPlanWants, int budgetPlanSavings, int budgetPlanId, int userId) {
+    boolean status = false;
+    UserDao uDao = new UserDao(FactoryProvider.getFactory());
+    User categorUserUpdate = uDao.getUserById(userId);
+    String hql = "";
+    int rowCount = 0;
+    Session session = this.factory.openSession();
+    Transaction tx = session.beginTransaction();
+    try {
+      hql = "update BudgetPlan SET budgetPlanTitle=:title, budgetPlanDescription=:des, 	budgetPlanExpense=:exp, budgetPlanWants=:wants, budgetPlanSavings=:save WHERE budgetPlanId=:id and user_userId=:uid";
+      rowCount = session.createMutationQuery(hql)
+              .setParameter("title", budgetPlanTitle)
+              .setParameter("des", budgetPlanDescription)
+              .setParameter("exp", budgetPlanExpense)
+              .setParameter("wants", budgetPlanWants)
+              .setParameter("sav", budgetPlanSavings)
               .setParameter("id", budgetPlanId)
               .setParameter("uid", userId)
               .executeUpdate();
@@ -168,8 +204,11 @@ public class BudgetPlanDao {
 
   public HashMap<String, String> getSpent(int budgetPlanId, double income, int userId) {
     HashMap<String, String> spentBudget = new HashMap<>();
+//    HttpSession session = ;
     BudgetPlan bp = this.getBudgetPlanById(budgetPlanId);
     ExpenseDao eDao = new ExpenseDao(this.factory);
+    UserDao uDao = new UserDao(this.factory);
+    User user = uDao.getUserById(userId);
     LocalDate currentDate = LocalDate.now();
     List<Expense> allMonthlyTransactions = eDao.getUserExpenseForTheMonth(userId, currentDate);
     List<Expense> allWeeklyTransactions = eDao.getUserExpenseForTheWeek(userId, currentDate);
@@ -181,7 +220,7 @@ public class BudgetPlanDao {
 
     double totalExpenseM = 0.0, totalExpenseW = 0.0, totalExpenseD = 0.0;
     double totalWantM = 0.0, totalWantW = 0.0, totalWantD = 0.0;
-    double totalSavingM = income * savingPercent / 100, totalSavingW = totalSavingM / 4, totalSavingD = totalSavingW/7;
+    double totalSavingM = income * savingPercent / 100, totalSavingW = totalSavingM / 4, totalSavingD = totalSavingW / 7;
 
     for (Expense ufM : allMonthlyTransactions) {
       if (ufM.getCategory().getCategoryType().equals("Fixed Expenses") || ufM.getCategory().getCategoryType().equals("Non-fixed Expenses") || ufM.getCategory().getCategoryType().equals("Emergency Expenses") || ufM.getCategory().getCategoryType().equals("Education Expenses")) {
@@ -225,6 +264,7 @@ public class BudgetPlanDao {
       totalSavingW = (income * ((expensePercent + wantPercent) / 100) / 4) - (totalExpenseW + totalWantW);
     }
 
+    //total expense budget spent daily
     double expenseD = (totalExpenseD / (((income * expensePercent / 100) / 4) / 7)) * 100;
     double wantsD = (totalWantD / (((income * wantPercent / 100) / 4) / 7)) * 100;
     double savingsD = 100;
@@ -256,6 +296,26 @@ public class BudgetPlanDao {
     spentBudget.put("Daily Expense Amount", String.valueOf(String.format("%.2f", totalExpenseD)));
     spentBudget.put("Daily Wants Amount", String.valueOf(String.format("%.2f", totalWantD)));
     spentBudget.put("Daily Savings Amount", String.valueOf(String.format("%.2f", totalSavingD)));
+
+    if (totalExpenseM + totalWantM >= income || totalExpenseW + totalWantW >= (income/4) || totalExpenseD + totalWantD >= (income/4/7)) {
+      String message = "";
+      if(totalExpenseD >= expenseD)  message = "";
+      if(totalExpenseW>= expenseW)  message = "";
+      if(totalExpenseM >= expense)  message = "";
+      if(totalWantD >= wantsD)  message = "";
+      if(totalWantW >= wantsW)  message = "";
+      if(totalWantM >= wants)  message = "";
+      if(totalSavingD >= savingsD)  message = "";
+      if(totalSavingW >= savingsW)  message = "";
+      if(totalSavingM >= savings)  message = "";
+      try {
+        SendMail mail = new SendMail(message, "Budget Limit Reached", user.getUserEmail());
+        mail.sendEmail();
+
+      } catch (Exception e) {
+//        session.setAttribute("message", "An error occured, please try again");
+      }
+    }
 
     return spentBudget;
   }

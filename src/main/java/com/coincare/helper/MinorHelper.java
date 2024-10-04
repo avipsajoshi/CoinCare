@@ -122,7 +122,7 @@ public class MinorHelper {
   public static LocalDate getStringToDate(String dateString) {
     // Optionally, define a formatter if the date string is not in the default ISO format
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    LocalDate localDate= LocalDate.now(); 
+    LocalDate localDate = LocalDate.now();
     try {
       // Parse the string to LocalDate
       localDate = LocalDate.parse(dateString, formatter);
@@ -131,5 +131,18 @@ public class MinorHelper {
       System.out.println("Invalid date format: " + e.getMessage());
     }
     return localDate;
+  }
+
+  public static String get20Words(String desc) {
+    String[] strs = desc.split(" ");
+    if (strs.length > 20) {
+      String res = "";
+      for (int i = 0; i < 20; i++) {
+        res = res + strs[i] + " ";
+      }
+      return (res + "...");
+    } else {
+      return (desc + "...");
+    }
   }
 }

@@ -17,7 +17,7 @@
     <%@include file="components/nav.jsp"%>
     <div class="main-content">
       <div class="container">
-        <h2><a href="./dashboard.jsp">Coin Care</a>\<a href="./statements.jsp">Your Statements</a></h2>
+        <h2><a href="./dashboard.jsp"><i class='bx bx-left-arrow-alt'></i> Coin Care</a> / <a href="./statements.jsp">Your Statements</a></h2>
         <h2><%=currentDay%> <%=currentMonth.toString()%>, <%=currentYear%></h2>
       </div>
       <%@include file="components/message.jsp" %>

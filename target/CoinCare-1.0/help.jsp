@@ -10,7 +10,6 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Help | CoinCare</title>
-
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
   </head>
   <body class="body">
@@ -19,11 +18,7 @@
 
     <div class="main-content">
       <div class="container">
-        <h1>Coin Care</h1>
-      </div>
-
-      <div class="container">
-        <h2>Help Center</h2>
+        <h2><a href="./dashboard.jsp"><i class='bx bx-left-arrow-alt'></i> Coin Care</a> / <a href="./help.jsp">Help Center</a></h2>
       </div>
 
       <div class="custom-content">

@@ -33,7 +33,7 @@
 
     <div class="main-content">
       <div class="container">
-        <h2><a href="./dashboard.jsp">Coin Care</a>\<a href="./income.jsp">Income</a></h2>
+        <h2><a href="./dashboard.jsp"><i class='bx bx-left-arrow-alt'></i> Coin Care</a> / <a href="./income.jsp">Income</a></h2>
         <h2><%=currentDay%> <%=currentMonth.toString()%>, <%=currentYear%></h2>
       </div>
       <%@include file="components/message.jsp" %>
@@ -92,6 +92,7 @@
               <td><%=e.getIncomeType()%></td>
               <td><%=e.getMode()%></td>
               <td><button type="button" name="editBtn" class="btn action-btn" onclick="openUpdatePopup(pop_iu, '<%=e.getIncomeId()%>')">Edit</button></td>
+            </tr>
           <div id="update-popup-inc<%=e.getIncomeId()%>" class="popup-container scroll-container">
             <div class="close-button" onclick="closeUpdatePopup(pop_iu, '<%=e.getIncomeId()%>')">X</div>
             <form id="update-inc-form" action="./IncomeServlet" method="post" style="padding-left:inherit;">
@@ -115,23 +116,20 @@
               </select>
               <br>
               <label for="inc-name">Income on: </label>
-              <br>
               <small id="up-inc-name-error" class="error"></small>
               <br>
-              <input type="text" id="up-inc-name" name="up-inc-name" placeholder="Title" value="<%=e.getIncomeSource()%>"/>
+              <input type="text" class="input-field" id="up-inc-name" name="up-inc-name" placeholder="Title" value="<%=e.getIncomeSource()%>"/>
               <br>
               <label for="inc-name">Description: </label>
-              <br>
               <small id="up-inc-des-error" class="error"></small>
               <br>
-              <input type="text" id="up-inc-des" name="up-inc-des" placeholder="Description" value="<%=e.getIncomeDescription()%>"/>
+              <input type="text" class="input-field" id="up-inc-des" name="up-inc-des" placeholder="Description" value="<%=e.getIncomeDescription()%>"/>
               <br>
               <label for="up-inc-price">Amount: </label>
-              <br><small id="up-inc-price-error" class="error"></small>
+              <small id="up-inc-price-error" class="error"></small>
               <br>
-              <input type="number" id="up-inc-price" name="up-inc-price" placeholder="Amount in numbers" value="<%=e.getIncomeAmount()%>"/>
+              <input type="number" class="input-field" id="up-inc-price" name="up-inc-price" placeholder="Amount in numbers" value="<%=e.getIncomeAmount()%>"/>
               <br>
-
               <label for="up-select-mode">Mode of Transaction: </label>
               <br>
               <select name="mode" class="select-category">
@@ -144,14 +142,14 @@
               </select>
               <button type="submit" class="submitBtn-inc">Update Changes</button>
             </form>
+
+
             <form id="del-inc-form" action="./IncomeServlet" method="get" style="padding-left:inherit;">
               <input type="hidden" value="<%=e.getIncomeId()%>" name="incId" id="del-inc-id">
               <input type="hidden" name="operationType"  value="delete" >
               <button type="submit" class="submitBtn-inc">Delete</button>
             </form>
           </div>
-          </tr>
-
           <%}%>
           </tbody>
         </table>

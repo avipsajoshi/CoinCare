@@ -37,7 +37,7 @@
     <div class="main-content">
       <%@include file="components/message.jsp"%>
       <div class="container">
-        <h2><a href="./dashboard.jsp">Coin Care</a>\<a href="./settings.jsp">Settings</a></h2>
+        <h2><a href="./dashboard.jsp"><i class='bx bx-left-arrow-alt'></i> Coin Care</a> / <a href="./settings.jsp">Settings</a></h2>
       </div>
 
       <div class="custom-content">
@@ -172,8 +172,31 @@
               <p><%=user1.getSubscribedBudgetPlan().getBudgetPlanTitle() %></p>
               <h3><u>Budget Plan Description</u></h3>
               <p><%=user1.getSubscribedBudgetPlan().getBudgetPlanDescription() %></p>
-              <button type="button" name="editBtn" class="btn action-btn" onclick="openPopup(pop_bu, this.value)">Change</button>
+              <button type="button" name="editBtn" class="btn action-btn" onclick="openbudgetplan()">Change</button>
             </div>
+
+            <div id="update-popup-budget" class="popup-container update-cat-form scroll-container">
+              <div class="close-button" onclick="closebudgetplan()">X</div>
+              <form id="change-budget" action="./UpdateProfileServlet" method="post" style="padding-left:inherit;">
+                <input type="hidden" name="operationType" value="update">
+                <input type="hidden" value="<%=user1.getUserId()%>" name="userId">
+                <select name="up-budget" id="category-type-dropdown" class="select-category-type" required>
+                  <%
+                    BudgetPlanDao bDao = new BudgetPlanDao(FactoryProvider.getFactory());
+                    List<BudgetPlan> allBudgetPlans = bDao.getAllBudgetPlan();
+                    
+                  %>
+                  <option value="<%=(user1.getSubscribedBudgetPlan().getBudgetPlanTitle() != null ? user1.getSubscribedBudgetPlan().getBudgetPlanId() : "No") %>" selected><%=(user1.getSubscribedBudgetPlan().getBudgetPlanTitle() != null ? user1.getSubscribedBudgetPlan().getBudgetPlanTitle() : "No") %></option>
+                  <% for(BudgetPlan b : allBudgetPlans){
+                  if(b.getBudgetPlanId()== user1.getSubscribedBudgetPlan().getBudgetPlanId()) continue;
+                  %>
+                  <option value="<%=b.getBudgetPlanId()%>"><%=b.getBudgetPlanTitle()%></option>
+                  <%}%>
+                </select>
+                <button type="submit" class="submitBtn-cat" name="profileBtn" value="3">Update Changes</button>
+              </form>
+            </div>
+
           </div>
 
 
@@ -412,6 +435,15 @@
             var pop = popup + id;
             document.getElementById(pop).style.display = "none";
           }
+          const bpchange = document.getElementById("update-popup-budget");
+          function openbudgetplan() {
+            bpchange.style.display = "block";
+          }
+          function closebudgetplan() {
+            bpchange.style.display = "none";
+
+          }
+
 
           //form validation
           const catAddForm = document.getElementById("cat-form");

@@ -1,5 +1,6 @@
 package com.coincare.dao;
 
+import com.coincare.entities.Admin;
 import com.coincare.entities.BudgetPlan;
 import com.coincare.entities.User;
 import com.coincare.entities.UserFinancials;
@@ -387,7 +388,7 @@ public class UserDao {
 
   public List<UserFinancials> getUserReportForCustomTime(int userId, LocalDate start, LocalDate end) {
     List<UserFinancials> list = new ArrayList();
-    
+
     LocalDateTime startOfTime = LocalDateTime.of(start, LocalTime.MIDNIGHT);
     LocalDateTime endOfTime = end.atTime(LocalTime.MAX);
     try {
@@ -407,10 +408,10 @@ public class UserDao {
     }
     return list;
   }
-  
+
   public BudgetPlan getSubscribedBudgetPlan(int userId) {
     BudgetPlan bp = null;
-    User u=null;
+    User u = null;
     try {
       Session session = this.factory.openSession();
       Query pq = session.createQuery("subscribedBudgetPlanId from User as u WHERE u.userId =:uid", User.class);
@@ -419,7 +420,7 @@ public class UserDao {
       if (!list.isEmpty()) {
         u = list.get(0);//returns single user object(row)
       }
-      
+
       BudgetPlanDao bpDao = new BudgetPlanDao(this.factory);
       bp = bpDao.getBudgetPlanById(u.getSubscribedBudgetPlan().getBudgetPlanId());
       session.close();
@@ -428,6 +429,54 @@ public class UserDao {
 
     }
     return bp;
+  }
+
+  public User getAdminById(int parseInt) {
+    User p = null;
+    try {
+      Session session = this.factory.openSession();
+      Query pq = session.createQuery("from User as p WHERE p.userId =:pid", User.class);
+      pq.setParameter("pid", parseInt);
+      List<User> list = pq.list();
+      if (!list.isEmpty()) {
+        p = list.get(0);//returns single user object(row)
+      }
+      session.close();
+    } catch (Exception w) {
+      w.printStackTrace();
+
+    }
+    return p;
+  }
+
+  public boolean updateUserBudgetPlan(int userId, int budgetPlanId) {
+    boolean status = false;
+
+    BudgetPlanDao bDao = new BudgetPlanDao(this.factory);
+    BudgetPlan bp = bDao.getBudgetPlanById(budgetPlanId);
+    String hql = "";
+    int rowCount = 0;
+    Session session = this.factory.openSession();
+    Transaction tx = session.beginTransaction();
+    try {
+      hql = "update User as u SET u.subscribedBudgetPlan=:type  WHERE u.userId=:id";
+      rowCount = session.createMutationQuery(hql)
+              .setParameter("type", bp)
+              .setParameter("id", userId)
+              .executeUpdate();
+      System.out.println("Rows affected: " + rowCount);
+      if (rowCount >= 1) {
+        status = true;
+      }
+      tx.commit();
+    } catch (Exception e) {
+      e.printStackTrace();
+      tx.rollback();
+      status = false;
+    } finally {
+      session.close();
+    }
+    return status;
   }
 
 }

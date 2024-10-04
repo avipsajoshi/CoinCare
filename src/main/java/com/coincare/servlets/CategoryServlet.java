@@ -49,7 +49,7 @@ public class CategoryServlet extends HttpServlet {
         String catDes = request.getParameter("up-cat-description");
         String catType = request.getParameter("up-catType");
         String catId = request.getParameter("catId");
-        status = catDao.updateCategory(catTitle, operation, catType, Integer.parseInt(catId), Integer.parseInt(userid));
+        status = catDao.updateCategory(catTitle, catDes, catType, Integer.parseInt(catId), Integer.parseInt(userid));
         //update user category
         if (status) {
           session.setAttribute("message", "Category record updated");
@@ -76,6 +76,14 @@ public class CategoryServlet extends HttpServlet {
         return;
       } else if (operation.trim().equals("adminCatAdd")) {
         //add admin category
+
+        String catTitle = request.getParameter("cat-name");
+        String catDes = request.getParameter("cat-description");
+        String catType = request.getParameter("catType");
+
+        User user = userDao.getUserById(Integer.parseInt(userid));
+        cat = new Category(catTitle, catDes, user, catType);
+        status = catDao.addCategory(cat);
         if (status) {
           session.setAttribute("message", "Category added");
         } else {
@@ -85,6 +93,14 @@ public class CategoryServlet extends HttpServlet {
         return;
 
       } else if (operation.trim().equals("adminCatUpdate")) {
+        String catTitle = request.getParameter("up-cat-name");
+        String catDes = request.getParameter("up-cat-description");
+        String catType = request.getParameter("up-catType");
+        String catId = request.getParameter("catId");
+
+        // Update category details
+        status = catDao.updateCategory(catTitle, catDes, catType, Integer.parseInt(catId), Integer.parseInt(userid));
+
         //update admin category
         if (status) {
           session.setAttribute("message", "Category record updated");
@@ -96,6 +112,8 @@ public class CategoryServlet extends HttpServlet {
 
       } else if (operation.trim().equals("adminCatDelete")) {
         //delete admin category with id
+        String catId = request.getParameter("catId");
+        status = catDao.deleteCategoryById(Integer.parseInt(catId));
         if (status) {
           System.out.println("Deleted");
           session.setAttribute("message", "Category deleted");

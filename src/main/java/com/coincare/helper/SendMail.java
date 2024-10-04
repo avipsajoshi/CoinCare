@@ -52,6 +52,7 @@ public class SendMail {
 
     //step1: to get session object 
     Authenticator auth = new Authenticator(){
+      @Override
       public PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(mailFrom, "");
       }

@@ -68,6 +68,18 @@
         <servlet-name>StatementDownloadServlet</servlet-name>
         <servlet-class>com.coincare.servlets.StatementDownloadServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ExpensePredictionServlet</servlet-name>
+        <servlet-class>com.coincare.servlets.ExpensePredictionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ArticleServlet</servlet-name>
+        <servlet-class>com.coincare.servlets.ArticleServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <servlet-class>com.coincare.servlets.FeedbackServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SendMailServlet</servlet-name>
         <url-pattern>/SendMailServlet</url-pattern>
@@ -136,9 +148,21 @@
         <servlet-name>StatementDownloadServlet</servlet-name>
         <url-pattern>/StatementDownloadServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExpensePredictionServlet</servlet-name>
+        <url-pattern>/ExpensePredictionServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ArticleServlet</servlet-name>
+        <url-pattern>/ArticleServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <url-pattern>/FeedbackServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
-      30
+      60
     </session-timeout>
     </session-config>
 </web-app>

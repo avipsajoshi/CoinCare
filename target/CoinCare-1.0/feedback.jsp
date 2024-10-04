@@ -18,7 +18,7 @@
 
     <div class="main-content">
       <div class="container">
-        <h2><a href="./dashboard.jsp">Coin Care</a>\<a href="./feedback.jsp">Give Your Feedback</a></h2>
+        <h2><a href="./dashboard.jsp"><i class='bx bx-left-arrow-alt'></i> Coin Care</a> / <a href="./feedback.jsp">Give Your Feedback</a></h2>
       </div>
 
       <div class="custom-content">
