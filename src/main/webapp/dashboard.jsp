@@ -32,7 +32,13 @@
   <body class="body">
     <script src="js/light-dark.js"></script>
     <%@include file="components/nav.jsp"%>
-
+    <%
+      ExpenseDao eDao = new ExpenseDao(FactoryProvider.getFactory());
+      CategoryDao cDao = new CategoryDao(FactoryProvider.getFactory());
+      UserDao uDao = new UserDao(FactoryProvider.getFactory());
+      User thisUser = uDao.getUseByEmail(user.getUserEmail());
+      int uId=thisUser.getUserId();
+    %>
     <div class="main-content">
       <div class="container">
         <h2><a href="./dashboard.jsp"> Coin Care</a> / <a href="./dashboard.jsp">Dashboard</a></h2>
@@ -50,6 +56,14 @@
             <label id="balanceShow">Balance: 0.0</label>
           </div>
         </div>
+        <div class="export-data">
+          <!--              <div class="pdf">
+                          <i class='bx bxs-file-pdf' ></i>
+                        </div>-->
+          <div class="csv">
+            <i class='bx bxs-file-export' onclick="getreport('<%=uId%>', 'day');"></i>
+          </div>
+        </div>
       </div>
 
 
@@ -61,16 +75,13 @@
       if(queryExpenseId!=null){
       %>
       <script>
-      openPopup(popup_u);
-      dynamicBtnId = '<%=queryExpenseId%>';
+
+        openPopup(popup_u);
+        dynamicBtnId = '<%=queryExpenseId%>';
       </script>
       <%}%>
       <%
-        ExpenseDao eDao = new ExpenseDao(FactoryProvider.getFactory());
-        CategoryDao cDao = new CategoryDao(FactoryProvider.getFactory());
-        UserDao uDao = new UserDao(FactoryProvider.getFactory());
-        User thisUser = uDao.getUseByEmail(user.getUserEmail());
-        int uId=thisUser.getUserId();
+        
         List<Category> allCategory = cDao.getAllCategoryForNewExpense(uId);
         List<UserFinancials> allTransactions = uDao.getUserReportForToday(uId, currentDate);
         if(allTransactions.isEmpty()){
@@ -245,7 +256,7 @@
         <label for="exp-price">Amount: </label>
         <small id="exp-price-error" class="error"></small>
         <br>
-        <input type="number" id="exp-price" name="exp-price" placeholder="Amount in numbers" />
+        <input type="number" step="0.01" id="exp-price" name="exp-price" placeholder="Amount in numbers" />
 
         <br>
 
@@ -255,7 +266,7 @@
     </div>
 
     <script>
-      function updatePrediction() {
+      async function updatePrediction() {
         var selectedCategory = document.getElementById("selected-category").value;
         console.log(selectedCategory);
         var userId = document.getElementById("userId").value;
@@ -264,14 +275,14 @@
         console.log(sending);
         // Make an AJAX request to send the selected category
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "./ExpensePredictionServlet?category=" + selectedCategory, true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        await xhr.open("GET", "./ExpensePredictionServlet?category=" + selectedCategory, true);
+        await xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4 && xhr.status === 200) {
             // Update the predicted expense field with the returned value
             var response = xhr.responseText;
-            document.getElementById("exp-price").value = response;
+            document.getElementById("exp-price").value = parseFloat(response).toFixed(2);
           }
         };
         xhr.send();
@@ -301,26 +312,16 @@
         document.getElementById(pop).style.display = "none";
       }
 
-      //exp from validation input add
-      const expForm = document.getElementById("exp-form");
-      const expNameInput = document.getElementById("exp-name");
-      const expDescriptionInput = document.getElementById("exp-description");
-      const expPriceInput = document.getElementById("exp-price");
-      const expNameError = document.getElementById("exp-name-error");
-      const expDescriptionError = document.getElementById("exp-description-error");
-      const expPriceError = document.getElementById("exp-price-error");
 
-
-      const upexpForm = document.getElementById("update-exp-form");
-      const delexpForm = document.getElementById("del-exp-form");
-      const upexpNameInput = document.getElementById("up-exp-name");
-      const upexpDescriptionInput = document.getElementById("up-exp-description");
-      const upexpPriceInput = document.getElementById("up-exp-price");
-      const upexpNameError = document.getElementById("up-exp-name-error");
-      const upexpDescriptionError = document.getElementById("up-exp-description-error");
-      const upexpPriceError = document.getElementById("up-exp-price-error");
-//category form validation
       document.addEventListener('DOMContentLoaded', function () {
+        //exp from validation input add
+        const expForm = document.getElementById("exp-form");
+        const expNameInput = document.getElementById("exp-name");
+        const expDescriptionInput = document.getElementById("exp-description");
+        const expPriceInput = document.getElementById("exp-price");
+        const expNameError = document.getElementById("exp-name-error");
+        const expDescriptionError = document.getElementById("exp-description-error");
+        const expPriceError = document.getElementById("exp-price-error");
 
         //display income/expenses
         totalExpenseDisplay.innerHTML = 'Total Expense: ' + totalExpenseloaded.textContent;
@@ -331,35 +332,93 @@
         //add expense form validation
         expForm.addEventListener("submit", function (event) {
           event.preventDefault();
-          if (validateText(expNameInput, expNameError) && validateText(expDescriptionInput, expDescriptionError) && validateText(expPriceInput, expPriceError)) {
+          if (validateText(expNameInput, expNameError) && validateText(expDescriptionInput, expDescriptionError) && validateNumber(expPriceInput, expPriceError)) {
             expForm.submit();
           }
         });
 
-        function validateText(input, error_class) {
-          const namevalue = input.value.trim();
-          const error = error_class;
-          const nameregex = /^[a-zA-Z&+\-\/\d\s]+$/;
-          if (namevalue === "") {
-            setError(input, " Cannot be Empty", error);
-            return false;
-          } else {
-            removeError(input, error);
-            return true;
-          }
-        }
-        // Set error message
-        function setError(inputElement, message, errorId) {
-          const errorElement = errorId;
-          errorElement.textContent = message;
-        }
-
-        // Remove error message
-        function removeError(inputElement, errorId) {
-          const errorElement = errorId;
-          errorElement.textContent = "";
-        }
       });
+
+      function validateText(input, error_class) {
+        const namevalue = input.value.trim();
+        const error = error_class;
+        const nameregex = /^[a-zA-Z&+\-\/\d\s]+$/;
+        if (namevalue === "") {
+          setError(input, " Cannot be Empty", error);
+          return false;
+        } else if (!nameregex.test(namevalue)) {
+          setError(namevalue, " Shouldn't contain number.", error);
+          return false;
+        } else {
+          removeError(input, error);
+          return true;
+        }
+      }
+      function validateNumber(nameInput, error_class) {
+        const namevalue = nameInput.value.trim();
+        // Regular expression to check if the input starts with a special character
+        const nameregex = /^[^a-zA-Z0-9]/;
+        const error = error_class;
+        // Check if the input starts with a special character or is outside the range 0-999999
+        if (nameregex.test(namevalue)) {
+          setError(nameInput, " Should be a positive number.", error);
+          return false;
+        }
+        if (namevalue <= 0 || namevalue >= 999999) {
+          setError(nameInput, "Not in range", error);
+          return false;
+        } else {
+          return true;
+
+        }
+      }
+      // Set error message
+      function setError(inputElement, message, errorId) {
+        const errorElement = errorId;
+        errorElement.textContent = message;
+      }
+
+      // Remove error message
+      function removeError(inputElement, errorId) {
+        const errorElement = errorId;
+        errorElement.textContent = "";
+      }
+      function getreport(userId, when) {
+        // Prepare the data to be sent
+        const params = new URLSearchParams({
+          userId: userId,
+          time: when
+        });
+
+        // Send the request to the servlet
+        fetch('StatementDownloadServlet', {
+          method: 'POST', // or 'GET' depending on your servlet's method
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: params
+        })
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                  }
+                  return response.blob(); // Expecting a file (e.g., PDF)
+                })
+                .then(blob => {
+                  // Create a link element to trigger file download
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'statement.csv'; // Change file name as needed
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
+                  window.URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                  console.error('There was a problem with the request:', error);
+                });
+      }
     </script>
   </body>
 </html>

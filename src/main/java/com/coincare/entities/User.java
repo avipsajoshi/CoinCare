@@ -43,6 +43,7 @@ public class User {
 
   @ManyToOne
   @JoinColumn(name = "subscribedBudgetPlanId")
+  @ColumnDefault("'1'")
   private BudgetPlan subscribedBudgetPlan;
 
 //  @NotNull
@@ -95,7 +96,7 @@ public class User {
     this.userVerify = userVerify;
   }
 
-  public User(String userName, String userEmail, String userPassword, String userPic, String userCountry, String userType, int userDobYear, int userDobMonth, int userDobDay, List<BudgetPlan> budgetPlans, BudgetPlan subscribedBudgetPlan, String enableReportNotification, String enableTipsNotification, String userVerify) {
+  public User(String userName, String userEmail, String userPassword, String userPic, String userCountry, String userType, int userDobYear, int userDobMonth, int userDobDay, BudgetPlan subscribedBudgetPlan, String enableReportNotification, String enableTipsNotification, String userVerify) {
     this.userName = userName;
     this.userEmail = userEmail;
     this.userPassword = userPassword;
@@ -105,7 +106,6 @@ public class User {
     this.userDobYear = userDobYear;
     this.userDobMonth = userDobMonth;
     this.userDobDay = userDobDay;
-    this.budgetPlans = budgetPlans;
     this.subscribedBudgetPlan = subscribedBudgetPlan;
     this.enableReportNotification = enableReportNotification;
     this.enableTipsNotification = enableTipsNotification;
@@ -113,7 +113,10 @@ public class User {
   }
   
   
+  
 
+  
+  
   public User(String userName, String userEmail, String userPassword, String userPic, String userType) {
     this.userName = userName;
     this.userEmail = userEmail;

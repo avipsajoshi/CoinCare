@@ -31,14 +31,14 @@
         <h2>Enter OTP</h2>
       </div>
       <div class="text-container">
-        <input type="text" name="otp-value" id="otp-value" placeholder="Enter OTP" required/>
+        <input type="number" name="otp-value" id="otp-value" placeholder="Enter OTP" required/>
       </div>
       <div class="submitBtn">
         <button type="submit" class="otp-btn">Reset Password</button>
       </div>
     </form>
     <%} else if(operation.equals("newPass")){%>
-  
+
     <!--change password from "forget password"-->
     <form id="register-form" method="post" action="./NewPasswordServlet">
       <div class="formheader">
@@ -60,16 +60,15 @@
     </form>
     <%} else if(operation.equals("verify")){%>
 
-    
-    
+
+
     <!--verify email-->
     <form id="otp-form" method="post" action="./SingleChangeServlet">
       <div class="formheader">
         <h2>Enter OTP</h2>
       </div>
       <div class="text-container">
-        
-        <input type="text" name="otp-value-verify" id="otp-value" placeholder="Enter OTP" required/>
+        <input type="number" name="otp-value-verify" id="otp-value" placeholder="Enter OTP" required/>
       </div>
       <div class="submitBtn">
         <button type="submit" name="singlechangeBtn"  class="otp-btn" value="verification">Verify</button>
@@ -79,7 +78,7 @@
     <%} else if(operation.equals("changePass")){%>
 
     <!--change password-->
-    <form id="register-form" method="post" action="./NewPasswordServlet">
+    <form id="register-form2" method="post" action="./NewPasswordServlet">
       <div class="formheader">
         <h2>Enter Old Password</h2>
       </div>
@@ -107,5 +106,87 @@
     </form>
     <%}%>
 
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const registerForm = document.getElementById("register-form");
+        const registerForm2 = document.getElementById("register-form2");
+        const btn = document.getElementById("submitButton");
+
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput = document.getElementById("password2");
+
+        const passwordError = document.getElementById("password-error");
+        const confirmPasswordError = document.getElementById("password2-error");
+        registerForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          if (
+                  validatePassword(passwordInput, passwordError) &&
+                  validateConfirmPassword(passwordInput, confirmPasswordInput, confirmPasswordError)
+                  ) {
+            registerForm.submit();
+          }
+        });
+        registerForm2.addEventListener("submit", function (event) {
+          event.preventDefault();
+          if (validatePassword(passwordInput, passwordError) &&
+                  validateConfirmPassword(passwordInput, confirmPasswordInput, confirmPasswordError)
+                  ) {
+            registerForm.submit();
+          }
+        });
+      });
+
+// Validate Password
+      function validatePassword(passwordInput, errorElement) {
+        const passValue = passwordInput.value.trim();
+        const passRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+        if (passValue === "") {
+          setError(passwordInput, "Password is required", errorElement);
+          return false;
+        } else if (!passRegex.test(passValue)) {
+          setError(passwordInput, "Invalid password format!", errorElement);
+          return false;
+        } else {
+          removeError(passwordInput, errorElement);
+          return true;
+        }
+      }
+
+// Set Error Message
+      function setError(inputElement, message, errorElement) {
+        errorElement.textContent = message;
+        errorElement.classList.add("error-message");
+      }
+
+// Remove Error Message
+      function removeError(inputElement, errorElement) {
+        errorElement.textContent = "";
+        errorElement.classList.remove("error-message");
+      }
+
+      function validateConfirmPassword(cpasswordInput, passwordInput, errorElement) {
+        const confirmPassValue = cpasswordInput.value.trim();
+        const passValue = passwordInput.value.trim();
+        if (confirmPassValue === "") {
+          setError(
+                  " Confirm password is required",
+                  errorElement
+                  );
+          return false;
+        } else if (confirmPassValue !== passValue) {
+          setError(cpasswordInput,
+                  " Passwords do not match",
+                  errorElement);
+          return false;
+        } else {
+          removeError(confirmPassValue, errorElement);
+          return true;
+        }
+      }
+
+
+    </script>
   </body>
 </html>

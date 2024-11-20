@@ -11,11 +11,13 @@
 <%@page import="com.coincare.entities.BudgetPlan" %>
 <%@page import="com.coincare.helper.MinorHelper" %>
 <%@page import="com.coincare.entities.Article" %>
+<%@page import="com.coincare.entities.Feedback" %>
 <%@page import="com.coincare.helper.FactoryProvider" %>
 <%@page import="com.coincare.dao.UserDao" %>
 <%@page import="com.coincare.dao.CategoryDao" %>
 <%@page import="com.coincare.dao.BudgetPlanDao" %>
 <%@page import="com.coincare.dao.ArticleDao" %>
+<%@page import="com.coincare.dao.FeedbackDao" %>
 <%@page import="java.time.LocalDate"%>
 <%@page import="java.time.Month"%>
 <%@page import="java.util.List" %>
@@ -538,7 +540,30 @@
 
 
         <div class="tab-content" id="tab6">
-          <p>This is the content for User Feedback.</p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Feedback</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%
+                FeedbackDao feedbackDao = new FeedbackDao(FactoryProvider.getFactory());
+                List<Feedback> allFeedback = feedbackDao.getAllFeedback();
+                for(Feedback f : allFeedback){
+              %>
+              <tr>
+                <td scope="row"><%=f.getUser().getUserName()%></td>
+                <td scope="row"><%=f.getFeedbackDescription()%></td>
+              </tr>
+              <%}%>
+            </tbody>
+          </table>
+          
+          
+          
+          
         </div>
 
 

@@ -33,6 +33,7 @@
     <mapping class="com.coincare.entities.BudgetPlan" />
     <mapping class="com.coincare.entities.Category" />
     <mapping class="com.coincare.entities.Expense" />
+    <mapping class="com.coincare.entities.Feedback" />
     <mapping class="com.coincare.entities.Income" />
     
   </session-factory>

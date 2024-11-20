@@ -151,7 +151,7 @@
               <label for="exp-price">Amount: </label>
               <br><small id="up-exp-price-error" class="error"></small>
               <br>
-              <input type="number" id="up-exp-price" name="up-exp-price" placeholder="Amount in numbers"  value="<%=e.getExpenseAmount()%>" />
+              <input type="number" step = "0.1" min="0" id="up-exp-price" name="up-exp-price" placeholder="Amount in numbers"  value="<%=e.getExpenseAmount()%>" />
               <br>
               <button type="submit"class="submitBtn-exp">Update Changes</button>
             </form>
@@ -190,7 +190,7 @@
         <label for="select-category">Category: </label>
         <br>
         <!--expense category drop down-->
-        <select name="catId" class="select-category" id="selected-category" onchange="updatePrediction()">
+        <select name="catId" class="select-category" id="selected-category" onchange="updatePrediction()" required>
           <option selected value="26">Select a Category</option>
           <%
             for(Category c : allCategory){
@@ -201,7 +201,7 @@
         <br>
         <label for="select-mode">Mode of Transaction: </label>
         <br>
-        <select name="mode" class="select-category">
+        <select name="mode" class="select-category" required>
           <% for(String m: modes){
           %>
           <option value="<%=m%>"><%=m%></option>
@@ -211,46 +211,143 @@
         <label for="exp-name">What was the Expense on? </label>
         <small id="exp-name-error" class="error"></small>
         <br>
-        <input type="text" id="exp-name" name="exp-name" placeholder="Title"/>
+        <input type="text" id="exp-name" name="exp-name" placeholder="Title" required/>
         <br>
         <label for="exp-description">Additional Remarks: </label>
         <small id="exp-description-error" class="error"></small>
         <br>
-        <input id="exp-description" placeholder="Enter description about expense" class="exp-textarea" name="exp-description"/>
+        <input id="exp-description" placeholder="Enter description about expense" class="exp-textarea" name="exp-description" required/>
         <br>
         <label for="exp-price">Amount: </label>
         <small id="exp-price-error" class="error"></small>
         <br>
-        <input type="number" id="exp-price" name="exp-price" placeholder="Amount in numbers" />       
+        <input type="number"  min="0" step="0.01" id="exp-price" name="exp-price" placeholder="Amount in numbers" required/>       
         <button type="submit" class="submitBtn-exp">Add</button>
       </form>
 
       <script>
-        function updatePrediction() {
+        async function updatePrediction() {
+          
           var selectedCategory = document.getElementById("selected-category").value;
           console.log(selectedCategory);
           var userId = document.getElementById("userId").value;
-          var sending = selectedCategory + "." +userId;
+          var sending = selectedCategory + "." + userId;
           console.log(userId);
           console.log(sending);
           // Make an AJAX request to send the selected category
           var xhr = new XMLHttpRequest();
-          xhr.open("GET", "./ExpensePredictionServlet?category=" + selectedCategory, true);
-          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-          
+          await xhr.open("GET", "./ExpensePredictionServlet?category=" + selectedCategory, true);
+          await xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
           xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
               // Update the predicted expense field with the returned value
               var response = xhr.responseText;
-              document.getElementById("exp-price").value = response;
+              document.getElementById("exp-price").value = parseFloat(response).toFixed(2);
             }
           };
           xhr.send();
-          
+
         }
       </script>
     </div>
     <script>
+
+
+
+
+      document.addEventListener('DOMContentLoaded', function () {
+        //exp from validation input add
+        const totalExpenseloaded = document.getElementById("totalExpense");
+        const totalExp = document.getElementById("totalExp");
+        const expForm = document.getElementById("exp-form");
+        const expNameInput = document.getElementById("exp-name");
+        const expDescriptionInput = document.getElementById("exp-description");
+        const expPriceInput = document.getElementById("exp-price");
+        const expNameError = document.getElementById("exp-name-error");
+        const expDescriptionError = document.getElementById("exp-description-error");
+        const expPriceError = document.getElementById("exp-price-error");
+
+
+
+        const upexpForm = document.getElementById("update-exp-form");
+        const delexpForm = document.getElementById("del-exp-form");
+        const upexpNameInput = document.getElementById("up-exp-name");
+        const upexpDescriptionInput = document.getElementById("up-exp-description");
+        const upexpPriceInput = document.getElementById("up-exp-price");
+        const upexpNameError = document.getElementById("up-exp-name-error");
+        const upexpDescriptionError = document.getElementById("up-exp-description-error");
+        const upexpPriceError = document.getElementById("up-exp-price-error");
+//category form validation
+        totalExp.innerHTML = 'Total Expense: ' + totalExpenseloaded.textContent;
+        upexpForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          if (
+                  validateText(upexpNameInput, upexpNameError) && validateText(upexpDescriptionInput, upexpDescriptionError) && validateText(upexpPriceInput, upexpPriceError) 
+                  ) {
+            upexpForm.submit();
+          }
+        });
+        delexpForm.addEventListener("subit", function (event) {
+          event.preventDefault();
+          window.confirm("Are you sure?");
+          delexpForm.submit();
+        });
+        expForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          if (
+                  validateText(expNameInput, expNameError) && validateText(expDescriptionInput, expDescriptionError) && validateText(expPriceInput, expPriceError) 
+                  ) {
+            expForm.submit();
+          }
+        });
+      });
+      function validateText(input, error_class) {
+        const namevalue = input.value.trim();
+        const error = error_class;
+        const nameregex = /^[a-zA-Z&+\-\/\d\s]+$/;
+        if (namevalue === "") {
+          setError(input, " Cannot be Empty", error);
+          return false;
+        } else if (!nameregex.test(namevalue)) {
+          setError(namevalue, " Shouldn't contain number.", error);
+          return false;
+        } else {
+          removeError(input, error);
+          return true;
+        }
+      }
+      function validateNumber(nameInput, error_class) {
+        const namevalue = nameInput.value.trim();
+        // Regular expression to check if the input starts with a special character
+        const nameregex = /^[^a-zA-Z0-9]/;
+        const error = error_class;
+        // Check if the input starts with a special character or is outside the range 0-999999
+        if (nameregex.test(namevalue)) {
+          setError(nameInput, " Should only contain number.", error);
+          
+          return false;
+        }
+        if (namevalue <= 0 || namevalue >= 999999) {
+          setError(nameInput, "Not in range", error);
+          return false;
+        } else {
+          return true;
+
+        }
+      }
+      
+      // Set error message
+      function setError(inputElement, message, errorId) {
+        const errorElement = errorId;
+        errorElement.textContent = message;
+      }
+
+      // Remove error message
+      function removeError(inputElement, errorId) {
+        const errorElement = errorId;
+        errorElement.textContent = "";
+      }
 
       //for adding new record
       function openAddPopup(popup) {
@@ -271,82 +368,6 @@
         var pop = popup + id;
         document.getElementById(pop).style.display = "none";
       }
-
-      //exp from validation input add
-      const totalExpenseloaded = document.getElementById("totalExpense");
-      const totalExp = document.getElementById("totalExp");
-      const expForm = document.getElementById("exp-form");
-      const expNameInput = document.getElementById("exp-name");
-      const expDescriptionInput = document.getElementById("exp-description");
-      const expPriceInput = document.getElementById("exp-price");
-      const expNameError = document.getElementById("exp-name-error");
-      const expDescriptionError = document.getElementById("exp-description-error");
-      const expPriceError = document.getElementById("exp-price-error");
-      //update and delete
-
-//      let delexpid = document.getElementById("del-exp-id");
-//      let upexpid = document.getElementById("up-exp-id");
-//      delexpid.value = dynamicBtnId;
-//      upexpid.value = dynamicBtnId;
-
-
-
-      const upexpForm = document.getElementById("update-exp-form");
-      const delexpForm = document.getElementById("del-exp-form");
-      const upexpNameInput = document.getElementById("up-exp-name");
-      const upexpDescriptionInput = document.getElementById("up-exp-description");
-      const upexpPriceInput = document.getElementById("up-exp-price");
-      const upexpNameError = document.getElementById("up-exp-name-error");
-      const upexpDescriptionError = document.getElementById("up-exp-description-error");
-      const upexpPriceError = document.getElementById("up-exp-price-error");
-//category form validation
-      document.addEventListener('DOMContentLoaded', function () {
-        totalExp.innerHTML = 'Total Expense: ' + totalExpenseloaded.textContent;
-        upexpForm.addEventListener("submit", function (event) {
-          event.preventDefault();
-          if (
-                  validateText(upexpNameInput, upexpNameError) && validateText(upexpDescriptionInput, upexpDescriptionError) && validateText(upexpPriceInput, upexpPriceError)
-                  ) {
-            upexpForm.submit();
-          }
-        });
-        delexpForm.addEventListener("button", function (event) {
-          event.preventDefault();
-          window.confirm("Are you sure?");
-          delexpForm.submit();
-        });
-        expForm.addEventListener("submit", function (event) {
-          event.preventDefault();
-          if (
-                  validateText(expNameInput, expNameError) && validateText(expDescriptionInput, expDescriptionError) && validateText(expPriceInput, expPriceError)
-                  ) {
-            expForm.submit();
-          }
-        });
-        function validateText(input, error_class) {
-          const namevalue = input.value.trim();
-          const error = error_class;
-          const nameregex = /^[a-zA-Z&+\-\/\d\s]+$/;
-          if (namevalue === "") {
-            setError(input, " Cannot be Empty", error);
-            return false;
-          } else {
-            removeError(input, error);
-            return true;
-          }
-        }
-        // Set error message
-        function setError(inputElement, message, errorId) {
-          const errorElement = errorId;
-          errorElement.textContent = message;
-        }
-
-        // Remove error message
-        function removeError(inputElement, errorId) {
-          const errorElement = errorId;
-          errorElement.textContent = "";
-        }
-      });
     </script>
   </body>
 </html>

@@ -297,19 +297,100 @@ public class BudgetPlanDao {
     spentBudget.put("Daily Wants Amount", String.valueOf(String.format("%.2f", totalWantD)));
     spentBudget.put("Daily Savings Amount", String.valueOf(String.format("%.2f", totalSavingD)));
 
-    if (totalExpenseM + totalWantM >= income || totalExpenseW + totalWantW >= (income/4) || totalExpenseD + totalWantD >= (income/4/7)) {
+    if (totalExpenseM + totalWantM >= income || totalExpenseW + totalWantW >= (income / 4) || totalExpenseD + totalWantD >= (income / 4 / 7)) {
       String message = "";
-      if(totalExpenseD >= expenseD)  message = "";
-      if(totalExpenseW>= expenseW)  message = "";
-      if(totalExpenseM >= expense)  message = "";
-      if(totalWantD >= wantsD)  message = "";
-      if(totalWantW >= wantsW)  message = "";
-      if(totalWantM >= wants)  message = "";
-      if(totalSavingD >= savingsD)  message = "";
-      if(totalSavingW >= savingsW)  message = "";
-      if(totalSavingM >= savings)  message = "";
+      if (totalExpenseD >= expenseD) {
+        message = "Dear "+ user.getUserName()+ ",\n"
+                + "\n"
+                + "We would like to inform you that your recent expenses have exceeded the budget you set for  the day. This is a critical reminder to review your spending and make necessary adjustments to avoid financial strain.\n"
+                + "\n"
+                + "Current Expenses:"+totalExpenseD+"\n"
+                + "Budget Limit: "+expenseD+"\n"
+                + "\n"
+                + "We recommend revisiting your expense categories and planning your future expenditures carefully.";
+      }
+      if (totalExpenseW >= expenseW) {
+        message = "Dear "+ user.getUserName()+ ",\n"
+                + "\n"
+                + "We would like to inform you that your recent expenses have exceeded the budget you set for  the week. This is a critical reminder to review your spending and make necessary adjustments to avoid financial strain.\n"
+                + "\n"
+                + "Current Expenses:"+totalExpenseW+"\n"
+                + "Budget Limit: "+expenseW+"\n"
+                + "\n"
+                + "We recommend revisiting your expense categories and planning your future expenditures carefully.";
+      }
+      if (totalExpenseM >= expense) {
+        message = "Dear "+ user.getUserName()+ ",\n"
+                + "\n"
+                + "We would like to inform you that your recent expenses have exceeded the budget you set for  the month. This is a critical reminder to review your spending and make necessary adjustments to avoid financial strain.\n"
+                + "\n"
+                + "Current Expenses:"+totalExpenseM+"\n"
+                + "Budget Limit: "+expense+"\n"
+                + "\n"
+                + "We recommend revisiting your expense categories and planning your future expenditures carefully.";
+      }
+      if (totalWantD >= wantsD) {
+        message = "Dear "+ user.getUserName()+ ",\n"
+                + "\n"
+                + "We would like to inform you that your recent expenses have exceeded the budget you set for  the day. This is a critical reminder to review your spending and make necessary adjustments to avoid financial strain.\n"
+                + "\n"
+                + "Current Expenses:"+totalExpenseD+"\n"
+                + "Budget Limit: "+wantsD+"\n"
+                + "\n"
+                + "We recommend revisiting your expense categories and planning your future expenditures carefully.";
+      }
+      if (totalWantW >= wantsW) {
+        message = "Dear "+ user.getUserName()+ ",\n"
+                + "\n"
+                + "We would like to inform you that your recent expenses have exceeded the budget you set for  the week. This is a critical reminder to review your spending and make necessary adjustments to avoid financial strain.\n"
+                + "\n"
+                + "Current Expenses:"+totalWantW+"\n"
+                + "Budget Limit: "+wantsW+"\n"
+                + "\n"
+                + "We recommend revisiting your expense categories and planning your future expenditures carefully.";
+      }
+      if (totalWantM >= wants) {
+        message = "Dear "+ user.getUserName()+ ",\n"
+                + "\n"
+                + "We would like to inform you that your recent expenses have exceeded the budget you set for  the day. This is a critical reminder to review your spending and make necessary adjustments to avoid financial strain.\n"
+                + "\n"
+                + "Current Expenses:"+totalWantM+"\n"
+                + "Budget Limit: "+wants+"\n"
+                + "\n"
+                + "We recommend revisiting your expense categories and planning your future expenditures carefully.";
+      }
+      if (totalSavingD >= savingsD) {
+        message = "Dear "+ user.getUserName()+ ",\n"
+                + "\n"
+                + "We would like to inform you that your recent expenses have exceeded the budget you set for  the day. This is a critical reminder to review your spending and make necessary adjustments to avoid financial strain.\n"
+                + "\n"
+                + "Current Expenses:"+totalSavingD+"\n"
+                + "Budget Limit: "+savingsD+"\n"
+                + "\n"
+                + "We recommend revisiting your expense categories and planning your future expenditures carefully.";
+      }
+      if (totalSavingW >= savingsW) {
+        message = "Dear "+ user.getUserName()+ ",\n"
+                + "\n"
+                + "We would like to inform you that your recent expenses have exceeded the budget you set for  the week. This is a critical reminder to review your spending and make necessary adjustments to avoid financial strain.\n"
+                + "\n"
+                + "Current Expenses:"+totalSavingW+"\n"
+                + "Budget Limit: "+savingsW+"\n"
+                + "\n"
+                + "We recommend revisiting your expense categories and planning your future expenditures carefully.";
+      }
+      if (totalSavingM >= savings) {
+        message = "Dear "+ user.getUserName()+ ",\n"
+                + "\n"
+                + "We would like to inform you that your recent expenses have exceeded the budget you set for  the day. This is a critical reminder to review your spending and make necessary adjustments to avoid financial strain.\n"
+                + "\n"
+                + "Current Expenses:"+totalSavingM+"\n"
+                + "Budget Limit: "+savings+"\n"
+                + "\n"
+                + "We recommend revisiting your expense categories and planning your future expenditures carefully.";
+      }
       try {
-        SendMail mail = new SendMail(message, "Budget Limit Reached", user.getUserEmail());
+        SendMail mail = new SendMail(message, "Urgent: You've Exceeded Your Budget", user.getUserEmail());
         mail.sendEmail();
 
       } catch (Exception e) {

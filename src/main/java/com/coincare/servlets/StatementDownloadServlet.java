@@ -20,12 +20,17 @@ public class StatementDownloadServlet extends HttpServlet {
       UserDao uDao = new UserDao(FactoryProvider.getFactory());
       // Set response content type and headers for CSV file
       response.setContentType("text/csv");
-      response.setHeader("Content-Disposition", "attachment; filename=\"transactions.csv\"");
+      response.setHeader("Content-Disposition", "attachment; filename=\"statement.csv\"");
       String user = request.getParameter("userId");
       String when = request.getParameter("time");
       int userId = Integer.parseInt(user);
       List<UserFinancials> transactions = null;
+      
       // Sample data
+      if (when.equals("day")) {
+        transactions = uDao.getUserReportForToday(userId, LocalDate.now());
+
+      }
       if (when.equals("weekly")) {
         transactions = uDao.getUserReportForTheWeek(userId, LocalDate.now());
 
@@ -40,10 +45,11 @@ public class StatementDownloadServlet extends HttpServlet {
 
       out.println("transactionId,type,title,description,mode,category,amount,date");
 
+      int id = 1;
       // Loop over transactions and write each as a CSV row
       for (UserFinancials transaction : transactions) {
         out.printf("%d,%s,%s,%s,%s,%s,%.2f,%s\n",
-                transaction.getTransactionId(),
+                id,
                 transaction.getType(),
                 transaction.getTitle(),
                 transaction.getDescription(),
@@ -52,6 +58,7 @@ public class StatementDownloadServlet extends HttpServlet {
                 transaction.getAmount(),
                 transaction.getDate().toString()
         );
+        id++;
       }
 
       out.flush();

@@ -875,8 +875,8 @@
         });
 
         // Send the request to the servlet
-        fetch('StatementDownloadServlet', {
-          method: 'GET', // or 'GET' depending on your servlet's method
+        fetch('./StatementDownloadServlet', {
+          method: 'POST', // or 'GET' depending on your servlet's method
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },

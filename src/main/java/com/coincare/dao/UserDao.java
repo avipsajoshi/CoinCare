@@ -30,6 +30,7 @@ public class UserDao {
   //get user by email and password 
   public User getUserByEmailandPass(String email, String pass) {
     User user = null;
+    User user2 = null;
     try {
       //using Hibernate Query HQL
       String query = "From User WHERE userEmail = :e";
@@ -40,14 +41,14 @@ public class UserDao {
       if (!results.isEmpty()) {
         user = results.get(0);//returns single user object(row)
         if (HashPassword.verifyPassword(pass, user.getUserPassword())) {
-          return user;
+          user2 = user;
         }
       }
       session.close();
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return user;
+    return user2;
   }
 
   //all users

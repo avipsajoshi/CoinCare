@@ -1,6 +1,5 @@
 const registerForm = document.querySelector("#register-form");
 const loginForm = document.querySelector("#login-form");
-// const myform = document.getElementById("myForm");
 const btn = document.getElementById("submitButton");
 const nameInput = document.getElementById("user_name");
 const emailInput = document.getElementById("email");
@@ -10,6 +9,9 @@ const nameError = document.getElementById("name-error");
 const emailError = document.getElementById("email-error");
 const passwordError = document.getElementById("password-error");
 const confirmPasswordError = document.getElementById("password2-error");
+
+console.log(emailInput);
+console.log(passwordInput);
 
 registerForm.addEventListener("submit", function (event) {
   event.preventDefault();
@@ -26,7 +28,7 @@ loginForm.addEventListener("submit", function (event) {
   event.preventDefault();
   if (
     validateEmail() &&
-    validatePassword()
+    validateLoginPassword()
   ) {
     loginForm.submit();
   }
@@ -59,6 +61,27 @@ function validateEmail() {
     return true;
   }
 }
+
+function validateLoginPassword() {
+  const passValue = passwordInput.value.trim();
+  const passRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+  if (passValue === "") {
+    setError(passwordInput, " Password is required", "password-error");
+    return false;
+  } else if (passValue.length < 8) {
+    setError(
+      passwordInput,
+      " Invalid Password",
+      "password-error"
+    );
+    return false;
+  }
+  else {
+    removeError(passwordInput, "password-error");
+    return true;
+  }
+}
+
 
 function validatePassword() {
   const passValue = passwordInput.value.trim();

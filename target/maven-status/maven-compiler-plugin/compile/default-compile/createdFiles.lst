@@ -36,5 +36,7 @@ com\coincare\JakartaRestConfiguration.class
 com\coincare\dao\IncomeDao.class
 com\coincare\servlets\AdminServlet.class
 com\coincare\dao\BudgetPlanDao.class
+com\coincare\dao\FeedbackDao.class
 com\coincare\dao\ArticleDao.class
 com\coincare\entities\UserFinancials.class
+com\coincare\entities\Feedback.class

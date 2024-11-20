@@ -1,6 +1,7 @@
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\CategoryServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\helper\FactoryProvider.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\ExpenseServlet.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\FeedbackDao.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\IncomeServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\User.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\UserDao.java
@@ -26,6 +27,7 @@ D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\StatementServl
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Category.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\helper\MinorHelper.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Income.java
+D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Feedback.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\servlets\NewPasswordServlet.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\dao\ExpenseDao.java
 D:\E\6th sem\project\CoinCare\src\main\java\com\coincare\entities\Article.java

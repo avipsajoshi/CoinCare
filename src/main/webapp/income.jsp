@@ -128,7 +128,7 @@
               <label for="up-inc-price">Amount: </label>
               <small id="up-inc-price-error" class="error"></small>
               <br>
-              <input type="number" class="input-field" id="up-inc-price" name="up-inc-price" placeholder="Amount in numbers" value="<%=e.getIncomeAmount()%>"/>
+              <input type="number" step="0.01" class="input-field" id="up-inc-price" name="up-inc-price" placeholder="Amount in numbers" value="<%=e.getIncomeAmount()%>"/>
               <br>
               <label for="up-select-mode">Mode of Transaction: </label>
               <br>
@@ -198,7 +198,7 @@
         <label for="inc-price">Amount: </label>
         <small id="inc-price-error" class="error"></small>
         <br>
-        <input type="number" id="inc-price" name="inc-price" placeholder="Amount in numbers" />
+        <input type="number" step="0.01" id="inc-price" name="inc-price" placeholder="Amount in numbers" />
         <br>
 
         <label for="up-select-mode">Mode of Transaction: </label>
@@ -262,7 +262,7 @@
         upincForm.addEventListener("submit", function (event) {
           event.preventDefault();
           if (
-                  validateText(upincNameInput, upincNameError) && validateText(upincPriceInput, upincPriceError) && validateText(upincDesInput, upincDesError)
+                  validateText(upincNameInput, upincNameError) && validateNumber(upincPriceInput, upincPriceError) && validateText(upincDesInput, upincDesError)
                   ) {
             upincForm.submit();
           }
@@ -279,7 +279,7 @@
         incForm.addEventListener("submit", function (event) {
           event.preventDefault();
           if (
-                  validateText(incNameInput, incNameError) && validateText(incPriceInput, incPriceError) && validateText(incDesInput, incDesError)
+                  validateText(incNameInput, incNameError) && validateNumber(incPriceInput, incPriceError) && validateText(incDesInput, incDesError)
                   ) {
             incForm.submit();
           }
@@ -296,6 +296,24 @@
           } else {
             removeError(input, error);
             return true;
+          }
+        }
+        function validateNumber(nameInput, error_class) {
+          const namevalue = nameInput.value.trim();
+          // Regular expression to check if the input starts with a special character
+          const nameregex = /^[^a-zA-Z0-9]/;
+          const error = error_class;
+          // Check if the input starts with a special character or is outside the range 0-999999
+          if (nameregex.test(namevalue)) {
+            setError(nameInput, " Should be a positive number.", error);
+            return false;
+          }
+          if (namevalue <= 0 || namevalue >= 999999) {
+            setError(nameInput, "Not in range", error);
+            return false;
+          } else {
+            return true;
+
           }
         }
         // Set error message

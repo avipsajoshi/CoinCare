@@ -19,7 +19,7 @@ public class LoginServlet extends HttpServlet {
     try (PrintWriter out = response.getWriter()) {
       HttpSession httpSession = request.getSession();
       if (httpSession.getAttribute("logged_user") != null) {
-      try {
+        try {
           User alreadyLogged = (User) httpSession.getAttribute("logged_user");
 //          response.sendRedirect("index.jsp");
           if (alreadyLogged.getUserType().equals("admin") || alreadyLogged.getUserType().equals("owner")) {
@@ -31,38 +31,41 @@ public class LoginServlet extends HttpServlet {
           } else {
           }
         } catch (Exception e) {
-        //print error in console
-        e.printStackTrace();
+          //print error in console
+          e.printStackTrace();
         }
-      }
-      else{
+      } else {
         try {
           //get request from form
           String userEmail = request.getParameter("user_email");
           String userPassword = request.getParameter("user_password");
           // validations
-          if (userEmail.isEmpty()) {
+          if (userEmail.isEmpty() || userPassword.isEmpty()) {
             out.println("Email Cannot be blank");
-          }
-          //creating new user object to fetch data
-          //authenticatoion dao layer (data access object)
-          UserDao userDao = new UserDao(FactoryProvider.getFactory());
-          User logged_user = userDao.getUserByEmailandPass(userEmail, userPassword);
-          if (logged_user == null) {
             httpSession.setAttribute("message", "Invalid email or password!");
             // ("key", "value");
             response.sendRedirect("login.jsp");
           } else {
-            httpSession.setAttribute("logged_user", logged_user);
-  //          response.sendRedirect("index.jsp");
-            if (logged_user.getUserType().equals("admin") || logged_user.getUserType().equals("owner")) {
-              //admin-dashboard.jsp
-              response.sendRedirect("admin-dashboard.jsp");
-            } else if (logged_user.getUserType().equals("user")) {
-              //client.jsp
-              response.sendRedirect("dashboard.jsp");
+            //creating new user object to fetch data
+            //authenticatoion dao layer (data access object)
+            UserDao userDao = new UserDao(FactoryProvider.getFactory());
+            User logged_user = userDao.getUserByEmailandPass(userEmail, userPassword);
+            if (logged_user == null) {
+              httpSession.setAttribute("message", "Invalid email or password!");
+              // ("key", "value");
+              response.sendRedirect("login.jsp");
             } else {
-              out.println("Error identifying user");
+              httpSession.setAttribute("logged_user", logged_user);
+              //          response.sendRedirect("index.jsp");
+              if(logged_user.getUserType().equals("admin") || logged_user.getUserType().equals("owner")) {
+                //admin-dashboard.jsp
+                response.sendRedirect("admin-dashboard.jsp");
+              } else if (logged_user.getUserType().equals("user")) {
+                //client.jsp
+                response.sendRedirect("dashboard.jsp");
+              } else {
+                out.println("Error identifying user");
+              }
             }
           }
         } catch (Exception e) {

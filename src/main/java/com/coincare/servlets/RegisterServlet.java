@@ -1,6 +1,8 @@
 package com.coincare.servlets;
 
+import com.coincare.dao.BudgetPlanDao;
 import com.coincare.dao.UserDao;
+import com.coincare.entities.BudgetPlan;
 import com.coincare.entities.User;
 import com.coincare.helper.FactoryProvider;
 import com.coincare.helper.HashPassword;
@@ -42,7 +44,9 @@ public class RegisterServlet extends HttpServlet {
       int year = Year.now().getValue() - 5;
       User existUser = userDao.getUseByEmail(userEmail);
       if (existUser == null) {
-        User user = new User(userName, userEmail, hashedPassword, "./user-images/user-image.png", "Enter Country", "user", year, 1, 1, "on", "on", "Verify");
+        BudgetPlanDao bdao = new BudgetPlanDao(FactoryProvider.getFactory());
+        BudgetPlan budget = bdao.getBudgetPlanById(1);
+        User user = new User(userName, userEmail, hashedPassword, "./user-images/user-image.png", "Enter Country", "user", year, 1, 1, budget, "on", "on", "Verify");
         
         Session hibernateSession = FactoryProvider.getFactory().openSession();
         Transaction tx = hibernateSession.beginTransaction();

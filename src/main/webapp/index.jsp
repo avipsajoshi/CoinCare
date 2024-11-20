@@ -6,11 +6,14 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="com.coincare.helper.FactoryProvider" %>
+<%
+    response.sendRedirect("register.jsp");
+%>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Homepage | CoinCare</title>
+    <title>CoinCare</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="./images/coincarelogo.png">
     <link rel="stylesheet" href="css/fontAndColors.css">
@@ -64,7 +67,7 @@
             letter-spacing="0.1"
             fill="#2D3748"
             >
-            <tspan x="60" y="30">CoinCare</tspan>
+          <tspan x="60" y="30">CoinCare</tspan>
           </text>
           <g id="Group">
           <polyline
@@ -565,7 +568,6 @@
             Easily track your spending, set budgets, and reach your financial
             goals with our powerful expense management tool. Stay informed with
             real-time insights and achieve financial freedom. <br />
-            Start now and watch your savings grow!
           </p>
         </div>
       </div>
@@ -1031,7 +1033,7 @@
                 class="flex justify-start sm:justify-start xl:justify-end space-x-6 pr-2 xl:pr-0 lg:pr-0 md:pr-0 sm:pr-0"
                 >
                 <div>
-                  <a href="#">
+                  <a href="https://www.twitter.com">
                     <svg
                       aria-label="Twitter"
                       xmlns="http://www.w3.org/2000/svg"
@@ -1052,7 +1054,7 @@
                   </a>
                 </div>
                 <div>
-                  <a href="#">
+                  <a href="https://www.instagram.com">
                     <svg
                       aria-label="Instagram"
                       xmlns="http://www.w3.org/2000/svg"
@@ -1105,7 +1107,7 @@
                   </a>
                 </div>
                 <div>
-                  <a href="#">
+                  <a href="https://www.github.com">
                     <svg
                       aria-label="Github"
                       xmlns="http://www.w3.org/2000/svg"

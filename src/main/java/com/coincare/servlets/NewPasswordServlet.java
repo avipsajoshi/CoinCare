@@ -3,6 +3,7 @@ package com.coincare.servlets;
 import com.coincare.dao.UserDao;
 import com.coincare.entities.User;
 import com.coincare.helper.FactoryProvider;
+import com.coincare.helper.HashPassword;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -23,7 +24,15 @@ public class NewPasswordServlet extends HttpServlet {
       String email = (String) session.getAttribute("email");
       
       UserDao userDao = new UserDao(FactoryProvider.getFactory());
-      boolean resetUserPassword = userDao.resetUserPassword(email,password);
+      String hashedPassword="";
+      try {
+        hashedPassword = HashPassword.hashUserPassword(password);
+        System.out.println("Password hashed" + hashedPassword);
+      } catch (Exception e) {
+        session.setAttribute("message", "Unsuccessful. Please Try Again");
+        response.sendRedirect("./reset-password.jsp");
+      }
+      boolean resetUserPassword = userDao.resetUserPassword(email,hashedPassword);
       if(resetUserPassword){
         session.setAttribute("message", "Password Change succesful");
       }
